@@ -24,7 +24,7 @@
 
 
                             <!-- Mobile Number Form -->
-                            <div id="mobile-form">
+                            <div id="mobile-form" >
                                 <form id="send-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
@@ -56,7 +56,7 @@
 
                                 <div class="text-center">
 
-                                    {{-- <a href="{{ route('auth.google') }}" class="d-block">
+                                    <a href="{{ route('auth.google') }}" class="d-block">
                                         <span id="google-login" class="btn btn-dark w-100">
                                             <svg class="me-1" width="16" height="16" viewBox="0 0 16 16"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,9 +75,10 @@
                                             </svg>
                                             {{ __('frontend.continue_with_google') }}
                                         </span>
-                                    </a> --}}
+                                    </a>
 
-                                    <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a>
+                                    {{-- <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a> --}}
+
                                 </div>
 
 
@@ -214,7 +215,7 @@
         }
         var input = document.querySelector("#mobile");
         var iti = window.intlTelInput(input, {
-            initialCountry: "in", // Automatically detect user's country
+            initialCountry: "mm", // Automatically detect user's country
             separateDialCode: true, // Show the country code separately
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js" // To handle number formatting
         });

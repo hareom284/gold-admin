@@ -1,7 +1,10 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Frontend\Http\Controllers\Auth\OTPController;
+use Modules\Frontend\Http\Controllers\Auth\AuthController;
 use Modules\Frontend\Http\Controllers\DashboardController;
 
 /*
@@ -36,6 +39,17 @@ Route::get('user-favorite-personality', [DashboardController::class, 'Userfavori
 Route::get('web-continuewatch-list', [DashboardController::class, 'ContinuewatchList']);
 
 
+//google login api
+Route::get('auth/google',[AuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback',[AuthController::class, 'handleGoogleCallbackApi'])->name('auth.google.callback');
+
+//phone number login api
+Route::post('/auth/otp-login-store', [OTPController::class, 'otpLoginStoreApi'])->name('auth.otp-login-store');
+Route::get('/auth/check-user-exists', [OTPController::class, 'checkUserExistsApi'])->name('check.user.exists');
 
 
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('logout', [AuthController::class, 'logoutApi'])->name("auth.logout");
+});
 
