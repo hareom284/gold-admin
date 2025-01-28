@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center justify-content-between my-2 me-2">
         <h5 class="main-title text-capitalize mb-0">{{ $title }}</h5>
 
-        @if(count($data)>6)
+        @if(count($data)>6 && $slug != 'latest_movie')
 
             @if(!empty($is_watch_list ))
                 <a href="{{ route('watchList') }}" class="view-all-button text-decoration-none flex-none"><span>{{__('frontend.view_all')}}</span> <i class="ph ph-caret-right"></i></a>
