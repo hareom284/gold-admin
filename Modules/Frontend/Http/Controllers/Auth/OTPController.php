@@ -78,66 +78,6 @@ class OTPController extends Controller
         return redirect('/'); // Redirect to intended page
     }
 
-    public function otpLoginStoreApi(Request $request)
-    {
-        try {
-            // Validate the request
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'mobile' => 'required|numeric|digits:10',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()], 422);
-            }
-
-            // Check if the user already exists
-            $user = User::where('email', $request->email)->first();
-
-            if (!$user) {
-                // Create a new user if not found
-                $data = [
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                    'mobile' => $request->mobile,
-                    'password' => Hash::make(Str::random(8)), // Random password for OTP login
-                    'user_type' => 'user',
-                    'login_type' => 'otp',
-                ];
-
-                $user = User::create($data);
-
-                // Optionally create profile and assign a role
-                $user->createOrUpdateProfileWithAvatar(); // Ensure this function exists
-                $user->assignRole($data['user_type']); // Ensure this role exists
-            } elseif ($user->login_type !== 'otp') {
-                // Block login if the user exists but doesn't use OTP for login
-                return response()->json([
-                    'error' => 'This email is already registered with a different login method.',
-                ], 403);
-            }
-
-            // Log in the user and generate an access token
-            $this->setDevice($user, $request); // Ensure device tracking is implemented
-            $access_token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Login Successfully',
-                'access_token' => $access_token,
-                'status' => 200,
-            ]);
-
-        } catch (\Exception $e) {
-            // Catch and return errors
-            return response()->json([
-                'error' => $e->getMessage(),
-                'status' => 500,
-            ]);
-        }
-    }
 
     public function checkUserExists(Request $request)
     {
@@ -166,9 +106,8 @@ class OTPController extends Controller
             $this->setDevice($user, $request);
 
             Auth::login($user);
-            $token = $user->createToken('auth_token')->plainTextToken;
+
             $flag = 1;
-            return response()->json(['message'=>"Login Successfully",'is_user_exists' => $flag, 'status' => 200, 'access_token' => $token]);
         }
 
         return response()->json(['is_user_exists' => $flag, 'url' => route('user.login')]);

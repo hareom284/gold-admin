@@ -95,13 +95,6 @@ class AuthController extends Controller
 
     }
 
-    public function logoutApi()
-    {
-        $user = User::where('id',auth('sanctum')->id)->first();
-        $user->tokens()->delete();
-        return response()->json(['status' => true, 'message' => "Logout successfully"],200);
-    }
-
     /**
      * Show the specified resource.
      */
@@ -139,7 +132,7 @@ class AuthController extends Controller
      // Redirect to Google
      public function redirectToGoogle()
      {
-         return Socialite::driver('google')->stateless()->redirect();
+         return Socialite::driver('google')->redirect();
      }
 
      // Handle Google Callback
@@ -206,83 +199,6 @@ class AuthController extends Controller
              return Redirect::to('/login')->with('error', 'Something went wrong!');
          }
      }
-
-     //for mobile api
-     public function handleGoogleCallbackApi(Request $request)
-{
-    try {
-        // Validate request
-        $validator = Validator::make($request->all(), [
-            'callback_token' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(["error" => $validator->errors()], 422);
-        }
-
-        // Retrieve Google user using the callback token
-        $googleUser = Socialite::driver('google')->userFromToken($request->callback_token);
-
-        // Check if a user with the email exists
-        $existingUser = User::where('email', $googleUser->getEmail())->first();
-
-            if (!$existingUser) {
-                // Register new user
-                $fullName = $googleUser->getName();
-                $nameParts = explode(' ', $fullName);
-                $firstName = $nameParts[0] ?? '';
-                $lastName = $nameParts[1] ?? $firstName;
-
-                $data = [
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
-                    'email' => $googleUser->getEmail(),
-                    'password' => Hash::make(Str::random(8)), // Generate a random password
-                    'user_type' => 'user',
-                    'login_type' => 'google',
-                ];
-
-                $newUser = User::create($data);
-                $newUser->assignRole($data['user_type']); // Optional: assign role if using Spatie
-                $newUser->save();
-
-                // Generate auth token
-                $token = $newUser->createToken('auth_token')->plainTextToken;
-
-                return response()->json([
-                    'message' => 'User registered successfully.',
-                    'access_token' => $token,
-                ], 201);
-            }
-
-            // Prevent login if the user is registered with a different method
-            if ($existingUser->login_type !== 'google') {
-                return response()->json([
-                    'error' => 'This email is already registered. Please use the original login method.',
-                ], 403);
-            }
-
-            // Check device limit if applicable
-            if ($request->has('device_id')) {
-                $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
-
-                if (isset($response['error'])) {
-                    return response()->json(['error' => $response['error']], 500);
-                }
-            }
-
-            // Generate auth token
-            $token = $existingUser->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'User logged in successfully.',
-                'access_token' => $token,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json(["error" => $e->getMessage()], 500);
-        }
-    }
-
 
      // Redirect to Apple
      public function redirectToApple()

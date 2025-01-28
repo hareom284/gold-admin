@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Frontend\Http\Controllers\Auth\AuthApiController;
 use Modules\Frontend\Http\Controllers\Auth\OTPController;
 use Modules\Frontend\Http\Controllers\Auth\AuthController;
 use Modules\Frontend\Http\Controllers\DashboardController;
@@ -40,16 +41,16 @@ Route::get('web-continuewatch-list', [DashboardController::class, 'Continuewatch
 
 
 //google login api
-Route::get('auth/google',[AuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('auth/google/callback',[AuthController::class, 'handleGoogleCallbackApi'])->name('auth.google.callback');
+Route::get('auth/google',[AuthApiController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback',[AuthApiController::class, 'handleGoogleCallbackApi'])->name('auth.google.callback');
 
 //phone number login api
-Route::post('/auth/otp-login-store', [OTPController::class, 'otpLoginStoreApi'])->name('auth.otp-login-store');
-Route::get('/auth/check-user-exists', [OTPController::class, 'checkUserExistsApi'])->name('check.user.exists');
+Route::post('/auth/otp-login-store', [AuthApiController::class, 'otpLoginStoreApi'])->name('auth.otp-login-store');
+Route::get('/auth/check-user-exists', [AuthApiController::class, 'checkUserExistsApi'])->name('check.user.exists');
 
 
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('logout', [AuthController::class, 'logoutApi'])->name("auth.logout");
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('logout', [AuthApiController::class, 'logoutApi'])->name("auth.logout");
 });
 
