@@ -6,7 +6,19 @@ $footerData = getFooterData();
 <footer class="footer">
   <div class="footer-top">
     <div class="container-fluid">
-      <div class="row">
+        <div class="row text-center">
+            <div class="footer-logo mb-4">
+                <!--Logo -->
+                 @include('frontend::components.partials.logo')
+            </div>
+            <h5>Download our app</h5>
+            <h6>Enjoy instant access to the best movies and TV shows right on your mobile screen.</h6>
+            <div class="mt-3 mb-5">
+                <button class="btn btn-danger">Get on Google Play</button>
+            </div>
+
+        </div>
+      {{-- <div class="row">
         <div class="col-xxl-2 col-xl-2 col-sm-6">
           <div class="footer-logo mb-4">
               <!--Logo -->
@@ -81,12 +93,12 @@ $footerData = getFooterData();
           </ul>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
-  <div class="footer-bottom">
+  <div class="footer-bottom mt-5">
     <div class="container-fluid">
       <div class="text-center">
-        © {{ now()->year }} <span class="text-primary">{{ env('APP_NAME') }}</span>. {{__('frontend.all_rights_reserved')}}.
+        © {{ now()->year }} <span class="">Gold Channel</span>. {{__('frontend.all_rights_reserved')}}.
       </div>
     </div>
   </div>

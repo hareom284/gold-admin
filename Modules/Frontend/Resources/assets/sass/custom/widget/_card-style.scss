@@ -7,6 +7,16 @@
   z-index: 1;
 }
 
+.imdb_rating_icon{
+   position: absolute;
+   bottom: 0;
+   right: 0;
+   color: var(--bs-warning);
+   background-color: azure;
+   padding: 0.125rem 1rem;
+
+}
+
 .iq-card {
   .block-images {
     backface-visibility: hidden;
@@ -55,8 +65,8 @@
       .product-premium {
         position: absolute;
         top: .875rem;
-        left: auto;
-        right: 1rem;
+        right: auto;
+        left: 1rem;
         background: var(--bs-warning);
         color: var(--bs-white);
         border-radius: 100%;
@@ -270,7 +280,7 @@
   .iq-card {
     .block-images {
       .image-box {
-        .product-new {          
+        .product-new {
           padding: 0.175rem 0.25rem;
           font-size: .5rem;
         }

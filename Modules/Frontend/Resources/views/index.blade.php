@@ -3,8 +3,18 @@
 @section('content')
 
 
-    <!-- Main Banner -->
 
+    <!-- Main Banner -->
+     {{-- ads banner  --}}
+    <div id="adsbanner-section" class="px-0">
+
+        @php
+           $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
+        @endphp
+
+        @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
+
+    </div>
 
     <div id="banner-section" class="section-spacing-bottom px-0">
 
@@ -87,7 +97,7 @@
               </div>
            </div>
         </div>
-
+{{--
         <div id="most-view-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">
                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -98,7 +108,7 @@
                  @endfor
                </div>
              </div>
-          </div>
+          </div> --}}
 
           <div id="actor-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">

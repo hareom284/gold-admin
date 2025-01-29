@@ -104,7 +104,7 @@ class DashboardController extends Controller
 
         if(!empty($fetch_actor)){
 
-            $html = view('frontend::components.section.actor', ['popular_language' =>  $fetch_actor , 'title' =>__('frontend.fetch_actor')]) ->render();
+            $html = view('frontend::components.section.actor', ['fetch_actor' =>  $fetch_actor , 'title' =>__('frontend.fetch_actor')]) ->render();
 
         }
 

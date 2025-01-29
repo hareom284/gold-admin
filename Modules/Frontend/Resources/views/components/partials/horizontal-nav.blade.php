@@ -60,14 +60,14 @@
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if($loop->even)
-                                <li class="nav-link"><a class="dropdown-item cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if ($loop->odd)
-                                    <li class="nav-link"><a class="dropdown-item cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                    <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>

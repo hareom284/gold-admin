@@ -53,13 +53,15 @@ header {
 
   &.header-absolute,
   .header-absolute {
-    position: absolute;
+    // position: absolute;
     left: 0;
     right: 0;
     top: 0;
     background: rgba(0, 0, 0, .3);
     backdrop-filter: blur(.625em);
   }
+
+
 
   .navbar-toggler-icon {
     background-image: none;
@@ -95,6 +97,10 @@ header {
       }
     }
   }
+
+  a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
+    color: var(--bs-primary);
+}
 
   // header search
   &.header-search {
