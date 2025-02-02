@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\BannerResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Modules\CastCrew\Models\CastCrew;
@@ -13,6 +14,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Api\MoviesResource;
 use App\Http\Resources\Api\CastCrewResource;
+use Modules\Banner\Models\Banner;
 use Modules\Entertainment\Models\Entertainment;
 
 
@@ -71,12 +73,12 @@ class ApiController extends Controller
 
                    return response()->json([
                        'success'=>true,
-                       'message' => 'User registered successfully.',
+                       'message' => 'Login successfully.',
                        'token' => $token,
                    ], 201);
                }
 
-               // Prevent login if the user is registered with a different method
+               // Prevent login if the user is login with a different method
                if ($existingUser->login_type !== 'google') {
                    return response()->json([
                        'success'=>false,
@@ -98,7 +100,7 @@ class ApiController extends Controller
 
                return response()->json([
                    'success'=>true,
-                   'message' => 'User logged in successfully.',
+                   'message' => 'Login successfully.',
                    'token' => $token,
                ], 200);
            } catch (\Exception $e) {
@@ -232,22 +234,29 @@ class ApiController extends Controller
            ],200);
        }
 
+       //HomeBanner
+       public function HomeBanner()
+       {
+           $user_id = auth()->id();
+           $bannerList = Banner::where('status',1)->get();
+           $banners = BannerResource::collection($bannerList->map(function ($banner) use ($user_id) {
+                return new BannerResource($banner, $user_id);
+            }));
+
+            return response()->json([
+                'success' => true,
+                'message' => "Banner list reterived successfully",
+                'data' => $banners
+            ],200);
+       }
+
        //top rated movies
        public function TopRatedMovies()
        {
-           $cacheKey = 'top_rated_movies';
-           $top_rated = Cache::get($cacheKey);
 
-           if (!$top_rated) {
-               $top_rated=[];
+            $topRatedMovies = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where('status', 1)->take(20)->get();
 
-                   $topRatedMovies = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where('status', 1)->take(20)->get();
-
-                   $top_rated = MoviesResource::collection($topRatedMovies);
-
-
-               Cache::put($cacheKey, $top_rated);
-           }
+            $top_rated = MoviesResource::collection($topRatedMovies);
 
            return response()->json([
                "success"=>true,
@@ -259,18 +268,9 @@ class ApiController extends Controller
        //recently added movies
        public function RecentlyAddedMovies()
        {
-           $cacheKey = 'recently_add_movies';
-           $recently_add = Cache::get($cacheKey);
+            $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
 
-           if (!$recently_add) {
-               $recently_add=[];
-
-                   $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
-
-                   $recently_add = MoviesResource::collection($topRatedMovies);
-
-               Cache::put($cacheKey, $recently_add);
-           }
+            $recently_add = MoviesResource::collection($topRatedMovies);
 
            return response()->json([
                "success"=>true,
@@ -279,27 +279,54 @@ class ApiController extends Controller
            ],200);
        }
 
+       //fetch actor
        public function FetchActor()
        {
-           $cacheKey = 'fetch_actor';
-           $fetch_actor = Cache::get($cacheKey);
 
-           if(!$fetch_actor){
+            $fetch_actor = CastCrew::inRandomOrder()->take(20)->get();
 
-             $fetch_actor=[];
+            $fetch_actor = CastCrewResource::collection($fetch_actor);
 
-
-              $fetch_actor = CastCrew::inRandomOrder()->take(20)->get();
-
-              $fetch_actor = CastCrewResource::collection($fetch_actor);
-
-              Cache::put($cacheKey, $fetch_actor);
-           }
-
-         return response()->json([
-                "success"=>true,
-                "message"=>"Actor reterived successfully",
-                "data"=>$fetch_actor,
-         ],200);
+            return response()->json([
+                    "success"=>true,
+                    "message"=>"Actor reterived successfully",
+                    "data"=>$fetch_actor,
+            ],200);
        }
+
+       //hit movies
+       public function HitMovies($ref)
+       {
+
+            switch($ref){
+                    case 'korea';
+                        $tag_id = 1;
+                        break;
+                    case 'india';
+                        $tag_id =2;
+                        break;
+                    case 'china';
+                        $tag_id = 3;
+                        break;
+                    default:
+                    return response()->json([
+                        "success"=>false,
+                        "message"=>"Invalid request",
+                        "data"=>[],
+                    ],400);
+                }
+
+           $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
+             $query->where('tag_id', $tag_id);
+           })->take(10)->get();
+
+           $hit_movie = MoviesResource::collection($hit_movie);
+
+           return response()->json([
+               "success"=>true,
+               "message"=>"Hit movies reterived successfully",
+               "data"=>$hit_movie,
+           ],200);
+        }
+
 }

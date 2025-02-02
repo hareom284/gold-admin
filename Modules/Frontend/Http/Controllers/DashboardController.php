@@ -75,6 +75,7 @@ class DashboardController extends Controller
                 $recently_add = MoviesResource::collection($topRatedMovies);
                 $recently_add = $recently_add->toArray(request());
 
+
             Cache::put($cacheKey, $recently_add);
         }
 
@@ -109,6 +110,54 @@ class DashboardController extends Controller
         }
 
       return response()->json(['html' => $html]);
+    }
+
+    public function HitMovie($ref)
+    {
+        $cacheKey = $ref.'_hit';
+        $hit_movie = Cache::get($cacheKey);
+
+        $html='';
+
+        switch($ref){
+            case 'korea';
+                $tag_id = 1;
+                break;
+            case 'india';
+                $tag_id =2;
+                break;
+            case 'china';
+                $tag_id = 3;
+                break;
+            default:
+                $tag_id = 1;
+        }
+
+        if(!$hit_movie){
+
+          $hit_movie=[];
+
+
+           $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
+             $query->where('tag_id', $tag_id);
+           })->take(10)->get();
+
+           $hit_movie = MoviesResource::collection($hit_movie);
+           $hit_movie = $hit_movie->toArray(request());
+
+
+           Cache::put($cacheKey, $hit_movie);
+        }
+
+
+
+        if(!empty($hit_movie)){
+
+            $html = view('frontend::components.section.hit_movie', ['hit_movie' =>  $hit_movie , 'title' =>$ref]) ->render();
+
+        }
+
+       return response()->json(['html' => $html]);
     }
 
 

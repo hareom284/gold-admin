@@ -3,10 +3,10 @@
 namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Request;
+use Modules\Subscriptions\Models\Plan;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Entertainment\Models\Watchlist;
 
-class MoviesResource extends JsonResource
+class TvshowResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,49 +17,15 @@ class MoviesResource extends JsonResource
     {
         $genre_data = [];
         $genres = $this->entertainmentGenerMappings;
-
-        if(!empty($genres)){
-
-            foreach($genres as $genre) {
-
-                $genre_data[] = [
-                    'id' => $genre->id,
-                    'name' => $genre->genre->name ?? null,
-                ];
-            }
-
-
+        foreach($genres as $genre){
+            $genre_data[] = $genre->genre;
+        }
+        $plans = [];
+        $plan = $this->plan;
+        if($plan){
+            $plans = Plan::where('level', '<=', $plan->level)->get();
         }
 
-        $tag_data = [];
-        $tags = $this->entertainmentTagMappings;
-
-        if(!empty($tags)){
-
-            foreach($tags as $tag) {
-
-                $tag_data[] = [
-                    'id' => $tag->id,
-                    'name' => $tag->tag->name ?? null,
-                ];
-            }
-
-
-        }
-
-        // $plans = [];
-        // $plan = $this->plan;
-        // if($plan){
-        //     $plans = Plan::where('level', '<=', $plan->level)->get();
-        // }
-        $userId = auth()->id();
-        if($userId) {
-            $isInWatchList = WatchList::where('entertainment_id',$this->id)
-            ->where('user_id', $userId)
-            ->exists();
-        }else{
-            $isInWatchList = $this->is_watch_list ?? false;
-        }
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -81,14 +47,18 @@ class MoviesResource extends JsonResource
             'download_status' => $this->download_status,
             'enable_quality' => $this->enable_quality,
             'download_url' => $this->download_url,
-            'poster_image' => setBaseUrlWithFileName($this->poster_url ?? null),
-            'thumbnail_image' =>setBaseUrlWithFileName($this->thumbnail_url ?? null),
-            'is_watch_list' => $isInWatchList ? true : false,
-            'genres' => $genre_data,
-            'tags'=> $tag_data,
-            // 'plans' => PlanResource::collection($plans),
+            'poster_image' =>  setBaseUrlWithFileName($this->poster_url),
+            'thumbnail_image' => setBaseUrlWithFileName($this->thumbnail_url),
+            'is_watch_list' => $this->is_watch_list ?? false,
+            'genres' => GenresResource::collection($genre_data),
+            'plans' => PlanResource::collection($plans),
             'status' => $this->status,
-
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
+            'deleted_by' => $this->deleted_by,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

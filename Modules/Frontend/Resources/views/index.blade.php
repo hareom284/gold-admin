@@ -98,6 +98,42 @@
               </div>
            </div>
         </div>
+
+        <div id="korea-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="india-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="china-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
 {{--
         <div id="most-view-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">
@@ -411,6 +447,13 @@ const observer = new IntersectionObserver((entries, observer) => {
                 fetchTopRatedMovies();
             }else if (entry.target.id === 'recently-added-movie-section' ) {
                 fetchRecentlyAddedMovies();
+            }else if (entry.target.id === 'korea-hit-section' ) {
+                fetchHitMovies('korea');
+            }else if (entry.target.id === 'india-hit-section' ) {
+                fetchHitMovies('india');
+            }
+            else if (entry.target.id === 'china-hit-section' ) {
+                fetchHitMovies('china');
             }  else if (entry.target.id === 'latest-moive-section') {
                 fetchLatestMovies();
             }else if (entry.target.id === 'most-watch-movie-section') {
@@ -495,6 +538,19 @@ fetch(`${envURL}/api/recently-added-movie`)
     })
     .catch(error => {
         console.error('Error fetching recently added Movies:', error);
+    });
+}
+
+function fetchHitMovies(ref) {
+
+fetch(`${envURL}/api/hit-movie/${ref}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById(`${ref}-hit-section`).innerHTML = data.html;
+        slickGeneral(`${ref}-hit-section`);
+    })
+    .catch(error => {
+        console.error('Error fetching korea hit Movies:', error);
     });
 }
 

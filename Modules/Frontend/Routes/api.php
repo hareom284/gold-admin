@@ -38,10 +38,11 @@ Route::get('web-continuewatch-list', [DashboardController::class, 'Continuewatch
 
 
 
-//custom route
+//add new route
 Route::get('top-rated-movie',[DashboardController::class,'TopRatedMovies']);
 Route::get('recently-added-movie',[DashboardController::class,'RecentlyAddedMovies']);
 Route::get('most-watch-movie',[DashboardController::class,'MostWatchdMovies']);
 Route::get('fetch-actor',[DashboardController::class,'FetchActor']);
+Route::get('hit-movie/{ref}',[DashboardController::class,'HitMovie']);
 
 

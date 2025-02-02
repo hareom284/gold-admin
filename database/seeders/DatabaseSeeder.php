@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Tax\database\seeders\TaxDatabaseSeeder::class);
         $this->call(\Modules\Entertainment\database\seeders\ContinueWatchTableSeeder::class);
         $this->call(\Modules\Currency\database\seeders\CurrencyDatabaseSeeder::class);
+        $this->call(\Modules\Tag\database\seeders\TagDatabaseSeeder::class);
         Schema::enableForeignKeyConstraints();
         \Artisan::call('cache:clear');
         $this->call(LiveTvCategoryTableSeeder::class);
