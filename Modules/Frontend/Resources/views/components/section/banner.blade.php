@@ -68,7 +68,7 @@
                     @endif --}}
                     @if ($slider['data']['movie_access']=='paid')
                     <div class="">
-                        <a href="#" class="btn btn-warning">
+                        <a href="#" class="btn btn-light">
                          <span class="d-flex align-items-center justify-content-center gap-2">
                              <span><i class="ph-fill ph-crown"></i></span>
                              <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
@@ -77,7 +77,7 @@
                     </div>
                     @endif
                       <div class="flex-grow-1">
-                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']])) }}" class="btn btn-primary">
+                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']])) }}" class="btn btn-dark">
                            <span class="d-flex align-items-center justify-content-center gap-2">
                                <span><i class="ph-fill ph-info"></i></span>
                                <span class="text-nowrap">{{__('frontend.more_info_home')}}</span>

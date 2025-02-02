@@ -5,16 +5,6 @@
 
 
     <!-- Main Banner -->
-     {{-- ads banner  --}}
-    <div id="adsbanner-section" class="px-0">
-
-        @php
-           $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
-        @endphp
-
-        @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
-
-    </div>
 
     <div id="banner-section" class="section-spacing-bottom px-0">
 
@@ -25,6 +15,17 @@
         @if($is_enable_banner == 1)
         @include('frontend::components.section.banner', ['data' => $sliders ?? []])
         @endif
+    </div>
+
+    {{-- ads banner  --}}
+    <div id="adsbanner-section" class="px-0">
+
+        @php
+            $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
+        @endphp
+
+        @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
+
     </div>
 
 

@@ -3,9 +3,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Modules\Frontend\Http\Controllers\Auth\AuthApiController;
-use Modules\Frontend\Http\Controllers\Auth\OTPController;
-use Modules\Frontend\Http\Controllers\Auth\AuthController;
 use Modules\Frontend\Http\Controllers\DashboardController;
 
 /*
@@ -41,24 +38,10 @@ Route::get('web-continuewatch-list', [DashboardController::class, 'Continuewatch
 
 
 
-//frontend home page
+//custom route
 Route::get('top-rated-movie',[DashboardController::class,'TopRatedMovies']);
 Route::get('recently-added-movie',[DashboardController::class,'RecentlyAddedMovies']);
 Route::get('most-watch-movie',[DashboardController::class,'MostWatchdMovies']);
 Route::get('fetch-actor',[DashboardController::class,'FetchActor']);
 
-
-//google login api
-Route::get('auth/google',[AuthApiController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('auth/google/callback',[AuthApiController::class, 'handleGoogleCallbackApi'])->name('auth.google.callback');
-
-//phone number login api
-Route::post('/auth/otp-login-store', [AuthApiController::class, 'otpLoginStoreApi'])->name('auth.otp-login-store');
-Route::get('/auth/check-user-exists', [AuthApiController::class, 'checkUserExistsApi'])->name('check.user.exists');
-
-
-
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('logout', [AuthApiController::class, 'logoutApi'])->name("auth.logout");
-});
 

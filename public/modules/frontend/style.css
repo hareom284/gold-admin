@@ -14435,6 +14435,7 @@ header.sticky {
 }
 header.header-absolute,
 header .header-absolute {
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
@@ -16416,20 +16417,6 @@ img {
   transition: all 0.4s ease-out;
   z-index: 2;
 }
-.iq-top-ten-block .block-image .product-premium {
-  background: var(--bs-warning);
-  border-radius: 100%;
-  color: var(--bs-white);
-  height: 1.75rem;
-  left: auto;
-  line-height: 1.9rem;
-  position: absolute;
-  right: 1rem;
-  text-align: center;
-  top: 0.875rem;
-  width: 1.75rem;
-  z-index: 100;
-}
 .iq-top-ten-block:hover .block-image .top-ten-numbers {
   bottom: -35px;
 }
@@ -16454,6 +16441,35 @@ img {
   z-index: 0;
 }
 
+.product-premium {
+  background: rgb(20, 20, 20) !important;
+  border-radius: 2px 0px 2px 0px !important;
+  color: hsl(48, 100%, 50%) !important;
+  height: 1.75rem;
+  line-height: 1.9rem;
+  position: absolute;
+  left: 0 !important;
+  text-align: center;
+  top: 0 !important;
+  opacity: 0.7;
+  width: 1.75rem;
+  z-index: 100;
+}
+.product-premium i {
+  font-size: 0.875rem;
+}
+
+#actor-slider .slick-general .slick-slide {
+  padding: 0px !important;
+  border: 1px solid;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+.btn-dark {
+  background-color: #5F5F5F !important;
+}
+
 .section-wraper:has(.slick-general .slick-item:hover) {
   z-index: 1;
 }
@@ -16462,9 +16478,10 @@ img {
   position: absolute;
   bottom: 0;
   right: 0;
-  color: var(--bs-warning);
-  background-color: azure;
+  color: white;
+  background-color: rgb(117, 121, 121);
   padding: 0.125rem 1rem;
+  opacity: 0.7;
 }
 
 .iq-card .block-images {
@@ -16512,23 +16529,6 @@ img {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-}
-.iq-card .block-images .image-box .product-premium {
-  position: absolute;
-  top: 0.875rem;
-  right: auto;
-  left: 1rem;
-  background: var(--bs-warning);
-  color: var(--bs-white);
-  border-radius: 100%;
-  height: 1.75rem;
-  width: 1.75rem;
-  line-height: 1.9rem;
-  text-align: center;
-  z-index: 100;
-}
-.iq-card .block-images .image-box .product-premium i {
-  font-size: 0.875rem;
 }
 .iq-card .block-images .card-description {
   position: absolute;
@@ -16662,10 +16662,6 @@ img {
     top: 0.5rem;
     left: 0.5rem;
     padding: 0.275rem 0.425rem;
-  }
-  .iq-card .block-images .image-box .product-premium {
-    top: 0.5rem;
-    right: 0.5rem;
   }
   .slick-item.first .card-hover:hover .block-images {
     transform: scale3d(1.1, 1.1, 1) translate3d(0%, 0, 0) perspective(31.25em);
