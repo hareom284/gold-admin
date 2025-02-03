@@ -68,7 +68,7 @@ Route::group(['prefix'=>'v1'],function(){
 
     //logout api
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::get('logout', [ApiController::class, 'logout']);
+        Route::post('logout', [ApiController::class, 'logout']);
     });
 
     //home page api

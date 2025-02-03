@@ -224,7 +224,7 @@ class ApiController extends Controller
        }
 
        //logout api
-       public function logoutApi()
+       public function logout()
        {
            $user = User::where('id',auth('sanctum')->id)->first();
            $user->tokens()->delete();
