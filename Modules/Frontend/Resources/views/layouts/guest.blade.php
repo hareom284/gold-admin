@@ -8,7 +8,7 @@
     <meta name="baseUrl" content="{{env('APP_URL')}}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Frontend Module - {{ config('app.name', 'Laravel') }}</title>
+    <title>Authentication - GoldChannel</title>
 
     <meta name="description" content="{{ $description ?? '' }}">
 
