@@ -190,8 +190,10 @@ img {
   --bs-dark-border-subtle: #F5F6FA;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 34, 41, 46;
-  --bs-font-sans-serif: "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* --bs-font-sans-serif: "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
   --bs-font-monospace: "Roboto", sans-serif, "Liberation Mono", "Courier New", monospace;
+  --bs-font-sans-serif: "Lato", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
   --bs-body-font-size: 1rem;
@@ -15155,7 +15157,7 @@ header .mobile-offcanvas .btn-close:focus {
     border-left: 0;
   }
   .iq-nav-menu > li > a {
-    font-size: 0.975rem;
+    font-size: 18px;
     padding: 1rem var(--bs-navbar-nav-link-padding-x);
     line-height: 1.5rem;
     z-index: 9;
