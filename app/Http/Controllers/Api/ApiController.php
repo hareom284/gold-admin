@@ -251,22 +251,22 @@ class ApiController extends Controller
        }
 
        //top rated movies
-       public function TopRatedMovies()
+       public function TopRatedItems($type)
        {
 
-            $topRatedMovies = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where('status', 1)->take(20)->get();
+            $topRatedItems = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where(['status'=>1,'type'=>$type])->take(20)->get();
 
-            $top_rated = MoviesResource::collection($topRatedMovies);
+            $top_rated = MoviesResource::collection($topRatedItems);
 
            return response()->json([
                "success"=>true,
-               "message"=>"Top rated movies reterived successfully",
+               "message"=>"Top rated $type reterived successfully",
                "data"=>$top_rated,
            ],200);
        }
 
        //recently added movies
-       public function RecentlyAddedMovies()
+       public function RecentlyAdded()
        {
             $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
 
@@ -274,7 +274,7 @@ class ApiController extends Controller
 
            return response()->json([
                "success"=>true,
-               "message"=>"Recently added movies reterived successfully",
+               "message"=>"Recently added items reterived successfully",
                "data"=>$recently_add,
            ],200);
        }
