@@ -43,7 +43,7 @@ class MoviesResource extends JsonResource
                     'name' => $tag->tag->name ?? null,
                 ];
             }
-
+g
 
         }
 

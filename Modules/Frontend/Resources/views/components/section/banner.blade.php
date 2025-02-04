@@ -68,7 +68,7 @@
                     @endif --}}
                     @if ($slider['data']['movie_access']=='paid')
                     <div class="">
-                        <a href="#" class="btn btn-light">
+                        <a href="#" class="btn btn-custom-button-one">
                          <span class="d-flex align-items-center justify-content-center gap-2">
                              <span><i class="ph-fill ph-crown"></i></span>
                              <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
