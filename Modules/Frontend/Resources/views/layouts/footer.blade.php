@@ -5,14 +5,21 @@ $footerData = getFooterData();
 
 <footer class="footer">
   <div class="footer-top">
-    <div class="container-fluid">
+    <div class="container-fluid " style="padding-block: 50px;">
         <div class="row text-center">
-            <div class="footer-logo mb-4">
+            <div class="footer-logo mb-4 d-flex justify-content-center align-items-center section-spacing-bottom">
                 <!--Logo -->
-                 @include('frontend::components.partials.logo')
+                 <div>
+                    @include('frontend::components.partials.logo')
+                 </div>
+                 <div style="font-size:24px;font-weight:800;color:white;" class="ms-3">Gold Channel</div>
             </div>
-            <h5>Download our app</h5>
-            <h6>Enjoy instant access to the best movies and TV shows right on <br>your mobile screen.</h6>
+
+            <div class="section-spacing-bottom">
+                <h5 style="font-weight: 800;font-size:20px;line-height:32px;">Download our app</h5>
+                <h6 style="font-weight: 400;font-size:20px;line-height:32px;color:#BEBEBE">Enjoy instant access to the best movies and TV shows right on <br>your mobile screen.</h6>
+            </div>
+
             <div class="mt-3 mb-5 d-flex justify-content-center gap-3 ">
                 <button class="btn btn-outline-light">
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,9 +121,9 @@ $footerData = getFooterData();
       </div>
     </div> --}}
   </div>
-  <div class="footer-bottom mt-5">
+  <div class="footer-bottom mt-5 border-top  mx-5">
     <div class="container-fluid">
-      <div class="text-center text-white">
+      <div class="text-center" style="font-weight: 400;font-size:18px;line-height:29px;">
         © {{ now()->year }} <span >Gold Channel</span>. {{__('frontend.all_rights_reserved')}}.
       </div>
     </div>

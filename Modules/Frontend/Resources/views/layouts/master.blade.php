@@ -18,9 +18,6 @@
     <meta name="google" content="notranslate">
 
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300&amp;display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('modules/frontend/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('iconly/css/style.css') }}">

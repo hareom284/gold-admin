@@ -9,28 +9,28 @@
       </div>
       <button type="button" class="btn-close p-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <ul class="navbar-nav iq-nav-menu  list-unstyled" id="header-menu">
-      <li class="nav-item">
+    <ul class="navbar-nav iq-nav-menu ms-5  list-unstyled" id="header-menu">
+      <li class="nav-item me-5">
         <a class="nav-link"  href="{{route('user.login')}}">
           <span class="item-name">{{__('frontend.home')}}</span>
         </a>
       </li>
       @if(isenablemodule('movie'))
-      <li class="nav-item">
+      <li class="nav-item me-5">
         <a class="nav-link"  href="{{ route('movies') }}">
           <span class="item-name">{{__('frontend.movies')}}</span>
         </a>
       </li>
       @endif
       @if(isenablemodule('tvshow'))
-      <li class="nav-item">
+      <li class="nav-item me-5">
         <a class="nav-link"  href="{{ route('tv-shows') }}">
           <span class="item-name">{{__('frontend.tvshows')}}</span>
         </a>
       </li>
       @endif
       @if(isenablemodule('video'))
-      <li class="nav-item">
+      <li class="nav-item me-5">
         <a class="nav-link"  href="{{ route('videos') }}">
           <span class="item-name">{{__('frontend.video')}}</span>
         </a>
@@ -42,7 +42,7 @@
         </a>
       </li> --}}
       @if(isenablemodule('livetv'))
-      <li class="nav-item">
+      <li class="nav-item me-5">
         <a class="nav-link"  href="{{route('livetv')}}">
           <span class="item-name">{{__('frontend.livetv')}}</span>
         </a>
@@ -51,7 +51,7 @@
       @php
           $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
       @endphp
-      <li class="nav-item">
+      <li class="nav-item me-5">
             <a  class="nav-link dropdown-toggle" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Genres
             </a>
