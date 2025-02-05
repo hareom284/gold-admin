@@ -22,7 +22,7 @@
                                   </span>
                                 @endif
                             </a>
-                            <span class="top-ten-numbers texture-text" style="background-image: url('{{ asset('img/web-img/texture.jpg') }}');">
+                            <span class="top-ten-numbers texture-text maname-regular" style="background-color:#353535; -webkit-text-stroke: 2px #686868;">
                                 {{ $index + 1 }}
                             </span>
                         </div>

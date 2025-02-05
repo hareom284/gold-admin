@@ -3,23 +3,22 @@
   z-index: 0;
 }
 
-.product-premium {
-  background:rgb(20, 20, 20) !important;
-  border-radius: 2px 0px 2px 0px !important;
-  color: hsl(48, 100%, 50%) !important;
-  height: 1.75rem;
-  line-height: 1.9rem;
-  position: absolute;
-  left: 0 !important;
-  text-align: center;
-  top: 0 !important;
-  opacity: 0.7;
-  width: 1.75rem;
-  z-index: 100;
-  i {
-    font-size: $font-size-sm;
-  }
-}
+// .product-premium {
+//   background:rgba(20, 20, 20,0.9) !important;
+//   border-radius: 2px 0px 2px 0px !important;
+//   color: hsl(48, 100%, 50%) !important;
+//   height: 1.75rem;
+//   line-height: 1.9rem;
+//   position: absolute;
+//   left: 0 !important;
+//   text-align: center;
+//   top: 0 !important;
+//   width: 1.75rem;
+//   z-index: 100;
+//   i {
+//     font-size: $font-size-sm;
+//   }
+// }
 
 #actor-slider .slick-general .slick-slide{
   padding: 0px !important;

@@ -19,7 +19,7 @@
                 style="width: 100%; height: 100%; object-fit: cover;">
          </div>
          <div style="width: 300px">
-           <span class="text-capitalize">{{ $data->name }}</span>
+           <span class="text-capitalize text-white">{{ $data->name }}</span>
          </div>
        </div>
      @endforeach

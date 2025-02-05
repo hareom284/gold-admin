@@ -116,8 +116,8 @@ $footerData = getFooterData();
   </div>
   <div class="footer-bottom mt-5">
     <div class="container-fluid">
-      <div class="text-center">
-        © {{ now()->year }} <span class="">Gold Channel</span>. {{__('frontend.all_rights_reserved')}}.
+      <div class="text-center text-white">
+        © {{ now()->year }} <span >Gold Channel</span>. {{__('frontend.all_rights_reserved')}}.
       </div>
     </div>
   </div>
