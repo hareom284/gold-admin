@@ -15,8 +15,8 @@ use Modules\Genres\Http\Controllers\Api\GenersController;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('genres', fn (Request $request) => $request->user())->name('genres');
-});
+// Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
+//     Route::get('genres', fn (Request $request) => $request->user())->name('genres');
+// });
 
 Route::get('genre-list', [GenersController::class, 'genreList']);

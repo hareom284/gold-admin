@@ -52,7 +52,7 @@ class UserTableSeeder extends Seeder
             [
                 'first_name' => 'Ivan',
                 'last_name' => 'Norris',
-                'email' => 'admin@goldchannel.com',
+                'email' => 'demoadmin@goldchannel.com',
                 'password' => Hash::make('12345678'),
                 'mobile' => '+12124567899',
                 'date_of_birth' => fake()->date,

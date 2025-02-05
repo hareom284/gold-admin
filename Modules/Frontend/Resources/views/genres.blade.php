@@ -1,7 +1,6 @@
 @extends('frontend::layouts.master')
 
 @section('content')
-
 <div class="list-page section-spacing-bottom px-0">
     <div class="page-title">
         <h4 class="m-0 text-center">{{__('frontend.all_genre')}}</h4>

@@ -61,6 +61,8 @@ header {
     backdrop-filter: blur(.625em);
   }
 
+
+
   .navbar-toggler-icon {
     background-image: none;
     position: relative;
@@ -95,6 +97,10 @@ header {
       }
     }
   }
+
+  a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
+    color: var(--bs-primary);
+}
 
   // header search
   &.header-search {

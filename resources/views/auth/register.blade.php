@@ -2,7 +2,6 @@
     <x-slot name="title">
         @lang('Register')
     </x-slot>
-
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
@@ -67,6 +66,7 @@
                     {{ __('Register') }}
                 </x-button>
             </div>
+
         </form>
 
         <x-slot name="extra">

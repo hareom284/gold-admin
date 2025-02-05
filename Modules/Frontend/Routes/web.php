@@ -50,7 +50,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::get('language/{language}', [LanguageController::class, 'switch'])->name('frontend.language.switch');
 Route::get('/login-page', [AuthController::class, 'login'])->name('login-page');
 Route::post('/store-user', [AuthController::class, 'store'])->name('store-user');
-Route::get('/register', [AuthController::class, 'registration'])->name('register-page');
+// Route::get('/register', [AuthController::class, 'registration'])->name('register-page');
 Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name('forget-password');
 
 

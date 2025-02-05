@@ -80,7 +80,7 @@ class AuthController extends Controller
         Artisan::call('config:cache');
         Artisan::call('route:clear');
 
-        return response()->json(['status' => true, 'message' => __('messages.successfully_register')]);
+        return response()->json(['status' => true, 'message' => __('messages.successfully_register')],200);
     }
 
     public function Logout(Request $request){
@@ -132,7 +132,6 @@ class AuthController extends Controller
      // Redirect to Google
      public function redirectToGoogle()
      {
-
          return Socialite::driver('google')->redirect();
      }
 
@@ -200,7 +199,6 @@ class AuthController extends Controller
              return Redirect::to('/login')->with('error', 'Something went wrong!');
          }
      }
-
 
      // Redirect to Apple
      public function redirectToApple()

@@ -17,6 +17,6 @@ use Modules\CastCrew\Http\Controllers\API\CastCrewController;
 
 Route::get('castcrew-list', [CastCrewController::class, 'castCrewList']);
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('castcrew', fn (Request $request) => $request->user())->name('castcrew');
-});
+// Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
+//     Route::get('castcrew', fn (Request $request) => $request->user())->name('castcrew');
+// });

@@ -48,6 +48,34 @@
         </a>
       </li>
       @endif
+      @php
+          $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
+      @endphp
+      <li class="nav-item">
+            <a  class="nav-link dropdown-toggle" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Genres
+            </a>
+            <ul class="dropdown-menu " style="width:max-content" aria-labelledby="dropdownMenuButton1">
+               <div class="row">
+                    <div class="col-12 col-md-6 ">
+                        @foreach ($genres as $genre)
+                            @if($loop->even)
+                                <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                            @endif
+                        @endforeach
+                    </div>
+                    <div class="col-12 col-md-6 ">
+                        @foreach ($genres as $genre)
+                            @if ($loop->odd)
+                                    <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                            @endif
+                        @endforeach
+                    </div>
+               </div>
+            </ul>
+         </ul>
+      </li>
+
     </ul>
   </div>
   <!-- container-fluid.// -->

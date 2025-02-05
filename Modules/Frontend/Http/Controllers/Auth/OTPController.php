@@ -3,19 +3,22 @@
 
 namespace Modules\Frontend\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Hash;
-use Auth;
 use Str;
+use Auth;
+use Hash;
+use App\Models\User;
 use App\Models\Device;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\DeviceEmail;
 use App\Models\Setting;
+use App\Mail\DeviceEmail;
 use Jenssegers\Agent\Agent;
+use Illuminate\Http\Request;
 use App\Models\UserMultiProfile;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Modules\Frontend\Trait\LoginTrait;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use GPBMetadata\Google\Api\Auth as ApiAuth;
 
 
 class OTPController extends Controller
@@ -24,13 +27,13 @@ class OTPController extends Controller
 
     public function otpLogin()
     {
-        $userId = auth()->id(); 
-        
+        $userId = auth()->id();
+
         $settings = Setting::getAllSettings($userId);
         $isOtpLoginEnabled = Setting::where('name', 'is_otp_login')->value('val') == 1;
 
         // return $settings;
-        
+
         return view('frontend::auth.otp_login', compact('settings', 'isOtpLoginEnabled'));
     }
 
@@ -75,6 +78,7 @@ class OTPController extends Controller
         return redirect('/'); // Redirect to intended page
     }
 
+
     public function checkUserExists(Request $request)
     {
         $data = $request->all();
@@ -102,6 +106,7 @@ class OTPController extends Controller
             $this->setDevice($user, $request);
 
             Auth::login($user);
+
             $flag = 1;
         }
 

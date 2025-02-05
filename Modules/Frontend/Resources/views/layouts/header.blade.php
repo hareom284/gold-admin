@@ -94,12 +94,12 @@
                                         <li class="nav-item">
 
                                             @if(auth()->user()->is_subscribe==0)
-                                            <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
+                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
                                                 {{__('frontend.subscribe')}}
                                             </button>
                                             @else
 
-                                            <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
+                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
                                                 {{__('frontend.upgrade')}}
                                             </button>
 
@@ -185,7 +185,7 @@
                                     </li>
                                 @else
                                     <li class="nav-item">
-                                        <a href="{{ route('login') }}" class="btn btn-primary font-size-14 login-btn">
+                                        <a href="{{ route('login') }}" class="btn btn-custom-button-one font-size-14 login-btn">
                                             {{__('frontend.login')}}
                                         </a>
                                     </li>

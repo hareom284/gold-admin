@@ -46,9 +46,11 @@ class FrontendController extends Controller
         $sliders = Cache::get($cacheKey);
         if (!$sliders) {
            $sliderList = Banner::where('status', 1)->get();
+
            $sliders = SliderResource::collection($sliderList->map(function ($slider) use ($user_id) {
                 return new SliderResource($slider, $user_id);
            }));
+
 
            $sliders = $sliders->toArray(request());
            Cache::put($cacheKey, $sliders);

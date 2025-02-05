@@ -3,8 +3,8 @@
 @section('content')
 
 
-    <!-- Main Banner -->
 
+    <!-- Main Banner -->
 
     <div id="banner-section" class="section-spacing-bottom px-0">
 
@@ -17,11 +17,22 @@
         @endif
     </div>
 
+    {{-- ads banner  --}}
+    <div id="adsbanner-section" class="px-0">
+
+        @php
+            $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
+        @endphp
+
+        @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
+
+    </div>
+
 
 
 
     <div class="container-fluid padding-right-0">
-        <div class="overflow-hidden">
+        {{-- <div class="overflow-hidden">
 
             @php
             $is_enable_continue_watching = App\Models\MobileSetting::getValueBySlug('continue-watching');
@@ -59,12 +70,108 @@
                </div>
 
             </div>
-          @endif
+          @endif --}}
 
 
 
 
-          @if(isenablemodule('movie') == 1)
+        <div id="top-rated-moive-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="recently-added-movie-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="korea-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="india-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        <div id="china-hit-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+{{--
+        <div id="most-view-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+               <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                  @for ($i = 0; $i < 6; $i++)
+                    <div class="shimmer-container col mb-3">
+                        @include('components.card_shimmer_movieList')
+                    </div>
+                 @endfor
+               </div>
+             </div>
+          </div> --}}
+
+          <div id="actor-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_languageList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div>
+
+        {{-- <div id="most-watch-movie-section" class="section-wraper scroll-section section-hidden">
+            <div class="card-style-slider movie-shimmer">
+                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+                   @for ($i = 0; $i < 6; $i++)
+                     <div class="shimmer-container col mb-3">
+                         @include('components.card_shimmer_movieList')
+                     </div>
+                  @endfor
+              </div>
+           </div>
+        </div> --}}
+
+          {{-- @if(isenablemodule('movie') == 1)
             <div id="top-10-moive-section" class="section-wraper scroll-section section-hidden">
                 <div class="card-style-slider movie-shimmer">
                     <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -89,9 +196,9 @@
                   </div>
                </div>
             </div>
-         @endif
+         @endif --}}
 
-         <div id="language-section" class="section-wraper scroll-section section-hidden">
+         {{-- <div id="language-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">
                 <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                    @for ($i = 0; $i < 6; $i++)
@@ -101,10 +208,10 @@
                   @endfor
               </div>
            </div>
-        </div>
+        </div> --}}
 
 
-        @if(isenablemodule('movie') == 1)
+        {{-- @if(isenablemodule('movie') == 1)
 
         <div  id="popular-moive-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">
@@ -117,9 +224,9 @@
               </div>
            </div>
         </div>
-      @endif
+      @endif --}}
 
-      @if(isenablemodule('livetv')==1 )
+      {{-- @if(isenablemodule('livetv')==1 )
       <div id="topchannel-section" class="section-wraper scroll-section section-hidden">
         <div class="card-style-slider shimmer-container">
             <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -131,9 +238,9 @@
               </div>
           </div>
       </div>
-   @endif
+   @endif --}}
 
-    @if(isenablemodule('tvshow')==1)
+    {{-- @if(isenablemodule('tvshow')==1)
       <div id="popular-tvshow-section" class="section-wraper scroll-section section-hidden">
         <div class="card-style-slider movie-shimmer">
             <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -145,9 +252,9 @@
           </div>
        </div>
     </div>
-   @endif
+   @endif --}}
 
-   <div id="favorite-personality" class="section-wraper scroll-section section-hidden">
+   {{-- <div id="favorite-personality" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider shimmer-container">
         <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 row-cols-xl-7 mt-3">
                 @for ($i = 0; $i < 7; $i++)
@@ -157,9 +264,9 @@
                 @endfor
         </div>
     </div>
-  </div>
+  </div> --}}
 
-  @if(isenablemodule('movie')==1 )
+  {{-- @if(isenablemodule('movie')==1 )
   <div id="free-movie-section"  class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider movie-shimmer">
         <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -171,9 +278,9 @@
       </div>
     </div>
   </div>
-@endif
+@endif --}}
 
-<div id="genres-section" class="section-wraper scroll-section section-hidden">
+{{-- <div id="genres-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider shimmer-container">
         <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                 @for ($i = 0; $i < 6; $i++)
@@ -183,9 +290,9 @@
                 @endfor
         </div>
     </div>
-</div>
+</div> --}}
 
-@if(isenablemodule('video')==1 )
+{{-- @if(isenablemodule('video')==1 )
 <div id="video-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider movie-shimmer">
         <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
@@ -197,10 +304,10 @@
       </div>
     </div>
 </div>
-@endif
+@endif --}}
 
 
-   @if( $user_id != null && isenablemodule('movie')==1)
+   {{-- @if( $user_id != null && isenablemodule('movie')==1)
 
    <div id="base-on-last-watch-section" class="section-wraper scroll-section section-hidden">
      <div class="card-style-slider movie-shimmer">
@@ -225,9 +332,21 @@
          @endfor
        </div>
      </div>
-  </div>
+  </div> --}}
 
-  <div id="most-view-section" class="section-wraper scroll-section section-hidden">
+  {{-- <div id="most-view-section" class="section-wraper scroll-section section-hidden">
+    <div class="card-style-slider movie-shimmer">
+       <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
+          @for ($i = 0; $i < 6; $i++)
+            <div class="shimmer-container col mb-3">
+                @include('components.card_shimmer_movieList')
+            </div>
+         @endfor
+       </div>
+     </div>
+  </div> --}}
+
+  {{-- <div id="tranding-in-country-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider movie-shimmer">
        <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
           @for ($i = 0; $i < 6; $i++)
@@ -239,19 +358,7 @@
      </div>
   </div>
 
-  <div id="tranding-in-country-section" class="section-wraper scroll-section section-hidden">
-    <div class="card-style-slider movie-shimmer">
-       <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
-          @for ($i = 0; $i < 6; $i++)
-            <div class="shimmer-container col mb-3">
-                @include('components.card_shimmer_movieList')
-            </div>
-         @endfor
-       </div>
-     </div>
-  </div>
-
-@endif
+@endif --}}
 
 @if($user_id != null)
 
@@ -336,10 +443,25 @@ const observer = new IntersectionObserver((entries, observer) => {
               fetchContinueWatch();
             } else if (entry.target.id === 'top-10-moive-section' ) {
                 fetchTop10Movies();
-            } else if (entry.target.id === 'latest-moive-section') {
+            }else if (entry.target.id === 'top-rated-moive-section' ) {
+                fetchTopRatedMovies();
+            }else if (entry.target.id === 'recently-added-movie-section' ) {
+                fetchRecentlyAddedMovies();
+            }else if (entry.target.id === 'korea-hit-section' ) {
+                fetchHitMovies('korea');
+            }else if (entry.target.id === 'india-hit-section' ) {
+                fetchHitMovies('india');
+            }
+            else if (entry.target.id === 'china-hit-section' ) {
+                fetchHitMovies('china');
+            }  else if (entry.target.id === 'latest-moive-section') {
                 fetchLatestMovies();
+            }else if (entry.target.id === 'most-watch-movie-section') {
+                fetchMostWatchMovies();
             }else if (entry.target.id === 'language-section' ) {
                 fetchLanguages();
+            }else if (entry.target.id === 'actor-section' ) {
+                fetchActors();
             }else if (entry.target.id === 'popular-moive-section' ) {
                 fetchPopularMovies();
             }else if (entry.target.id === 'topchannel-section' ) {
@@ -392,6 +514,70 @@ function fetchContinueWatch() {
             console.error('Error fetching Top 10 Movies:', error);
         });
 }
+// fetch top rated movies section
+function fetchTopRatedMovies() {
+
+    fetch(`${envURL}/api/top-rated-movie`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('top-rated-moive-section').innerHTML = data.html;
+            slickGeneral('slick-general-top-rated');
+        })
+        .catch(error => {
+            console.error('Error fetching Top rated Movies:', error);
+        });
+}
+
+function fetchRecentlyAddedMovies() {
+
+fetch(`${envURL}/api/recently-added-movie`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('recently-added-movie-section').innerHTML = data.html;
+        slickGeneral('slick-general-recently-added');
+    })
+    .catch(error => {
+        console.error('Error fetching recently added Movies:', error);
+    });
+}
+
+function fetchHitMovies(ref) {
+
+fetch(`${envURL}/api/hit-movie/${ref}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById(`${ref}-hit-section`).innerHTML = data.html;
+        slickGeneral(`${ref}-hit-section`);
+    })
+    .catch(error => {
+        console.error('Error fetching korea hit Movies:', error);
+    });
+}
+
+function fetchMostWatchMovies() {
+
+fetch(`${envURL}/api/most-watch-movie`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('most-watch-movie-section').innerHTML = data.html;
+        slickGeneral('slick-general-most-watch');
+    })
+    .catch(error => {
+        console.error('Error fetching most watched Movies:', error);
+    });
+}
+
+function fetchActors() {
+    fetch(`${envURL}/api/fetch-actor`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('actor-section').innerHTML = data.html;
+            slickGeneral('slick-general-actor');
+        })
+        .catch(error => {
+            console.error('Error fetching Actor:', error);
+        });
+    }
 
 // Fetch Top 10 Movies
 function fetchTop10Movies() {
@@ -430,6 +616,8 @@ function fetchLanguages() {
             console.error('Error fetching Language:', error);
         });
     }
+
+
 
     function fetchPopularMovies() {
     fetch(`${envURL}/api/popular-movie`)

@@ -1,6 +1,13 @@
 <?php
 
 return[
+    'genres'=>'Genres',
+    'top_rated' => 'Top Rated Movies & TV Shows',
+    'recently_add'=>'Recently Added',
+    'most_watch'=>'Most Watched Movies',
+    'enjoy_subscription'=>'Enjoy with a subscription',
+    'more_info_home'=>'More Info',
+    'fetch_actor'=>'Watch Movies Featuring Your Favorite Star',
     'sign_up_title'=>'Sign up to Begin Your Adventure',
     'sign_sub_title'=>'Create Your Account for unforgettable Experience',
     'sign_up'=>'Sign up',
