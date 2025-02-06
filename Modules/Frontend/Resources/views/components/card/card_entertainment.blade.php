@@ -39,17 +39,19 @@
 </ul>
 
           <h5 class="iq-title text-capitalize line-count-1"> {{ $value['name']  ?? '--'}} </h5>
-          <div class="d-flex align-items-center gap-3">
+          <div class="d-flex align-items-center gap-3 text-white">
+            <div class="movie-language d-flex align-items-center gap-1">
+                <small>{{ substr($value['release_date'],0,4)}}</small>
+              </div>
             <div class="movie-time d-flex align-items-center gap-1 small">
               <i class="ph ph-clock"></i>
               {{ $value['duration'] ? formatDuration($value['duration']) : '--' }}
             </div>
-            <div class="movie-language d-flex align-items-center gap-1">
-              <i class="ph ph-translate"></i>
-              <small>{{ $value['language'] }}</small>
-            </div>
           </div>
-          <div class="d-flex align-items-center gap-3 mt-3">
+          <div>
+            <small class="text-white">{{substr($value['description'],0,100)}}</small>
+          </div>
+          {{-- <div class="d-flex align-items-center gap-3 mt-3">
                 <x-watchlist-button :entertainment-id="$value['id']" :in-watchlist="$value['is_watch_list']" customClass="watch-list-btn" />
 
               <div class="flex-grow-1">
@@ -58,7 +60,7 @@
                      {{ __('frontend.watch_now') }}
                  </a>
               </div>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>
