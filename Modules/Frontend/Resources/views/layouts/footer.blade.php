@@ -12,7 +12,7 @@ $footerData = getFooterData();
                  <div>
                     @include('frontend::components.partials.logo')
                  </div>
-                 <div style="font-size:24px;font-weight:800;color:white;" class="ms-3">Gold Channel</div>
+                 <div style="font-size:24px;font-weight:800;color:white;" class="ms-3"></div>
             </div>
 
             <div class="section-spacing-bottom">
