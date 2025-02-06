@@ -1,6 +1,6 @@
 <div class="top-ten-block">
     <div class="d-flex align-items-center justify-content-between my-2">
-    <h5 class="main-title text-capitalize mb-0">{{__('frontend.top_rated')}}</h5>
+    <h5 class="main-title text-capitalize mb-0 fw-bold mb-2">{{__('frontend.top_rated')}}</h5>
     </div>
     <div class="card-style-slider {{ count($top_rated) <= 6 ? 'slide-data-less' : '' }}">
         <div class="slick-general slick-general-top-rated  iq-top-ten-block-slider" data-items="6.5" data-items-desktop="5.5" data-items-laptop="4.5" data-items-tab="3.5" data-items-mobile-sm="3.5"
@@ -22,7 +22,7 @@
                                   </span>
                                 @endif
                             </a>
-                            <span class="top-ten-numbers texture-text maname-regular" style="background-color:#353535; -webkit-text-stroke: 2px #686868;">
+                            <span class="top-ten-numbers texture-text maname-regular" style="background-color:#353535; -webkit-text-stroke: 1px #686868;font-weight: 400;">
                                 {{ $index + 1 }}
                             </span>
                         </div>

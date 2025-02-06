@@ -1,6 +1,6 @@
 <div class="top-ten-block">
     <div class="d-flex align-items-center justify-content-between my-2">
-        <h5 class="main-title text-capitalize mb-0">{{$title}} Hits</h5>
+        <h5 class="main-title text-capitalize fw-bold mb-2">{{$title}} Hits</h5>
         @if(count($hit_movie)>6)
         <a href="{{route('movies')}}" class="view-all-button text-decoration-none flex-none"><span>{{__('frontend.view_all')}}</span> <i class="ph ph-caret-right"></i></a>
         @endif

@@ -5,18 +5,18 @@
 
 <div id="thumbnail-section">
 
-    @include('frontend::components.section.thumbnail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'thumbnail_image'=>$data['thumbnail_image']])
+    @include('frontend::components.section.custom-video-detail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'poster_image'=>$data['poster_image']])
 </div>
 
-<div id="detail-section">
+{{-- <div id="detail-section">
     @include('frontend::components.section.data_detail',  ['data' => $data])
-</div>
+</div> --}}
 
-<div class="short-menu mb-5">
+<div class="short-menu mt-4">
     <div class="container-fluid">
-        <div class="py-4 px-md-5 px-3 movie-detail-menu rounded">
+        <div class="py-2 px-md-5 px-3 movie-detail-menu rounded">
             <div class="d-flex align-items-center gap-2">
-                <div class="left">
+                {{-- <div class="left">
                     <i class="ph ph-caret-left"></i>
                 </div>
                 <div class="custom-nav-slider">
@@ -55,13 +55,77 @@
                 </div>
                 <div class="right">
                     <i class="ph ph-caret-right"></i>
+                </div> --}}
+
+                  <ul class="nav " role="tablist" id="detail-tab">
+                    <li class="nav-item" role="presentation">
+                      <a class="active text-white" style="font-weight: 600;font-size:24px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <a class="text-white" style="font-weight: 600;font-size:24px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
+                    </li>
+                  </ul>
+            </div>
+        </div>
+    </div
+</div>
+
+<div class="container-fluid mt-4">
+    <a href="#" class="btn btn-custom-button-one">
+        <span class="d-flex align-items-center justify-content-center gap-2">
+            <span><i class="ph-fill ph-crown"></i></span>
+            <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
+        </span>
+    </a>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="tab-content pt-5" id="tab-content">
+
+        <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+            <div class=" padding-right-0">
+                <div class="overflow-hidden">
+                    @if(count( $data['casts']) >0)
+                    <div id="movie-cast" class="half-spacing">
+                        @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
+                    </div>
+                    @endif
+
+                    @if(count( $data['directors']) >0)
+                    <div id="favorite-personality">
+                        @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
+
+
+        <div class="tab-pane mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+            <div class="row" style="font-weight: 400;font-size:24px;line-height:39px;">
+                <div class="col-md-6 col-12 ">
+                    <div class="d-flex justify-content-around border align-items-center  rounded p-4 me-5" >
+                        <div class="text-white">720p</div>
+                        <div class="text-white">1.2 GB</div>
+                        <div>Gdrive</div>
+                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12" >
+                    <div class="d-flex justify-content-around border align-items-center  rounded p-4 me-5">
+                        <div class="text-white">720p</div>
+                        <div class="text-white">1.2 GB</div>
+                        <div>Gdrive</div>
+                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
+                    </div>
+                </div>
+                <hr class="my-5 border border-light">
+            </div>
+        </div>
+      </div>
 </div>
 
-<div class="container-fluid padding-right-0">
+{{-- <div class="container-fluid padding-right-0">
     <div class="overflow-hidden">
         @if(count( $data['casts']) >0)
         <div id="movie-cast" class="half-spacing">
@@ -75,9 +139,9 @@
         </div>
         @endif
     </div>
-</div>
+</div> --}}
 
-<div class="container-fluid">
+{{-- <div class="container-fluid">
     <div id="add-review">
         @include('frontend::components.section.add_review',  ['addreview' => 'Add Review'])
     </div>
@@ -86,7 +150,7 @@
         @include('frontend::components.section.review_list',  ['data' => $data['three_reviews'], 'your_review'=> $data['your_review'], 'title'=> $data['name'], 'total_review'=>count($data['reviews'])])
     </div>
 
-</div>
+</div> --}}
 <div class="container-fluid padding-right-0">
     <div class="overflow-hidden">
         @if(count($data['more_items']) !=0 )

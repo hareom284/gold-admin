@@ -1,6 +1,6 @@
 <div class="top-ten-block">
     <div class="d-flex align-items-center justify-content-between my-2">
-    <h5 class="main-title text-capitalize mb-0">{{__('frontend.recently_add')}}</h5>
+    <h5 class="main-title text-capitalize fw-bold mb-2">{{__('frontend.recently_add')}}</h5>
     </div>
     <div class="card-style-slider {{ count($recently_add) <= 6 ? 'slide-data-less' : '' }}">
         <div class="slick-general slick-general-recently-added  iq-top-ten-block-slider" data-items="6.5" data-items-desktop="5.5" data-items-laptop="4.5" data-items-tab="3.5" data-items-mobile-sm="3.5"
