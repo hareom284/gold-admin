@@ -118,7 +118,7 @@ return[
     'search_not_found'=>'Sorry, Couldn\'t Find Your Search!',
     'try_something_new'=>'Try something new',
     'submit'=>'Submit',
-    'account_setting'=>'Account Setting',
+    'account_setting'=>'Account',
     'subscription_plan'=>'Subscription plans',
     'subscription_history'=>'Subscription History',
     'subscribe'=>'Subscribe',

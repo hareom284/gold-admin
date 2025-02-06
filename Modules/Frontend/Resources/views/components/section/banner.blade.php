@@ -11,7 +11,7 @@
       <div class="slick-item" style="background-image: url({{ setBaseUrlWithFileName($slider['poster_url']) }});">
         <div class="movie-content h-100">
           <div class="container-fluid h-100">
-            <div class="row align-items-center h-100">
+            <div class="row mt-5 h-100">
               <div class="col-xxl-4 col-lg-6">
                 <div class="movie-info">
                   <div class="movie-tag mb-3">
@@ -25,8 +25,8 @@
                     @endif
                     </ul> --}}
                   </div>
-                  <h4 class="mb-2">{{ $data['name'] }}</h4>
-                  <p class="mb-0 font-size-14 line-count-3">{{ $data['description'] }}</p>
+                  <h4 class="mb-2 text-nowrap" style="font-size: 36px;font-weight:800;">{{ $data['name'] }}</h4>
+                  <p class="mb-0 font-size-14 line-count-2" style="font-size: 30px;font-weight:400;">{{ $data['description'] }}</p>
                   {{-- <ul class="list-inline mt-4 mb-0 mx-0 p-0 d-flex align-items-center flex-wrap gap-3">
 
                     <li>
