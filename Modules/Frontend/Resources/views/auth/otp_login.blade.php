@@ -28,7 +28,7 @@
                                 <form id="send-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
-                                        <input type="tel" id="mobile" value="1234567890" class="form-control"
+                                        <input type="tel" id="mobile" class="form-control"
                                             pattern="[0-9]{10}" placeholder="{{ __('frontend.enter_mobile') }}" required
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                         <div class="invalid-feedback" id="mobile-error">Mobile number field is required.
