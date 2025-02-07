@@ -145,7 +145,7 @@ class DashboardController extends Controller
 
            $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
              $query->where('tag_id', $tag_id);
-           })->take(10)->get();
+           })->with('season')->take(10)->get();
 
            $hit_movie = MoviesResource::collection($hit_movie);
            $hit_movie = $hit_movie->toArray(request());

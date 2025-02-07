@@ -32,8 +32,17 @@
 </div>
 
 <div class="container-fluid mt-4">
-    <div class="tab-content pt-5" id="tab-content">
-        <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+    <a href="#" class="btn btn-custom-button-one">
+        <span class="d-flex align-items-center justify-content-center gap-2">
+            <span><i class="ph-fill ph-crown"></i></span>
+            <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
+        </span>
+    </a>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="tab-content" id="tab-content">
+        <div class="tab-pane active " id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
             <div class=" padding-right-0">
                 <div class="overflow-hidden">
                     @if(count( $data['casts']) >0)
@@ -52,7 +61,7 @@
         </div>
 
 
-        <div class="tab-pane mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+        <div class="tab-pane  mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
             <div id="seasons">
                 @include('frontend::components.section.seasons',  ['data' => $data['tvShowLinks']])
             </div>

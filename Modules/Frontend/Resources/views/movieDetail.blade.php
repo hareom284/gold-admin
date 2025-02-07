@@ -80,7 +80,7 @@
 </div>
 
 <div class="container-fluid mt-4">
-    <div class="tab-content pt-5" id="tab-content">
+    <div class="tab-content " id="tab-content">
 
         <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
             <div class=" padding-right-0">
@@ -102,25 +102,7 @@
 
 
         <div class="tab-pane mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
-            <div class="row" style="font-weight: 400;font-size:16px;line-height:39px;">
-                <div class="col-md-6 col-12 ">
-                    <div class="d-flex justify-content-around border align-items-center  rounded p-2 me-5" >
-                        <div class="text-white">720p</div>
-                        <div class="text-white">1.2 GB</div>
-                        <div>Gdrive</div>
-                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-12" >
-                    <div class="d-flex justify-content-around border align-items-center  rounded p-2 me-5">
-                        <div class="text-white">720p</div>
-                        <div class="text-white">1.2 GB</div>
-                        <div>Gdrive</div>
-                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
-                    </div>
-                </div>
-                <hr class="my-5 border border-light">
-            </div>
+            @include('frontend::components.section.download_link_section')
         </div>
       </div>
 </div>

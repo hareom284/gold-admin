@@ -26,7 +26,7 @@
         @endphp
 
         @if($value['plan_level'] > $current_plan_level)
-        <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph ph-crown-simple"></i></button>
+        <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph-fill ph-crown"></i></button>
         @endif
         @endif
     </div>
@@ -44,8 +44,13 @@
                 <small>{{ substr($value['release_date'],0,4)}}</small>
               </div>
             <div class="movie-time d-flex align-items-center gap-1 small">
-              <i class="ph ph-clock"></i>
-              {{ $value['duration'] ? formatDuration($value['duration']) : '--' }}
+                @if ($value['type'] == 'movie')
+                    <i class="ph ph-clock"></i>  {{formatDuration($value['duration'])}}
+                @else
+                    {{$value['season_count']}} seasons
+                @endif
+              {{-- <i class="ph ph-clock"></i>
+              {{ $value['duration'] ? formatDuration($value['duration']) : '--' }} --}}
             </div>
           </div>
           <div>
