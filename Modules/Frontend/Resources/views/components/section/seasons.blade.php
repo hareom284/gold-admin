@@ -1,6 +1,34 @@
 <div id="season-card-wrapper" class="section-spacing-bottom px-0">
+    <div class="d-flex my-4 justify-content-between align-items-center">
+        <div>
+           <h5>Episodes</h5>
+        </div>
+        <div>
+            <div class="dropdown episode-dropdown season-tab">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Season
+                </button>
+                <ul class="dropdown-menu  nav-tabs " aria-labelledby="dropdownMenuButton1"  id="season-tab" role="tablist">
+                    @foreach ($data as $index => $item)
+                        <li class="nav-item dropdown-item" role="presentation">
+                            <a class=" nav-link {{ $index == 0 ? 'active' : '' }} cursor-pointer"
+                                    id="season-{{ $index + 1 }}"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#season-{{ $index + 1 }}-pane"
+                                    role="tab"
+                                    aria-controls="season-{{ $index + 1 }}-pane"
+                                    aria-selected="{{ $index == 0 ? 'true' : 'false' }}">
+                                Season {{ $index + 1 }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+              </div>
+        </div>
+    </div>
+
     <div class="seasons-tabs-wrapper position-relative">
-        <div class="season-tabs-inner">
+        {{-- <div class="season-tabs-inner">
             <div class="left">
                 <i class="ph ph-caret-left"></i>
             </div>
@@ -25,7 +53,7 @@
             <div class="right">
                 <i class="ph ph-caret-right"></i>
             </div>
-        </div>
+        </div> --}}
 
         <div class="tab-content" id="season-tab-content">
             @foreach($data as $index => $value)
@@ -37,7 +65,8 @@
                     <ul id="episode-list-{{ $value['season_id'] }}" class="list-inline m-0 p-0 d-flex flex-column gap-4 episode-list">
                         @foreach($value['episodes']->toArray(request()) as $episodeIndex => $episode)
                             <li>
-                                @include('frontend::components.card.card_episode', ['data' => $episode, 'index' => $episodeIndex])
+                                {{-- @include('frontend::components.card.card_episode', ['data' => $episode, 'index' => $episodeIndex]) --}}
+                                @include('frontend::components.card.card_accrodion', [ 'data' => $episode, 'index' => $episodeIndex])
                             </li>
                         @endforeach
                     </ul>

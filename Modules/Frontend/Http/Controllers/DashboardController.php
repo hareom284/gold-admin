@@ -80,7 +80,7 @@ class DashboardController extends Controller
         }
 
         if(!empty($recently_add)){
-          $html = view('frontend::components.section.recently_add_movie', ['recently_add' => $recently_add])->render();
+          $html = view('frontend::components.section.entertainment', ['data' =>  $recently_add , 'title' =>'Recently Added','type' => 'movie','slug'=>'recently-movie'] )->render();
         }
 
         return response()->json(['html' => $html]);
@@ -119,15 +119,20 @@ class DashboardController extends Controller
 
         $html='';
 
+        $country = "";
+
         switch($ref){
             case 'korea';
                 $tag_id = 1;
+                $country = "Korean";
                 break;
             case 'india';
                 $tag_id =2;
+                $country = "Indian";
                 break;
             case 'china';
                 $tag_id = 3;
+                $country = "Chinese";
                 break;
             default:
                 $tag_id = 1;
@@ -140,7 +145,7 @@ class DashboardController extends Controller
 
            $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
              $query->where('tag_id', $tag_id);
-           })->take(10)->get();
+           })->with('season')->take(10)->get();
 
            $hit_movie = MoviesResource::collection($hit_movie);
            $hit_movie = $hit_movie->toArray(request());
@@ -153,7 +158,7 @@ class DashboardController extends Controller
 
         if(!empty($hit_movie)){
 
-            $html = view('frontend::components.section.hit_movie', ['hit_movie' =>  $hit_movie , 'title' =>$ref]) ->render();
+            $html = view('frontend::components.section.entertainment', ['data' =>  $hit_movie , 'title' =>$country.' Hits','type' => 'movie','slug'=>$ref.'-hit'] )->render();
 
         }
 

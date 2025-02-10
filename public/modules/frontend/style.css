@@ -15250,21 +15250,21 @@ header .mobile-offcanvas .btn-close:focus {
 
 .season-tab {
   margin-bottom: 0;
-  flex-wrap: nowrap;
-  gap: 0.5rem 1rem;
+}
+.season-tab .dropdown-menu .dropdown-item:hover {
+  background-color: #232a2e !important;
 }
 .season-tab .nav-item {
   flex-shrink: 0;
 }
 .season-tab .nav-item .nav-link {
-  padding: 0.5rem 1rem;
-  background-color: var(--bs-dark);
-  color: var(--bs-body-color);
+  color: white !important;
   border-radius: var(--bs-border-radius);
+  background-color: #232a2e !important;
 }
 .season-tab .nav-item .nav-link.active, .season-tab .nav-item .nav-link:hover {
-  background-color: var(--bs-primary);
-  color: var(--bs-heading-color);
+  background-color: #232a2e !important;
+  color: red !important;
 }
 
 .tab-content.iq-tab-fade-up .tab-pane.fade {

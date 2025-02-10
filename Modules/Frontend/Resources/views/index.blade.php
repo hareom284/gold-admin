@@ -2,7 +2,9 @@
 
 @section('content')
 
+
     <!-- Main Banner -->
+
 
     <div id="banner-section" class="section-spacing-bottom px-0">
 
@@ -15,28 +17,25 @@
         @endif
     </div>
 
-    {{-- ads banner  --}}
-    <div id="adsbanner-section" class="px-0 section-spacing-bottom">
+        {{-- ads banner  --}}
+        <div id="adsbanner-section" class="px-0 section-spacing-bottom">
 
-        @php
-            $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
-        @endphp
+            @php
+                $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
+            @endphp
 
-        @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
+            @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
 
-    </div>
+        </div>
 
-
-
-
-    <div class="container-fluid padding-right-0 ">
-        {{-- <div class="overflow-hidden">
+    <div class="container-fluid padding-right-0">
+        <div class="overflow-hidden">
 
             @php
             $is_enable_continue_watching = App\Models\MobileSetting::getValueBySlug('continue-watching');
            @endphp
 
-            @if($user_id !=null && $is_enable_continue_watching == 1)
+            {{-- @if($user_id !=null && $is_enable_continue_watching == 1)
 
             <div id="continue-watch-section" class="section-wraper scroll-section section-hidden">
 
@@ -73,7 +72,7 @@
 
 
 
-        <div id="top-rated-moive-section" class="section-wraper section-spacing-bottom-for-top-rated scroll-section section-hidden my-5">
+          <div id="top-rated-moive-section" class="section-wraper scroll-section section-hidden my-5">
             <div class="card-style-slider movie-shimmer">
                 <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                    @for ($i = 0; $i < 6; $i++)
@@ -85,7 +84,7 @@
            </div>
         </div>
 
-        <div id="recently-added-movie-section" class="section-wraper scroll-section section-hidden">
+        <div id="recently-movie-section" class="section-wraper scroll-section section-hidden">
             <div class="card-style-slider movie-shimmer">
                 <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                    @for ($i = 0; $i < 6; $i++)
@@ -132,20 +131,8 @@
               </div>
            </div>
         </div>
-{{--
-        <div id="most-view-section" class="section-wraper scroll-section section-hidden">
-            <div class="card-style-slider movie-shimmer">
-               <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
-                  @for ($i = 0; $i < 6; $i++)
-                    <div class="shimmer-container col mb-3">
-                        @include('components.card_shimmer_movieList')
-                    </div>
-                 @endfor
-               </div>
-             </div>
-          </div> --}}
 
-          <div id="actor-section" class="section-wraper scroll-section section-hidden" style="margin-bottom: 200px;">
+        <div id="actor-section" class="section-wraper scroll-section section-hidden" style="margin-bottom: 200px;">
             <div class="card-style-slider movie-shimmer">
                 <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                    @for ($i = 0; $i < 6; $i++)
@@ -157,17 +144,6 @@
            </div>
         </div>
 
-        {{-- <div id="most-watch-movie-section" class="section-wraper scroll-section section-hidden">
-            <div class="card-style-slider movie-shimmer">
-                <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
-                   @for ($i = 0; $i < 6; $i++)
-                     <div class="shimmer-container col mb-3">
-                         @include('components.card_shimmer_movieList')
-                     </div>
-                  @endfor
-              </div>
-           </div>
-        </div> --}}
 
           {{-- @if(isenablemodule('movie') == 1)
             <div id="top-10-moive-section" class="section-wraper scroll-section section-hidden">
@@ -330,9 +306,9 @@
          @endfor
        </div>
      </div>
-  </div> --}}
+  </div>
 
-  {{-- <div id="most-view-section" class="section-wraper scroll-section section-hidden">
+  <div id="most-view-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider movie-shimmer">
        <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
           @for ($i = 0; $i < 6; $i++)
@@ -342,9 +318,9 @@
          @endfor
        </div>
      </div>
-  </div> --}}
+  </div>
 
-  {{-- <div id="tranding-in-country-section" class="section-wraper scroll-section section-hidden">
+  <div id="tranding-in-country-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider movie-shimmer">
        <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
           @for ($i = 0; $i < 6; $i++)
@@ -358,7 +334,7 @@
 
 @endif --}}
 
-@if($user_id != null)
+{{-- @if($user_id != null)
 
 <div id="favorite-genres-section" class="section-wraper scroll-section section-hidden">
     <div class="card-style-slider shimmer-container">
@@ -385,7 +361,7 @@
   </div>
 
 
-@endif
+@endif --}}
 
 
 
@@ -443,50 +419,48 @@ const observer = new IntersectionObserver((entries, observer) => {
                 fetchTop10Movies();
             }else if (entry.target.id === 'top-rated-moive-section' ) {
                 fetchTopRatedMovies();
-            }else if (entry.target.id === 'recently-added-movie-section' ) {
-                fetchRecentlyAddedMovies();
+            }else if (entry.target.id === 'recently-movie-section' ) {
+                fetchRecentlyMovies();
             }else if (entry.target.id === 'korea-hit-section' ) {
                 fetchHitMovies('korea');
             }else if (entry.target.id === 'india-hit-section' ) {
                 fetchHitMovies('india');
-            }
-            else if (entry.target.id === 'china-hit-section' ) {
+            }else if (entry.target.id === 'china-hit-section' ) {
                 fetchHitMovies('china');
-            }  else if (entry.target.id === 'latest-moive-section') {
-                fetchLatestMovies();
-            }else if (entry.target.id === 'most-watch-movie-section') {
-                fetchMostWatchMovies();
-            }else if (entry.target.id === 'language-section' ) {
-                fetchLanguages();
             }else if (entry.target.id === 'actor-section' ) {
-                fetchActors();
-            }else if (entry.target.id === 'popular-moive-section' ) {
-                fetchPopularMovies();
-            }else if (entry.target.id === 'topchannel-section' ) {
-                fetchTopChannels();
-            }else if (entry.target.id === 'popular-tvshow-section' ) {
-                fetchPopularTvshows();
-            }else if (entry.target.id === 'favorite-personality' ) {
-                fetchfavoritePersonality();
-            } else if (entry.target.id === 'free-movie-section' ) {
-                fetchFreeMovie();
-            }else if (entry.target.id === 'genres-section' ) {
-                fetchGenerData();
-            }else if (entry.target.id === 'video-section' ) {
-                fetchVideoData();
-            }else if (entry.target.id === 'base-on-last-watch-section' ) {
-                fetchBaseonlastwatch();
-            }else if (entry.target.id === 'most-like-section' ) {
-                fetchMostLikeMoive();
-            }else if (entry.target.id === 'most-view-section' ) {
-                fetchMostViewMoive();
-            }else if (entry.target.id === 'tranding-in-country-section' ) {
-                fetchCountryTraingingMoive();
-            }else if (entry.target.id === 'favorite-genres-section' ) {
-                fetchFavoriteGenerData();
-            }else if (entry.target.id === 'user-favorite-personality' ) {
-                fetchUserfavoritePersonality();
+                fetchActor();
             }
+            // } else if (entry.target.id === 'latest-moive-section') {
+            //     fetchLatestMovies();
+            // }else if (entry.target.id === 'language-section' ) {
+            //     fetchLanguages();
+            // }else if (entry.target.id === 'popular-moive-section' ) {
+            //     fetchPopularMovies();
+            // }else if (entry.target.id === 'topchannel-section' ) {
+            //     fetchTopChannels();
+            // }else if (entry.target.id === 'popular-tvshow-section' ) {
+            //     fetchPopularTvshows();
+            // }else if (entry.target.id === 'favorite-personality' ) {
+            //     fetchfavoritePersonality();
+            // } else if (entry.target.id === 'free-movie-section' ) {
+            //     fetchFreeMovie();
+            // }else if (entry.target.id === 'genres-section' ) {
+            //     fetchGenerData();
+            // }else if (entry.target.id === 'video-section' ) {
+            //     fetchVideoData();
+            // }else if (entry.target.id === 'base-on-last-watch-section' ) {
+            //     fetchBaseonlastwatch();
+            // }else if (entry.target.id === 'most-like-section' ) {
+            //     fetchMostLikeMoive();
+            // }else if (entry.target.id === 'most-view-section' ) {
+            //     fetchMostViewMoive();
+            // }else if (entry.target.id === 'tranding-in-country-section' ) {
+            //     fetchCountryTraingingMoive();
+            // }else if (entry.target.id === 'favorite-genres-section' ) {
+            //     fetchFavoriteGenerData();
+            // }else if (entry.target.id === 'user-favorite-personality' ) {
+            //     fetchUserfavoritePersonality();
+            // }
 
             observer.unobserve(entry.target);
         }
@@ -501,20 +475,32 @@ sections.forEach(section => {
 
 ;
 
-function fetchContinueWatch() {
-    fetch(`${envURL}/api/web-continuewatch-list`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('continue-watch-section').innerHTML = data.html;
-            slickGeneral('slick-general-continue-watch');
-        })
-        .catch(error => {
-            console.error('Error fetching Top 10 Movies:', error);
-        });
-}
-// fetch top rated movies section
-function fetchTopRatedMovies() {
+// function fetchContinueWatch() {
+//     fetch(`${envURL}/api/web-continuewatch-list`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('continue-watch-section').innerHTML = data.html;
+//             slickGeneral('slick-general-continue-watch');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Top 10 Movies:', error);
+//         });
+// }
 
+// Fetch Top 10 Movies
+// function fetchTop10Movies() {
+//     fetch(`${envURL}/api/top-10-movie`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('top-10-moive-section').innerHTML = data.html;
+//             slickGeneral('slick-general-top-10');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Top 10 Movies:', error);
+//         });
+// }
+
+function fetchTopRatedMovies() {
     fetch(`${envURL}/api/top-rated-movie`)
         .then(response => response.json())
         .then(data => {
@@ -522,50 +508,23 @@ function fetchTopRatedMovies() {
             slickGeneral('slick-general-top-rated');
         })
         .catch(error => {
-            console.error('Error fetching Top rated Movies:', error);
+            console.error('Error fetching Top Related Movies:', error);
         });
 }
 
-function fetchRecentlyAddedMovies() {
-
-fetch(`${envURL}/api/recently-added-movie`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('recently-added-movie-section').innerHTML = data.html;
-        slickGeneral('slick-general-recently-added');
-    })
-    .catch(error => {
-        console.error('Error fetching recently added Movies:', error);
-    });
+function fetchRecentlyMovies() {
+    fetch(`${envURL}/api/recently-added-movie`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('recently-movie-section').innerHTML = data.html;
+            slickGeneral('slick-general-recently-movie');
+        })
+        .catch(error => {
+            console.error('Error fetching Recently Movies:', error);
+        });
 }
 
-function fetchHitMovies(ref) {
-
-fetch(`${envURL}/api/hit-movie/${ref}`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById(`${ref}-hit-section`).innerHTML = data.html;
-        slickGeneral(`${ref}-hit-section`);
-    })
-    .catch(error => {
-        console.error('Error fetching korea hit Movies:', error);
-    });
-}
-
-function fetchMostWatchMovies() {
-
-fetch(`${envURL}/api/most-watch-movie`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('most-watch-movie-section').innerHTML = data.html;
-        slickGeneral('slick-general-most-watch');
-    })
-    .catch(error => {
-        console.error('Error fetching most watched Movies:', error);
-    });
-}
-
-function fetchActors() {
+function fetchActor() {
     fetch(`${envURL}/api/fetch-actor`)
         .then(response => response.json())
         .then(data => {
@@ -573,209 +532,206 @@ function fetchActors() {
             slickGeneral('slick-general-actor');
         })
         .catch(error => {
-            console.error('Error fetching Actor:', error);
-        });
-    }
-
-// Fetch Top 10 Movies
-function fetchTop10Movies() {
-    fetch(`${envURL}/api/top-10-movie`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('top-10-moive-section').innerHTML = data.html;
-            slickGeneral('slick-general-top-10');
-        })
-        .catch(error => {
-            console.error('Error fetching Top 10 Movies:', error);
+            console.error('Error fetching actor Movies:', error);
         });
 }
 
-function fetchLatestMovies() {
-    fetch(`${envURL}/api/latest-movie`)
+function fetchHitMovies(country) {
+    fetch(`${envURL}/api/hit-movie/${country}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('latest-moive-section').innerHTML = data.html;
-            slickGeneral('slick-general-latest-movie');
+            document.getElementById(`${country}-hit-section`).innerHTML = data.html;
+            slickGeneral(`slick-general-${country}-hit`);
         })
         .catch(error => {
-            console.error('Error fetching Latest Movies:', error);
+            console.error('Error fetching hit Movies:', error);
         });
 }
 
-
-function fetchLanguages() {
-    fetch(`${envURL}/api/fetch-languages`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('language-section').innerHTML = data.html;
-            slickGeneral('slick-general-language');
-        })
-        .catch(error => {
-            console.error('Error fetching Language:', error);
-        });
-    }
-
+// function fetchLatestMovies() {
+//     fetch(`${envURL}/api/latest-movie`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('latest-moive-section').innerHTML = data.html;
+//             slickGeneral('slick-general-latest-movie');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Latest Movies:', error);
+//         });
+// }
 
 
-    function fetchPopularMovies() {
-    fetch(`${envURL}/api/popular-movie`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('popular-moive-section').innerHTML = data.html;
-            slickGeneral('slick-general-popular-movie');
-        })
-        .catch(error => {
-            console.error('Error fetching Popular Movies:', error);
-        });
-    }
+// function fetchLanguages() {
+//     fetch(`${envURL}/api/fetch-languages`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('language-section').innerHTML = data.html;
+//             slickGeneral('slick-general-language');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Language:', error);
+//         });
+//     }
+
+//     function fetchPopularMovies() {
+//     fetch(`${envURL}/api/popular-movie`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('popular-moive-section').innerHTML = data.html;
+//             slickGeneral('slick-general-popular-movie');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Popular Movies:', error);
+//         });
+//     }
 
 
-  function  fetchTopChannels() {
-    fetch(`${envURL}/api/top-channels`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('topchannel-section').innerHTML = data.html;
-            slickGeneral('slick-general-topchannel');
-        })
-        .catch(error => {
-            console.error('Error fetching Top channel:', error);
-        });
-    }
+//   function  fetchTopChannels() {
+//     fetch(`${envURL}/api/top-channels`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('topchannel-section').innerHTML = data.html;
+//             slickGeneral('slick-general-topchannel');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Top channel:', error);
+//         });
+//     }
 
-    function fetchPopularTvshows() {
-     fetch(`${envURL}/api/popular-tvshows`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('popular-tvshow-section').innerHTML = data.html;
-            slickGeneral('slick-general-popular-tvshow');
-        })
-        .catch(error => {
-            console.error('Error fetching popular Tvshows:', error);
-        });
-    }
+//     function fetchPopularTvshows() {
+//      fetch(`${envURL}/api/popular-tvshows`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('popular-tvshow-section').innerHTML = data.html;
+//             slickGeneral('slick-general-popular-tvshow');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching popular Tvshows:', error);
+//         });
+//     }
 
-    function fetchfavoritePersonality() {
-      fetch(`${envURL}/api/favorite-personality`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('favorite-personality').innerHTML = data.html;
-            slickGeneral('slick-general-castcrew');
-        })
-        .catch(error => {
-            console.error('Error fetching favorite personality:', error);
-        });
-    }
+//     function fetchfavoritePersonality() {
+//       fetch(`${envURL}/api/favorite-personality`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('favorite-personality').innerHTML = data.html;
+//             slickGeneral('slick-general-castcrew');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching favorite personality:', error);
+//         });
+//     }
 
-    function fetchFreeMovie() {
-       fetch(`${envURL}/api/free-movie`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('free-movie-section').innerHTML = data.html;
-            slickGeneral('slick-general-free-movie');
-        })
-        .catch(error => {
-            console.error('Error fetching Free Movie:', error);
-        });
-    }
-
-
-    function fetchGenerData() {
-      fetch(`${envURL}/api/get-gener`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('genres-section').innerHTML = data.html;
-           slickGeneral('slick-general-gener-section');
-       })
-       .catch(error => {
-           console.error('Error fetching Gener:', error);
-       });
-   }
+//     function fetchFreeMovie() {
+//        fetch(`${envURL}/api/free-movie`)
+//         .then(response => response.json())
+//         .then(data => {
+//             document.getElementById('free-movie-section').innerHTML = data.html;
+//             slickGeneral('slick-general-free-movie');
+//         })
+//         .catch(error => {
+//             console.error('Error fetching Free Movie:', error);
+//         });
+//     }
 
 
-   function fetchVideoData() {
-      fetch(`${envURL}/api/get-video`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('video-section').innerHTML = data.html;
-           slickGeneral('slick-general-video-section');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
-
-   function fetchBaseonlastwatch() {
-      fetch(`${envURL}/api/base-on-last-watch-movie`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('base-on-last-watch-section').innerHTML = data.html;
-           slickGeneral('slick-general-last-watch');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
+//     function fetchGenerData() {
+//       fetch(`${envURL}/api/get-gener`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('genres-section').innerHTML = data.html;
+//            slickGeneral('slick-general-gener-section');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Gener:', error);
+//        });
+//    }
 
 
-   function fetchMostLikeMoive() {
-      fetch(`${envURL}/api/most-like-movie`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('most-like-section').innerHTML = data.html;
-           slickGeneral('slick-general-most-like');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
+//    function fetchVideoData() {
+//       fetch(`${envURL}/api/get-video`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('video-section').innerHTML = data.html;
+//            slickGeneral('slick-general-video-section');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
 
-   function fetchMostViewMoive() {
-      fetch(`${envURL}/api/most-view-movie`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('most-view-section').innerHTML = data.html;
-           slickGeneral('slick-general-most-view');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
+//    function fetchBaseonlastwatch() {
+//       fetch(`${envURL}/api/base-on-last-watch-movie`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('base-on-last-watch-section').innerHTML = data.html;
+//            slickGeneral('slick-general-last-watch');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
 
-   function fetchCountryTraingingMoive() {
-      fetch(`${envURL}/api/country-tranding-movie`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('tranding-in-country-section').innerHTML = data.html;
-           slickGeneral('slick-general-tranding-country');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
 
-   function  fetchFavoriteGenerData() {
-      fetch(`${envURL}/api/favorite-genres`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('favorite-genres-section').innerHTML = data.html;
-           slickGeneral('slick-general-favorite-genres');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
+//    function fetchMostLikeMoive() {
+//       fetch(`${envURL}/api/most-like-movie`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('most-like-section').innerHTML = data.html;
+//            slickGeneral('slick-general-most-like');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
 
-   function  fetchUserfavoritePersonality() {
-      fetch(`${envURL}/api/user-favorite-personality`)
-       .then(response => response.json())
-       .then(data => {
-           document.getElementById('user-favorite-personality').innerHTML = data.html;
-           slickGeneral('slick-general-favorite-personality');
-       })
-       .catch(error => {
-           console.error('Error fetching Video:', error);
-       });
-   }
+//    function fetchMostViewMoive() {
+//       fetch(`${envURL}/api/most-view-movie`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('most-view-section').innerHTML = data.html;
+//            slickGeneral('slick-general-most-view');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
+
+//    function fetchCountryTraingingMoive() {
+//       fetch(`${envURL}/api/country-tranding-movie`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('tranding-in-country-section').innerHTML = data.html;
+//            slickGeneral('slick-general-tranding-country');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
+
+//    function  fetchFavoriteGenerData() {
+//       fetch(`${envURL}/api/favorite-genres`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('favorite-genres-section').innerHTML = data.html;
+//            slickGeneral('slick-general-favorite-genres');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
+
+//    function  fetchUserfavoritePersonality() {
+//       fetch(`${envURL}/api/user-favorite-personality`)
+//        .then(response => response.json())
+//        .then(data => {
+//            document.getElementById('user-favorite-personality').innerHTML = data.html;
+//            slickGeneral('slick-general-favorite-personality');
+//        })
+//        .catch(error => {
+//            console.error('Error fetching Video:', error);
+//        });
+//    }
 
 
 });

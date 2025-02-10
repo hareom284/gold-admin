@@ -25,6 +25,13 @@ class TvshowResource extends JsonResource
             $plans = Plan::where('level', '<=', $plan->level)->get();
         }
 
+        $season_count = 0;
+        if($this->season){
+            foreach($this->season as $season){
+                $season_count++;
+            }
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -52,6 +59,7 @@ class TvshowResource extends JsonResource
             'genres' => GenresResource::collection($genre_data),
             'plans' => PlanResource::collection($plans),
             'status' => $this->status,
+            'season_count' => $season_count,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
