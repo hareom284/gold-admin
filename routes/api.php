@@ -75,7 +75,5 @@ Route::group(['prefix'=>'v1'],function(){
     Route::get('home-banner',[ApiController::class,'HomeBanner']);
     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
-    // Route::get('most-watch-movie',[ApiController::class,'MostWatchdMovies']);
-    Route::get('hit-movie/{ref}',[ApiController::class,'HitMovies']);
     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
 });

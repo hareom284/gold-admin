@@ -43,7 +43,7 @@ class MoviesResource extends JsonResource
                     'name' => $tag->tag->name ?? null,
                 ];
             }
-g
+
 
         }
 
@@ -87,7 +87,7 @@ g
             'genres' => $genre_data,
             'tags'=> $tag_data,
             // 'plans' => PlanResource::collection($plans),
-            'status' => $this->status,
+            // 'status' => $this->status,
 
         ];
     }
