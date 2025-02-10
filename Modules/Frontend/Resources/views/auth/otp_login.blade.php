@@ -13,7 +13,7 @@
                                 <img src="{{ asset(setting('logo')) }}" class="img-fluid logo h-4 mb-4">
 
                                 <h5>{{ __('frontend.sign_in_title') }}</h5>
-                                <p class="fs-14">{{ __('frontend.sign_in_sub_title') }}</p>
+                                <p class="fs-14 text-white">Use your email or mobile number to continue watching <br>  Movies and TV Shows!</p>
                                 @if (session()->has('error'))
                                     <span class="text-danger">{{ session()->get('error') }}</span>
                                 @endif
