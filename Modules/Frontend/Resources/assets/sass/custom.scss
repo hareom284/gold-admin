@@ -176,15 +176,16 @@ body{
 
 .iq-nav-menu > li > a.active{
   font-weight: bold !important;
+  color: red !important;
 }
 
 
 .iq-nav-menu > li > a:hover{
-   color: white !important;
+   color: rgb(233, 14, 14) !important;
 }
 
 a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
-  color: white;
+  color: white !important;
 }
 
 .section-spacing-bottom-for-top-rated{
@@ -193,4 +194,8 @@ a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
 
 .footer .footer-top, .footer .footer-bottom {
   background-color: #080808  !important;
+}
+
+.underline-white:has(a.active) {
+  border-bottom: 1px solid #fff; /* Or any color you like */
 }

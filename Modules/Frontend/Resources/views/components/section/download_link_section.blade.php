@@ -1,3 +1,4 @@
+
 <div class="row" style="font-weight: 400;font-size:16px;line-height:39px;">
     <div class="col-md-6 col-12 ">
         <div class="d-flex justify-content-around border align-items-center  rounded p-2 me-5" >
