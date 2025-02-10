@@ -33,23 +33,30 @@
     gap: .5rem;
 }
 
+
 .season-tab{
     margin-bottom: 0;
-    flex-wrap: nowrap;
-    gap: .5rem 1rem;
+    // gap: .5rem 1rem;
 
+    .dropdown-menu .dropdown-item:hover{
+      background-color:  #232a2e !important;
+    }
     .nav-item{
         flex-shrink: 0;
 
         .nav-link{
-            padding: .5rem 1rem;
-            background-color: var(--bs-dark);
-            color: var(--bs-body-color);
+            // padding: .5rem 1rem;
+            // background-color: var(--bs-dark);
+            color: white !important;
             border-radius: var(--bs-border-radius);
+            background-color:  #232a2e !important;
 
             &.active, &:hover{
-                background-color: var(--bs-primary);
-                color: var(--bs-heading-color);
+              background-color: #232a2e !important;
+              color: red !important;
+                // background-color: var(--bs-primary);
+                // color: var(--bs-heading-color);
+              // color: var(--bs-dark);
             }
         }
     }

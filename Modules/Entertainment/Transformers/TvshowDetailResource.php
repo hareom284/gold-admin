@@ -31,7 +31,7 @@ class TvshowDetailResource extends JsonResource
 
         $genre_ids = $genres->pluck('genre_id')->toArray();
         $entertaintment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)->pluck('entertainment_id')->toArray();
-        $more_items = Entertainment::whereIn('id', $entertaintment_ids)->where('type','tvshow')->where('status',1)->limit(7)->get()->except($this->id);
+        $more_items = Entertainment::whereIn('id', $entertaintment_ids)->where('type','tvshow')->where('status',1)->with('season')->limit(7)->get()->except($this->id);
 
         $plans = [];
         $plan = $this->plan;

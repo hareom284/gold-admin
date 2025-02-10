@@ -5,14 +5,14 @@
 
 <div id="thumbnail-section">
 
-    @include('frontend::components.section.custom-video-detail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'poster_image'=>$data['poster_image']])
+    @include('frontend::components.section.custom-video-detail',  ['data' => $data])
 </div>
 
 {{-- <div id="detail-section">
     @include('frontend::components.section.data_detail',  ['data' => $data])
 </div> --}}
 
-<div class="short-menu mt-4">
+<div class="short-menu my-5">
     <div class="container-fluid">
         <div class="py-2 px-md-5 px-3 movie-detail-menu rounded">
             <div class="d-flex align-items-center gap-2">
@@ -59,10 +59,10 @@
 
                   <ul class="nav " role="tablist" id="detail-tab">
                     <li class="nav-item" role="presentation">
-                      <a class="active text-white" style="font-weight: 600;font-size:24px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
+                      <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                      <a class="text-white" style="font-weight: 600;font-size:24px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
+                      <a class="text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
                     </li>
                   </ul>
             </div>
@@ -80,7 +80,7 @@
 </div>
 
 <div class="container-fluid mt-4">
-    <div class="tab-content pt-5" id="tab-content">
+    <div class="tab-content " id="tab-content">
 
         <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
             <div class=" padding-right-0">
@@ -102,25 +102,7 @@
 
 
         <div class="tab-pane mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
-            <div class="row" style="font-weight: 400;font-size:24px;line-height:39px;">
-                <div class="col-md-6 col-12 ">
-                    <div class="d-flex justify-content-around border align-items-center  rounded p-4 me-5" >
-                        <div class="text-white">720p</div>
-                        <div class="text-white">1.2 GB</div>
-                        <div>Gdrive</div>
-                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-12" >
-                    <div class="d-flex justify-content-around border align-items-center  rounded p-4 me-5">
-                        <div class="text-white">720p</div>
-                        <div class="text-white">1.2 GB</div>
-                        <div>Gdrive</div>
-                        <div><a href="" class="btn btn-dark"><i class="ph ph-download-simple"></i></a></div>
-                    </div>
-                </div>
-                <hr class="my-5 border border-light">
-            </div>
+            @include('frontend::components.section.download_link_section')
         </div>
       </div>
 </div>

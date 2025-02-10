@@ -2,11 +2,13 @@
 
 namespace Modules\Entertainment\Transformers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Genres\Transformers\GenresResource;
-use Modules\Subscriptions\Transformers\PlanResource;
+use Modules\Episode\Models\Episode;
 use Modules\Subscriptions\Models\Plan;
 use Modules\Entertainment\Models\Watchlist;
+use Modules\Genres\Transformers\GenresResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Subscriptions\Transformers\PlanResource;
+
 class MoviesResource extends JsonResource
 {
     /**
@@ -20,7 +22,7 @@ class MoviesResource extends JsonResource
         if(!empty($genres)){
 
             foreach($genres as $genre) {
-    
+
                 $genre_data[] = [
                     'id' => $genre->id,
                     'name' => $genre->genre->name ?? null,
@@ -42,6 +44,13 @@ class MoviesResource extends JsonResource
             ->exists();
         }else{
             $isInWatchList = $this->is_watch_list ?? false;
+        }
+
+        $season_count = 0;
+        if($this->season){
+            foreach($this->season as $season){
+                $season_count++;
+            }
         }
         return [
             'id' => $this->id,
@@ -68,9 +77,10 @@ class MoviesResource extends JsonResource
             'thumbnail_image' =>setBaseUrlWithFileName($this->thumbnail_url ?? null),
             'is_watch_list' => $isInWatchList ? true : false,
             'genres' => $genre_data,
+            'season_count' => $season_count,
             // 'plans' => PlanResource::collection($plans),
             'status' => $this->status,
-          
+
         ];
     }
 }

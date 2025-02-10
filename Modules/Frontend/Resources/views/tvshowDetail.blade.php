@@ -3,91 +3,81 @@
 @section('content')
 
 <div id="thumbnail-section">
-    @include('frontend::components.section.thumbnail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'thumbnail_image'=>$data['thumbnail_image']])
+    {{-- @include('frontend::components.section.thumbnail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'thumbnail_image'=>$data['thumbnail_image']]) --}}
+    @include('frontend::components.section.custom-video-detail',  ['data' => $data])
+
 </div>
 
-<div id="detail-section">
+{{-- <div id="detail-section"y
     <div id="tvshow-id">
         @include('frontend::components.section.data_detail',  ['data' => $data])
     </div>
+</div> --}}
+
+<div class="short-menu my-5">
+    <div class="container-fluid">
+        <div class="py-2 px-md-5 px-3 movie-detail-menu rounded">
+            <div class="d-flex align-items-center gap-2">
+                  <ul class="nav " role="tablist" id="detail-tab">
+                    <li class="nav-item" role="presentation">
+                      <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <a class="text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
+                    </li>
+                  </ul>
+            </div>
+        </div>
+    </div
 </div>
 
-<div class="short-menu mb-5">
-    <div class="container-fluid">
-        <div class="py-4 px-md-5 px-3 movie-detail-menu rounded">
-            <div class="d-flex align-items-center gap-2">
-                <div class="left">
-                    <i class="ph ph-caret-left align-middle"></i>
-                </div>
-                <div class="custom-nav-slider">
-                    <ul class="list-inline m-0 p-0 d-flex align-items-center">
-                        <li class="flex-shrink-0">
-                            <a href="#seasons" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-film-reel align-middle"></i></span>
-                                    <span class="font-size-18">{{ __('frontend.episodes') }}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @if($data['casts'] != null || $data['directors'] !=null )
-                        <li class="flex-shrink-0">
-                            <a href="#movie-cast" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-user-circle-gear align-middle"></i></span>
-                                    <span class="font-size-18">{{ __('frontend.casts') }} & {{ __('frontend.directors') }}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @endif
+<div class="container-fluid mt-4">
+    <a href="#" class="btn btn-custom-button-one">
+        <span class="d-flex align-items-center justify-content-center gap-2">
+            <span><i class="ph-fill ph-crown"></i></span>
+            <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
+        </span>
+    </a>
+</div>
 
-                        @if(count($data['three_reviews']) !=0 )
-                        <li class="flex-shrink-0">
-                            <a href="#review-list" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-star align-middle"></i></span>
-                                    <span class="font-size-18">{{__('frontend.reviews')}}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @endif
-                        @if($data['more_items'] != null)
-                        <li class="flex-shrink-0">
-                            <a href="#more-like-this" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-dots-three-circle align-middle"></i></span>
-                                    <span class="font-size-18">{{__('frontend.more_like_this')}}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @endif
-                    </ul>
-                </div>
-                <div class="right">
-                    <i class="ph ph-caret-right align-middle"></i>
+<div class="container-fluid mt-4">
+    <div class="tab-content" id="tab-content">
+        <div class="tab-pane active " id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
+            <div class=" padding-right-0">
+                <div class="overflow-hidden">
+                    @if(count( $data['casts']) >0)
+                    <div id="movie-cast" class="half-spacing">
+                        @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
+                    </div>
+                    @endif
+
+                    @if(count( $data['directors']) >0)
+                    <div id="favorite-personality">
+                        @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
+
+
+        <div class="tab-pane  mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
+            <div id="seasons">
+                @include('frontend::components.section.seasons',  ['data' => $data['tvShowLinks']])
+            </div>
+        </div>
+      </div>
 </div>
 
-<div class="container-fluid">
+
+{{-- <div class="container-fluid">
     <div id="seasons">
         @include('frontend::components.section.seasons',  ['data' => $data['tvShowLinks']])
     </div>
-</div>
-<div class="container-fluid padding-right-0">
-    <div class="overflow-hidden">
-        <div id="movie-cast" class="half-spacing">
-            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
-        </div>
+</div> --}}
 
-        <div id="favorite-personality">
-            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
-        </div>
-    </div>
-</div>
 
-<div class="container-fluid">
+{{-- <div class="container-fluid">
     <div id="add-review">
         @include('frontend::components.section.add_review',  ['addreview' => 'Add Review'])
     </div>
@@ -97,7 +87,7 @@
             @include('frontend::components.section.review_list',  ['data' => $data['three_reviews']->toArray(request()), 'your_review'=> $data['your_review'], 'title'=> $data['name'], 'total_review'=>count($data['reviews'])])
         </div>
     @endif
-</div>
+</div> --}}
 
 <div class="container-fluid padding-right-0">
     <div class="overflow-hidden">

@@ -20,7 +20,7 @@
                                         <div class="image-box w-100">
 
                                             <img src="{{setBaseUrlWithFileName($entertainment->poster_url)}}" alt="movie card" class="img-fluid object-cover w-100 d-block border-0">
-                                            <span class="product-premium"><i class="ph ph-crown-simple"></i></span>
+                                            <span class="product-premium"><i class="ph-fill ph-crown"></i></span>
                                         </div>
                                         <div class="card-details mt-3">
                                             <h4 class="iq-title text-capitalize line-count-1"> {{ $entertainment->name }}</h4>
