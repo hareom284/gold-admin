@@ -26,6 +26,17 @@ class UserController extends Controller
         return view('frontend::editProfile',compact('user','userProfile'));
     }
 
+    public function customProfile()
+    {
+         $user =Auth::user();
+
+         $Profile=UserMultiProfile::where('user_id', $user->id)->get();
+
+         $userProfile = UserMultiProfileResource::collection($Profile);
+
+        return view('frontend::customProfile',compact('user','userProfile'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

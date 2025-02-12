@@ -58,10 +58,10 @@
                 </div> --}}
 
                   <ul class="nav " role="tablist" id="detail-tab">
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item underline-white" role="presentation">
                       <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item underline-white" role="presentation">
                       <a class="text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
                     </li>
                   </ul>
