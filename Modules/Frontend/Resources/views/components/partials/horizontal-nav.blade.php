@@ -9,50 +9,52 @@
       </div>
       <button type="button" class="btn-close p-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    {{-- @dd(Route::currentRouteName()) --}}
     <ul class="navbar-nav iq-nav-menu ms-5  list-unstyled" id="header-menu">
-      <li class="nav-item me-5">
-        <a class="nav-link"  href="{{route('user.login')}}">
+      <li class="nav-item me-5 underline-white">
+        <a class="nav-link {{Request::routeIs('home')  ? 'active' : ''}}"  href="{{route('home')}}">
           <span class="item-name">{{__('frontend.home')}}</span>
         </a>
       </li>
       @if(isenablemodule('movie'))
-      <li class="nav-item me-5">
-        <a class="nav-link"  href="{{ route('movies') }}">
+      <li class="nav-item me-5 underline-white">
+        <a class="nav-link {{Request::routeIs('movies')  ? 'active' : ''}}"  href="{{ route('movies') }}">
           <span class="item-name">{{__('frontend.movies')}}</span>
         </a>
       </li>
       @endif
       @if(isenablemodule('tvshow'))
-      <li class="nav-item me-5">
-        <a class="nav-link"  href="{{ route('tv-shows') }}">
+      <li class="nav-item me-5 underline-white">
+        <a class="nav-link {{Request::routeIs('tv-shows')  ? 'active' : ''}}"  href="{{ route('tv-shows') }}">
           <span class="item-name">{{__('frontend.tvshows')}}</span>
         </a>
       </li>
-      @endif
+      {{-- @endif
       @if(isenablemodule('video'))
       <li class="nav-item me-5">
         <a class="nav-link"  href="{{ route('videos') }}">
           <span class="item-name">{{__('frontend.video')}}</span>
         </a>
       </li>
-      @endif
+      @endif --}}
       {{-- <li class="nav-item">
         <a class="nav-link"  href="{{ route('comingsoon') }}">
           <span class="item-name">{{__('frontend.coming_soon')}}</span>
         </a>
       </li> --}}
-      @if(isenablemodule('livetv'))
+      {{-- @if(isenablemodule('livetv'))
       <li class="nav-item me-5">
         <a class="nav-link"  href="{{route('livetv')}}">
           <span class="item-name">{{__('frontend.livetv')}}</span>
         </a>
-      </li>
+      </li> --}}
       @endif
       @php
           $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
       @endphp
-      <li class="nav-item me-5">
-            <a  class="nav-link dropdown-toggle" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+
+      <li class="nav-item me-5 underline-white">
+            <a  class="nav-link dropdown-toggle {{Request::routeIs('movies.genre')  ? 'active' : ''}}" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Genres
             </a>
             <ul class="dropdown-menu " style="width:max-content" aria-labelledby="dropdownMenuButton1">
@@ -60,14 +62,14 @@
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if($loop->even)
-                                <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                <li class="nav-link  {{Route::current()->parameter('genre_id') == $genre->id ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if ($loop->odd)
-                                    <li class="nav-link"><a class="dropdown-item nav-menu-drop-down cursor-pointer" href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                    <li class="nav-link {{Route::current()->parameter('genre_id') == $genre->id ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>

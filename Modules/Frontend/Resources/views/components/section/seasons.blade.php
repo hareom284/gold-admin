@@ -55,6 +55,7 @@
             </div>
         </div> --}}
 
+
         <div class="tab-content" id="season-tab-content">
             @foreach($data as $index => $value)
                 <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}"

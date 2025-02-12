@@ -30,12 +30,14 @@ class BannerResource extends JsonResource
         }
 
         return [
-            'id' => $this->id,
-            'title' => $this->title,
+            'id' => $entertainment->id,
+            'title' => $entertainment->name,
+            'description' => $entertainment->description,
             'poster_url' => setBaseUrlWithFileName($this->poster_url),
             'file_url' => setBaseUrlWithFileName($this->file_url),
             'type' => $this->type,
-            'data' => $data,
+            'plan'=>$entertainment->movie_access,
+            // 'data' => $data,
         ];
     }
 }

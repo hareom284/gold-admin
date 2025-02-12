@@ -34,7 +34,7 @@ Route::get('storage-link', function () {
     return Artisan::call('storage:link');
 });
 
-Route::get('/', [FrontendController::class, 'index'])->name('user.login');
+Route::get('/', [FrontendController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth','admin']], function () {
     Route::get('notification-list', [NotificationsController::class, 'notificationList'])->name('notification.list');
