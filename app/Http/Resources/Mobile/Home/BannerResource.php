@@ -15,8 +15,9 @@ class BannerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->type_id,
+            'entertainment_id'=>$this->type_id,
             'poster_url' => setBaseUrlWithFileName($this->poster_url),
+            'file_url' => setBaseUrlWithFileName($this->file_url),
             'type' => $this->type,
         ];
     }
