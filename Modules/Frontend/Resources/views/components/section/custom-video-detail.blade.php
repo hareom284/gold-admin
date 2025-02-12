@@ -1,6 +1,5 @@
 <div class="container-fluid">
     <div class="row" >
-        {{-- @dd($data) --}}
             <div class="col-md-4 col-12">
                 <img class="img-fluid object-cover rounded" style="width: -webkit-fill-available;max-height:530px"  src="{{$data['poster_image']}}" alt="">
              </div>
@@ -14,19 +13,19 @@
                             TMDb <span class="border border-light text-white px-2 py-1 rounded ms-3"><i class="ph-fill ph-star me-2"></i>4.0</span>
                          </div>
                     </div>
-                    <h4 class="p-0 my-2" style="font-weight: 800;font-size:25px;line-height:58px;">Hello world</h4>
+                    <h4 class="p-0 my-2" style="font-weight: 800;font-size:25px;line-height:58px;">{{$data['name']}}</h4>
                     <div class="p-0 " style="font-weight: 400;font-size:18px;line-height:18px">
-                        2024 &nbsp;&nbsp;
+                        {{$data['release_year']}} &nbsp;&nbsp;
                         @if ($data['type'] == 'movie')
                              {{formatDuration($data['duration'])}}
                         @else ()
                         {{count($data['tvShowLinks'])}} seasons
                         @endif
                     </div>
-                    <p class="p-0 my-4 text-white" style="font-weight: 400;font-size:16px;line-htight:32px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo illo necessitatibus dolor ad? Assumenda omnis alias saepe expedita odio, accusamus quae dolorem eveniet doloremque consectetur ipsam exercitationem ea, autem placeat!</p>
+                    <p class="p-0 my-4 text-white" style="font-weight: 400;font-size:16px;line-htight:32px;">{{$data['description']}}</p>
                     <div class="p-0 mt-3" style="font-weight: 400;font-size:16px;line-height:32px;">
                         Genres &nbsp;&nbsp;&nbsp; <span class="text-white">Action,Trailer</span> <br>
-                        Language &nbsp;&nbsp;&nbsp; <span class="text-white">English</span>
+                        Language &nbsp;&nbsp;&nbsp; <span class="text-white">{{$data['language']}}</span>
                     </div>
                 </div>
              </div>

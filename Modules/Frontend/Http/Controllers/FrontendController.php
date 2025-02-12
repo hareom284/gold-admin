@@ -435,32 +435,6 @@ class FrontendController extends Controller
         return $pdf->download('invoice.pdf');
     }
 
-    public function customProfile()
-    {
-        $user = auth()->user();
-
-         $subscriptions = Subscription::where('user_id', auth()->id())
-            ->where('status', 'active')
-            ->orderBy('id','desc')
-            ->first();
-
-        $devices = $user->devices;
-
-        $your_device = null;
-        $other_devices = [];
-
-        $currentDeviceIp = request()->getClientIp();
-
-        foreach ($devices as $device) {
-            if ($device->device_id == $currentDeviceIp) {
-                $your_device = $device;
-            } else {
-                $other_devices[] = $device;
-            }
-        }
-
-        return view('frontend::components.user.custom_profile', compact('subscriptions', 'user', 'your_device', 'other_devices'));
-    }
 
 }
 

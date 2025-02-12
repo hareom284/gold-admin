@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <div id="thumbnail-section">
     {{-- @include('frontend::components.section.thumbnail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'thumbnail_image'=>$data['thumbnail_image']]) --}}
     @include('frontend::components.section.custom-video-detail',  ['data' => $data])
@@ -13,7 +14,6 @@
         @include('frontend::components.section.data_detail',  ['data' => $data])
     </div>
 </div> --}}
-
 <div class="short-menu my-5">
     <div class="container-fluid">
         <div class=" movie-detail-menu rounded">

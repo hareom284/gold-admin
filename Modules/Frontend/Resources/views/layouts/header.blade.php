@@ -107,11 +107,11 @@
                                                     <span class="font-size-14 dropdown-user-menu-contnet"> {{ auth()->user()->mobile}}</span>
                                                 </div>
                                             </div>
-                                            <div class="link">
+                                            {{-- <div class="link">
                                                 <a href="{{ route('edit-profile') }}" class="link-body-emphasis">
                                                     <i class="ph ph-caret-right"></i>
                                                 </a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <ul class="d-flex flex-column gap-3 list-inline m-0 p-0">
                                             {{-- <li>

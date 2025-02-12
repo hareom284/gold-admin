@@ -108,11 +108,10 @@ Route::get('invoice-download', [FrontendController::class, 'downloadInvoice'])->
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/logout', [AuthController::class, 'Logout'])->name('user-logout');
-    Route::get('/account-setting', [FrontendController::class, 'accountSetting'])->name('accountSetting');
+    Route::get('/account-setting', [UserController::class, 'customProfile'])->name('accountSetting');
+    // Route::get('/account-setting', [FrontendController::class, 'accountSetting'])->name('accountSetting');
     Route::get('/edit-profile', [UserController::class, 'editProfile'])->name('edit-profile');
     Route::post('/device-logout', [FrontendController::class, 'deviceLogout'])->name('device-logout');
-
-    // Route::get('custom-profile',[FrontendController::class, 'customProfile'])->name('custom-profile');
 });
 
 Route::get('/video/stream/{encryptedUrl}', [TvShowController::class, 'stream'])->name('video.stream');
