@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Mobile;
 
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\BannerResource;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
 use Modules\CastCrew\Models\CastCrew;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Api\MoviesResource;
 use App\Http\Resources\Api\CastCrewResource;
-use Modules\Banner\Models\Banner;
 use Modules\Entertainment\Models\Entertainment;
+use App\Http\Resources\Mobile\Home\BannerResource;
+use App\Http\Resources\Mobile\Home\BannerResource as HomeBannerResource;
 
 
 class ApiController extends Controller
@@ -237,11 +237,8 @@ class ApiController extends Controller
        //HomeBanner
        public function HomeBanner()
        {
-           $user_id = auth()->id();
            $bannerList = Banner::where('status',1)->get();
-           $banners = BannerResource::collection($bannerList->map(function ($banner) use ($user_id) {
-                return new BannerResource($banner, $user_id);
-            }));
+          $banners = BannerResource::collection($bannerList);
 
             return response()->json([
                 'success' => true,
