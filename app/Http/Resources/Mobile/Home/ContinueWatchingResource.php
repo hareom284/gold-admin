@@ -28,7 +28,7 @@ class ContinueWatchingResource extends JsonResource
 
         return [
 
-            'entertainment_id' => $this->entertainment_id,
+            'id' => $this->entertainment_id,
             'entertainment_type' => $this->entertainment_type,
             'watched_time' => $this->watched_time ?? '00:00:01',
             'total_watched_time' => $this->total_watched_time ?? '00:00:01',
