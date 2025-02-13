@@ -6,16 +6,18 @@ namespace Modules\Frontend\Http\Controllers\Auth;
 use Str;
 use Auth;
 use Hash;
+use Exception;
+use App\Models\Otp;
 use App\Models\User;
 use App\Models\Device;
 use App\Models\Setting;
+use App\Trait\OtpTrait;
 use Twilio\Rest\Client;
 use App\Mail\DeviceEmail;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use App\Models\UserMultiProfile;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Modules\Frontend\Trait\LoginTrait;
 use Illuminate\Support\Facades\Redirect;
@@ -25,7 +27,7 @@ use GPBMetadata\Google\Api\Auth as ApiAuth;
 
 class OTPController extends Controller
 {
-    use LoginTrait;
+    use LoginTrait,OtpTrait;
 
     public function otpLogin()
     {
@@ -39,28 +41,44 @@ class OTPController extends Controller
         return view('frontend::auth.otp_login', compact('settings', 'isOtpLoginEnabled'));
     }
 
-    public function sendOTP()
+    public function sendOTP(Request $request)
     {
-        try{
-            $sid = env('TWILIO_SID');
-            $token = env('TWILIO_TOKEN');
-            $client = new Client($sid, $token);
-            $client->messages->create(
-                '+66972581566',
-                [
-                    'from' => env('TWILIO_FROM'),
-                    'body' => "Hey Bro,this is testing"
-                ]
-            );
-            return "message send successfully";
-        }catch(Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
+        return $this->sendOtpAndSave($request->phone_or_email);
     }
 
+    public function resendOTP(Request $request)
+    {
+        return $this->resendOtpAndSave($request->phone_or_email);
+    }
+
+    public function verifyOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'otp' => 'required',
+            'phone_or_email' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $otp = Otp::where('phone_or_email', $request->phone_or_email)
+        ->where('otp', $request->otp)->first();
+        if (!$otp || $otp->expire_at < now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid OTP',
+            ], 422);
+        }
+        $otp->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP verified successfully',
+        ]);
+    }
 
     public function otpLoginStore(Request $request)
     {
@@ -102,7 +120,6 @@ class OTPController extends Controller
         return redirect('/'); // Redirect to intended page
     }
 
-
     public function checkUserExists(Request $request)
     {
         $data = $request->all();
@@ -110,7 +127,8 @@ class OTPController extends Controller
         $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
 
         $flag = 0;
-        $user = User::where('mobile', $request->mobile)->where('login_type','otp')->with('subscriptionPackage')->first();
+        $url = route('login');
+        $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
 
         if(!empty($user))
         {
@@ -132,8 +150,9 @@ class OTPController extends Controller
             Auth::login($user);
 
             $flag = 1;
+            $url = route('home');
         }
 
-        return response()->json(['is_user_exists' => $flag, 'url' => route('user.login')]);
+        return response()->json(['is_user_exists' => $flag, 'url' => $url]);
     }
 }

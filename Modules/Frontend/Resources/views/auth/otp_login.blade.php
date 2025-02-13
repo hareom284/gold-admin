@@ -28,7 +28,7 @@
                                 <form id="send-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
-                                        <input type="tel" id="mobile" value="1234567890" class="form-control"
+                                        <input type="tel" id="mobile" value="9762204337" class="form-control"
                                             pattern="[0-9]{10}" placeholder="{{ __('frontend.enter_mobile') }}" required
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                         <div class="invalid-feedback" id="mobile-error">Mobile number field is required.
@@ -232,40 +232,44 @@
                 document.getElementById('send-button-text').classList.add('d-none');
                 document.getElementById('send-button-spinner').classList.remove('d-none');
 
-                firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function(confirmationResult) {
-                    window.confirmationResult = confirmationResult;
-                    coderesult = confirmationResult;
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('send.otp') }}",
+                    data: {
+                        phone_or_email: number,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        console.log('initial',response);
+                        if (response.success == true) {
+                            $('#mobile-form').hide();
+                            $('#otp_error_message').text("");
+                            $('#otp-form').show();
 
-                    $('#mobile-form').hide();
-                    $('#otp_error_message').text("");
-                    $('#otp-form').show();
+                            $('#otp_title').text('Verify OTP');
+                            $('#otp_subtitle').text('We’ve sent an OTP to your mobile number. Please enter it to proceed');
 
-                    $('#otp_title').text('Verify OTP');
-                    $('#otp_subtitle').text('We’ve sent an OTP to your mobile number. Please enter it to proceed');
+                            startOtpTimer();
 
-                    startOtpTimer();
-
-
-                }).catch(function(error) {
-
-                    if (error.code == 'auth/invalid-phone-number') {
-
-                        $('#otp_error_message').text("Enter a valid mobile number");
-                    } else {
-
-                        $('#otp_error_message').text(error.message);
-
+                        } else {
+                            console.log("not success error",response);
+                            $('#otp_error_message').text(response.message).show();
+                             // Enable send button and update UI
+                            $('#send-otp-button').prop('disabled', false);
+                            $('#send-button-text').removeClass('d-none');
+                            $('#send-button-spinner').addClass('d-none');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log("Error respnse",xhr.responseJSON.message);
+                        $('#otp_error_message').text(xhr.responseJSON.message).show();
+                             // Enable send button and update UI
+                        $('#send-otp-button').prop('disabled', false);
+                        $('#send-button-text').removeClass('d-none');
+                        $('#send-button-spinner').addClass('d-none');
                     }
-
-
-                    $('#otp_error_message').show();
-
-                }).finally(function() {
-                    // Re-enable the button and hide the spinner after the process completes
-                    document.getElementById('send-otp-button').disabled = false;
-                    document.getElementById('send-button-text').classList.remove('d-none');
-                    document.getElementById('send-button-spinner').classList.add('d-none');
-                });;
+                });
             } else {
                 $('#mobile-error').text('Invalid phone number');
                 $('#mobile-error').show();
@@ -273,7 +277,6 @@
 
 
         }
-
 
         function startOtpTimer() {
             let timeLeft = 60;
@@ -311,58 +314,72 @@
 
             var numbervalue = iti.getNumber()
 
-            coderesult.confirm(code).then(function(result) {
-                var user = result.user;
-                $.ajax({
-                    url: '{{ route('check.user.exists') }}', // Replace with your API URL
-                    type: 'get', // Use POST method
-                    data: {
-                        user_id: user.uid, // Example of sending the user data
-                        mobile: numbervalue, // Send the mobile number as well
-                    },
-                    success: function(response) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('verify.otp') }}",
+                data: {otp: code, phone_or_email: numbervalue, _token: '{{ csrf_token() }}'},
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.success == true) {
+                                $.ajax({
+                                url: '{{ route('check.user.exists') }}', // Replace with your API URL
+                                type: 'get', // Use POST method
+                                data: {
+                                    phone_or_email: numbervalue, // Send the mobile number as well
+                                    _token: '{{ csrf_token() }}',
+                                },
+                                success: function(response) {
 
-                        if (response.is_user_exists == 0) {
-                            $('#otp-form').hide();
-                            $('#otp_title').text('Personal Details');
-                            $('#otp_subtitle').text(
-                                'Please provide additional details to complete signup');
-                            $('#mobile_number').val(numbervalue);
-                            $('#otp_error_message').text('');
-                            $('#registerForm').show();
-                        }
+                                    if (response.is_user_exists == 0) {
+                                        $('#otp-form').hide();
+                                        $('#otp_title').text('Personal Details');
+                                        $('#otp_subtitle').text(
+                                            'Please provide additional details to complete signup');
+                                        $('#mobile_number').val(numbervalue);
+                                        $('#otp_error_message').text('');
+                                        $('#registerForm').show();
+                                    }
 
-                        if (response.status == 406) {
+                                    if (response.status == 406) {
 
-                            $('#mobile-form').show();
-                            $('#otp-form').hide();
-                            $('#otp_error_message').text(response.message);
-                            $('#otp_error_message').show();
+                                        $('#mobile-form').show();
+                                        $('#otp-form').hide();
+                                        $('#otp_error_message').text(response.message);
+                                        $('#otp_error_message').show();
 
-                        }
+                                    }
 
-                        if (response.url && response.is_user_exists == 1) {
-                            window.location = response.url;
-                        }
-                    },
-                    error: function(error) {
-                        $('#otp_error_message').text(error);
+                                    if (response.url && response.is_user_exists == 1) {
+                                        window.location = response.url;
+                                    }
+                                },
+                                error: function(error) {
+                                    $('#otp_error_message').text(error);
+                                    $('#otp_error_message').show();
+                                },
+                                complete: function() {
+                                    // Re-enable the button and hide the spinner after the request is complete
+                                    document.getElementById('verify-otp-button').disabled = false;
+                                    document.getElementById('button-text').classList.remove('d-none');
+                                    document.getElementById('button-spinner').classList.add('d-none');
+                                }
+                            });
+                    }else{
+                        $('#otp_error_message').text(response.message);
                         $('#otp_error_message').show();
-                    },
-                    complete: function() {
-                        // Re-enable the button and hide the spinner after the request is complete
                         document.getElementById('verify-otp-button').disabled = false;
                         document.getElementById('button-text').classList.remove('d-none');
                         document.getElementById('button-spinner').classList.add('d-none');
                     }
-                });
-
-            }).catch(function(error) {
-                $('#otp_error_message').text(error.message);
-                $('#otp_error_message').show();
-                document.getElementById('verify-otp-button').disabled = false;
-                document.getElementById('button-text').classList.remove('d-none');
-                document.getElementById('button-spinner').classList.add('d-none');
+                },
+                error: function(xhr) {
+                        $('#otp_error_message').text(xhr.responseJSON.message);
+                        $('#otp_error_message').show();
+                        document.getElementById('verify-otp-button').disabled = false;
+                        document.getElementById('button-text').classList.remove('d-none');
+                        document.getElementById('button-spinner').classList.add('d-none');
+                    }
             });
 
         }
@@ -390,15 +407,36 @@
             }
 
             window.recaptchaVerifier.render().then(function() {
-                firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
-                    .then(function(confirmationResult) {
-                        window.confirmationResult = confirmationResult;
 
-                        startOtpTimer();
-                    })
-                    .catch(function(error) {
-                        $('#otp_error_message').text(error.message).show();
+                if(number){
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('resend.otp')}}",
+                        data: {phone_or_email:number,_token: "{{csrf_token()}}"},
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.status == true) {
+                                startOtpTimer();
+                            }else{
+                                $('#otp_error_message').text(response.message).show();
+                            }
+                        },
+                        error: function(xhr) {
+                            $('#otp_error_message').text(xhr.responseJSON.message).show();
+                        }
                     });
+                }
+
+                // firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
+                //     .then(function(confirmationResult) {
+                //         window.confirmationResult = confirmationResult;
+
+                //         startOtpTimer();
+                //     })
+                //     .catch(function(error) {
+                //         $('#otp_error_message').text(error.message).show();
+                //     });
             });
         }
     </script>
