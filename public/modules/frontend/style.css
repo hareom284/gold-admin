@@ -4336,7 +4336,9 @@ textarea.form-control-lg {
   --bs-navbar-padding-x: 0;
   --bs-navbar-padding-y: 0.5rem;
   --bs-navbar-color: rgba(var(--bs-emphasis-color-rgb), 0.55);
-  --bs-navbar-hover-color: rgba(var(--bs-emphasis-color-rgb), 0.8);
+  /* --bs-navbar-hover-color: rgba(var(--bs-emphasis-color-rgb), 0.8); */
+  --bs-navbar-hover-color: #FAFAFA;
+
   --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.3);
   --bs-navbar-active-color: rgba(var(--bs-emphasis-color-rgb), 1);
   --bs-navbar-brand-padding-y: 1.30625rem;
@@ -14414,10 +14416,10 @@ header .navbar-brand {
   margin: 0;
   display: inline-block;
 }
-header .navbar-brand img.logo {
+/* header .navbar-brand img.logo {
   height: 2.0625rem;
   max-height: 2.0625rem;
-}
+} */
 header .navbar-brand svg {
   width: 10rem;
 }
@@ -15263,8 +15265,8 @@ header .mobile-offcanvas .btn-close:focus {
   background-color: #232a2e !important;
 }
 .season-tab .nav-item .nav-link.active, .season-tab .nav-item .nav-link:hover {
-  background-color: #232a2e !important;
-  color: red !important;
+  background-color: #FAFAFA !important;
+  color: #FAFAFA !important;
 }
 
 .tab-content.iq-tab-fade-up .tab-pane.fade {
@@ -17739,11 +17741,13 @@ body {
 
 .iq-nav-menu > li > a.active {
   font-weight: bold !important;
-  color: red !important;
+  color: #FAFAFA !important;
 }
 
 .iq-nav-menu > li > a:hover {
-  color: rgb(233, 14, 14) !important;
+  color: #FAFAFA !important;
+  font-weight: bold !important;
+
 }
 
 a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
