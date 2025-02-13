@@ -1,22 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Modules\Frontend\Http\Controllers\MovieController;
-use Modules\Frontend\Http\Controllers\FrontendController;
-use Modules\Frontend\Http\Controllers\PaymentController;
-use Modules\Frontend\Http\Controllers\Auth\AuthController;
-use Modules\Frontend\Http\Controllers\Auth\OTPController;
-use App\Http\Controllers\LanguageController;
-use Modules\Frontend\Http\Controllers\TvShowController;
-use Modules\Frontend\Http\Controllers\CastCrewController;
-use Modules\Frontend\Http\Controllers\VideoController;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Http;
-use Modules\Frontend\Http\Controllers\Auth\UserController;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\LanguageController;
+use Modules\Frontend\Http\Controllers\MovieController;
+use Modules\Frontend\Http\Controllers\VideoController;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Modules\Frontend\Http\Controllers\TvShowController;
+use Modules\Frontend\Http\Controllers\PaymentController;
+use Modules\Frontend\Http\Controllers\Auth\OTPController;
+
+use Modules\Frontend\Http\Controllers\CastCrewController;
+use Modules\Frontend\Http\Controllers\FrontendController;
+use Modules\Frontend\Http\Controllers\Auth\AuthController;
+use Modules\Frontend\Http\Controllers\Auth\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,19 +31,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 Route::middleware(['checkInstallation'])->group(function () {
 
 // Login with Applelo
-Route::get('/auth/apple', [AuthController::class, 'redirectToApple'])->name('auth.apple');
-Route::get('/auth/apple/callback', [AuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
-
-
-// Login with OTP
-Route::get('/login', [OTPController::class, 'otpLogin'])->name('login');
-Route::post('/auth/otp-login-store', [OTPController::class, 'otpLoginStore'])->name('auth.otp-login-store');
-Route::get('/auth/check-user-exists', [OTPController::class, 'checkUserExists'])->name('check.user.exists');
-
-
-// Login with Google
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+// Route::get('/auth/apple', [AuthController::class, 'redirectToApple'])->name('auth.apple');
+// Route::get('/auth/apple/callback', [AuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
 
 
 
@@ -123,8 +112,10 @@ Route::get('/check-subscription/{planId}', [FrontendController::class, 'checkSub
 
 Route::group(['as' => 'frontend.'], function () {
     Route::post('/clear-cache-config', function () {
-        \Artisan::call('config:clear');
+        Artisan::call('config:clear');
         \Artisan::call('cache:clear');
         return response()->json(['message' => 'Cache and Config cleared']);
     })->name('cache_config_clear'); // Define the name for the route
 });
+
+include __DIR__.'/auth.php';

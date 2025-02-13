@@ -9,11 +9,13 @@ use Hash;
 use App\Models\User;
 use App\Models\Device;
 use App\Models\Setting;
+use Twilio\Rest\Client;
 use App\Mail\DeviceEmail;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use App\Models\UserMultiProfile;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Modules\Frontend\Trait\LoginTrait;
 use Illuminate\Support\Facades\Redirect;
@@ -35,6 +37,28 @@ class OTPController extends Controller
         // return $settings;
 
         return view('frontend::auth.otp_login', compact('settings', 'isOtpLoginEnabled'));
+    }
+
+    public function sendOTP()
+    {
+        try{
+            $sid = env('TWILIO_SID');
+            $token = env('TWILIO_TOKEN');
+            $client = new Client($sid, $token);
+            $client->messages->create(
+                '+959762204337',
+                [
+                    'from' => env('TWILIO_FROM'),
+                    'body' => "Hey Bro,this is testing"
+                ]
+            );
+            return "message send successfully";
+        }catch(Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
 

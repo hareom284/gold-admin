@@ -24,7 +24,15 @@
                     </div>
                     <p class="p-0 my-4 text-white" style="font-weight: 400;font-size:16px;line-htight:32px;">{{$data['description']}}</p>
                     <div class="p-0 mt-3" style="font-weight: 400;font-size:16px;line-height:32px;">
-                        Genres &nbsp;&nbsp;&nbsp; <span class="text-white">Action,Trailer</span> <br>
+                        Genres &nbsp;&nbsp;&nbsp;
+                        <span class="text-white">
+                            @foreach ($data['genres'] as $genre)
+                                {{$genre->name}}
+                                @if ($loop->last == false)
+                                    ,
+                                @endif
+                            @endforeach
+                        </span> <br>
                         Language &nbsp;&nbsp;&nbsp; <span class="text-white">{{$data['language']}}</span>
                     </div>
                 </div>
