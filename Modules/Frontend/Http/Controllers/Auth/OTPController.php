@@ -46,7 +46,7 @@ class OTPController extends Controller
             $token = env('TWILIO_TOKEN');
             $client = new Client($sid, $token);
             $client->messages->create(
-                '+959762204337',
+                '+66972581566',
                 [
                     'from' => env('TWILIO_FROM'),
                     'body' => "Hey Bro,this is testing"
