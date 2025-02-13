@@ -27,13 +27,13 @@
                         Genres &nbsp;&nbsp;&nbsp;
                         <span class="text-white">
                             @foreach ($data['genres'] as $genre)
-                                {{$genre->name}}
+                                {{isset($genre->name) ? $genre->name : ''}}
                                 @if ($loop->last == false)
                                     ,
                                 @endif
                             @endforeach
                         </span> <br>
-                        Language &nbsp;&nbsp;&nbsp; <span class="text-white">{{$data['language']}}</span>
+                        Language &nbsp;&nbsp;&nbsp; <span class="text-white">{{ucfirst($data['language'])}}</span>
                     </div>
                 </div>
              </div>
