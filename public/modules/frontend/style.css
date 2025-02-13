@@ -15432,9 +15432,9 @@ header .mobile-offcanvas .btn-close:focus {
   padding: 0.5rem 1rem;
 }
 
-.footer .footer-logo .logo {
+/* .footer .footer-logo .logo {
   width: 154px;
-}
+} */
 .footer .footer-top {
   padding: 50px 0 0px;
   background-color: var(--bs-gray-900);
