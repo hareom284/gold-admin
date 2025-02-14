@@ -83,16 +83,12 @@ class OTPController extends Controller
     public function otpLoginStore(Request $request)
     {
         $data = [
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' =>  $request->email,
+            'username' => $request->username,
             'mobile' =>  $request->mobile,
             'password' => Hash::make(Str::random(8)),
             'user_type' => 'user',
             'login_type' => 'otp'
         ];
-
-        $user=User::where('email', $request->email)->first();
 
         $user = User::create($data);
 

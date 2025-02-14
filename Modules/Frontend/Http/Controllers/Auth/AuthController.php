@@ -90,7 +90,6 @@ class AuthController extends Controller
 
         $this->removeDevice($user, $request);
 
-
         return redirect()->route('home');
 
     }
