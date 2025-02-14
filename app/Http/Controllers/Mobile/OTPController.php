@@ -66,54 +66,37 @@ class OTPController extends Controller
 
         $otp = Otp::where('phone_or_email', $request->phone_or_email)
         ->where('otp', $request->otp)->first();
+
         if (!$otp || $otp->expire_at < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid OTP',
             ], 422);
-        }
-        $otp->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'OTP verified successfully',
-        ]);
-    }
+        }else{
+            $otp->delete();
+            $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
 
-    public function checkUserExists(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'phone_or_email' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422);
-        }
-
-        $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
-
-        if (!empty($user)) {
-                if($user->user_type !='user'){
+            if (!empty($user)) {
+                    if($user->user_type !='user'){
+                        return response()->json([
+                            'success' => false,
+                            'message'=>"Admin doesn't have access to login"
+                        ],406);
+                    }
+                    $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
-                        'success' => false,
-                        'message'=>"Admin doesn't have access to login"
-                    ],406);
-                }
-                $token = $user->createToken('auth_token')->plainTextToken;
-                return response()->json([
-                    'success' => true,
-                    'message' => 'User login successfully',
-                    'token' => $token,
-                    'user' => $user
-                ],200);
-        }
+                        'success' => true,
+                        'message' => 'User login successfully',
+                        'token' => $token,
+                        'user' => $user
+                    ],200);
+            }
 
-        return response()->json([
-            'success'=>false,
-            'message'=>'User not found,need to create account'
-        ],404);
+            return response()->json([
+                'success'=>false,
+                'message'=>'OTP verified successfully, ples create new user',
+            ],404);
+        }
 
     }
 
