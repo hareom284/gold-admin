@@ -281,6 +281,12 @@ class ApiController extends Controller
        public function saveContinueWatch(Request $request)
         {
             $user = auth('sanctum')->user();
+            if(!$user){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No user found',
+                ], 404);
+            }
             // $user = User::where('id',15)->first();
             $watch_data = $request->all();
             $watch_data['total_watched_time'] = isset($watch_data['total_watched_time']) && substr_count($watch_data['total_watched_time'], ':') == 1 ? $watch_data['total_watched_time'] . ':00' : $watch_data['total_watched_time'];

@@ -67,6 +67,8 @@ class MovieController extends Controller
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
 
+        // return $movieId;
+
         // Retrieve cached data
         $data = Cache::get($cacheKey);
 
