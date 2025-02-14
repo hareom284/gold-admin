@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone_or_email');
             $table->string('otp');
+            $table->string('is_verified')->default(0);
             $table->string('expire_at');
             $table->timestamps();
         });

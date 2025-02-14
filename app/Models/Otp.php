@@ -10,5 +10,6 @@ class Otp extends Model
         'phone_or_email',
         'otp',
         'expire_at',
+        'is_verified',
     ];
 }

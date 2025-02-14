@@ -17,7 +17,7 @@ trait OtpTrait
    public function sendOtpAndSave($phone_or_email)
    {
         $otp = $this->generateToken();
-        $expire_at = now()->addMinutes(5);
+        $expire_at = now()->addMinutes(1);
 
         $checkOtp = Otp::where('phone_or_email', $phone_or_email)->first();
         if ($checkOtp) {
@@ -25,13 +25,14 @@ trait OtpTrait
                 $checkOtp->update([
                     'otp' => $otp,
                     'expire_at' => $expire_at,
+                    'is_verified' => false,
                 ]);
                  return $this->callOTPService($phone_or_email, $otp);
             }
 
             return response()->json([
                 'success'=>false,
-                'message' => 'You have already sent an OTP. Please wait for 5 minutes before sending another OTP.',
+                'message' => 'You have already sent an OTP. Please wait for 1 minutes before sending another OTP.',
             ], 422);
 
         }
@@ -48,7 +49,7 @@ trait OtpTrait
    public function resendOtpAndSave($phone_or_email)
    {
        $token = $this->generateToken();
-       $expire_at = now()->addMinutes(5);
+       $expire_at = now()->addMinutes(1);
 
        $otp = Otp::where('phone_or_email', $phone_or_email)->first();
        if ($otp) {
@@ -61,7 +62,7 @@ trait OtpTrait
            } else {
                return response()->json([
                    'success' => false,
-                   'message' => 'You have already sent an OTP. Please wait for 5 minutes before sending another OTP.',
+                   'message' => 'You have already sent an OTP. Please wait for 1 minutes before sending another OTP.',
                ], 422);
            }
        }
@@ -70,7 +71,6 @@ trait OtpTrait
             'success' => false,
             'message' => 'Your phone number is not registered with us.',
         ], 404);
-
     }
 
 
@@ -78,6 +78,12 @@ trait OtpTrait
 
    public function callOTPService($phone_or_email, $otp)
    {
+         //for local testing
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'OTP sent successfully'
+        // ],200);
+
         try{
             $sid = env('TWILIO_SID');
             $token = env('TWILIO_TOKEN');

@@ -65,30 +65,77 @@ class OTPController extends Controller
             ], 422);
         }
 
+            //get data from otp table by phone_or_email and otp
         $otp = Otp::where('phone_or_email', $request->phone_or_email)
         ->where('otp', $request->otp)->first();
+
+        //check otp exist or not and expire_at is less than now
         if (!$otp || $otp->expire_at < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid OTP',
             ], 422);
+        }else{
+
+            //change otp status to verified
+            $otp->is_verified = true;
+            $otp->save();
+
+            //if otp is verified , get user by phone number
+            $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
+
+                 //if user exist then login and return token
+                 if (!empty($user)) {
+                    if($user->user_type !='user'){
+                        return response()->json([
+                            'success' => false,
+                            'message'=>"Admin doesn't have access to login"
+                        ],406);
+                    }
+
+                    //delete otp and login user
+                    $otp->delete();
+
+                    Auth::login($user);
+
+                    return response()->json([
+                        'success' => true,
+                        'is_user_exists' => 1,
+                         'url' => route('home'),
+                        ]);
+            }
+
+            //if user not exist then create new user and login
+            return response()->json([
+                'success' => true,
+                'is_user_exists' => 0,
+                 'url' => route('login'),
+                ]);
         }
-        $otp->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'OTP verified successfully',
-        ]);
     }
 
     public function otpLoginStore(Request $request)
     {
+        $request->validate([
+            'username' => 'required',
+            'mobile' => 'required',
+            'otp' => 'required',
+        ]);
+
         $data = [
             'username' => $request->username,
             'mobile' =>  $request->mobile,
             'password' => Hash::make(Str::random(8)),
+            'otp'=> $request->otp,
             'user_type' => 'user',
             'login_type' => 'otp'
         ];
+
+        $otpData = Otp::where('phone_or_email', $request->mobile)->where('is_verified', true)->first();
+
+        if(!$otpData || $otpData->otp != $request->otp){
+            return redirect()->back();
+        }
 
         $user = User::create($data);
 
@@ -114,41 +161,5 @@ class OTPController extends Controller
         }
 
         return redirect('/'); // Redirect to intended page
-    }
-
-    public function checkUserExists(Request $request)
-    {
-        $data = $request->all();
-
-        $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-
-        $flag = 0;
-        $url = route('login');
-        $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
-
-        if(!empty($user))
-        {
-
-            if($user->user_type !='user'){
-
-                return response()->json(['message'=>"Admin doesn't have access to login", 'status' => 406]);
-            }
-
-            $response=$this->CheckDeviceLimit($user, $current_device);
-
-            if(isset($response['error'])) {
-
-                return response()->json(['message'=>$response['error'], 'status' => 406]);
-            }
-
-            $this->setDevice($user, $request);
-
-            Auth::login($user);
-
-            $flag = 1;
-            $url = route('home');
-        }
-
-        return response()->json(['is_user_exists' => $flag, 'url' => $url]);
     }
 }
