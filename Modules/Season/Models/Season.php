@@ -33,7 +33,7 @@ class Season extends BaseModel
 
     public function entertainmentdata()
     {
-        return $this->belongsTo(Entertainment::class,'entertainment_id');
+        return $this->belongsTo(Entertainment::class,'entertainment_uuid');
     }
 
     public function plan()

@@ -16,6 +16,7 @@ class EntertainmentGenerMapping extends BaseModel
     protected $fillable = [
 
         'entertainment_id',
+        'entertainment__uuid',
         'genre_id',
 
     ];

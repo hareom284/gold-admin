@@ -63,7 +63,7 @@ class MovieController extends Controller
 
     public function movieDetails(Request $request, $id)
     {
-        $movieId = $id;
+        $movieId = Entertainment::where('uuid',$id)->value('id');
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
 
@@ -206,7 +206,7 @@ class MovieController extends Controller
         $livetvId = $id;
         $userId = auth()->id();
 
-            $livetv = LiveTvChannel::where('id',$livetvId)->with('TvCategory','plan','TvChannelStreamContentMappings')->  first();
+            $livetv = LiveTvChannel::where('id',$livetvId)->with('TvCategory','plan','TvChannelStreamContentMappings')->first();
             $suggestions = LiveTvChannel::where('category_id', $livetv->category_id)
             ->where('id', '!=', $livetvId) // Exclude the current channel
             ->with('TvCategory') // Eager load the category

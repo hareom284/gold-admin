@@ -53,6 +53,9 @@ class MoviesResource extends JsonResource
         //     $plans = Plan::where('level', '<=', $plan->level)->get();
         // }
         $userId = auth()->id();
+
+        return $userId;
+        
         if($userId) {
             $isInWatchList = WatchList::where('entertainment_id',$this->id)
             ->where('user_id', $userId)
@@ -62,6 +65,7 @@ class MoviesResource extends JsonResource
         }
         return [
             'id' => $this->id,
+            'uuid' => $this->uuid,
             'name' => $this->name,
             'description' => strip_tags($this->description),
             'trailer_url_type' => $this->trailer_url_type,

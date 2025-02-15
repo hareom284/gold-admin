@@ -141,6 +141,7 @@ class MovieService
                             ['name' => $castDetails['name'], 'dob' => $castDetails['birthday'], 'type'=> $type],
                             [
                                 'name' => $castDetails['name'],
+                                'uuid' => Str::uuid(),
                                 'type' =>$type,
                                 'tmdb_id' => $tmdb_id, 
                                 'file_url' => !empty($castDetails['profile_path']) 

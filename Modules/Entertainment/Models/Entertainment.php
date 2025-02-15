@@ -17,6 +17,7 @@ class Entertainment extends BaseModel
 
     protected $fillable = [
         'name',
+        'uuid',
         'tmdb_id',
         'description',
         'trailer_url_type',
@@ -48,7 +49,7 @@ class Entertainment extends BaseModel
 
     public function entertainmentGenerMappings()
     {
-        return $this->hasMany(EntertainmentGenerMapping::class,'entertainment_id','id')->with('genre');
+        return $this->hasMany(EntertainmentGenerMapping::class,'entertainment_uuid','uuid')->with('genre');
     }
     public function entertainmentTagMappings()
     {
@@ -168,7 +169,7 @@ class Entertainment extends BaseModel
 
     public function season()
     {
-        return $this->hasMany(Season::class, 'entertainment_id')->with('plan', 'episodes');
+        return $this->hasMany(Season::class, 'entertainment_uuid')->with('plan', 'episodes');
     }
 
 

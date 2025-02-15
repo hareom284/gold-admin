@@ -14,6 +14,7 @@ use Modules\CastCrew\Models\CastCrew;
 use Modules\Entertainment\Services\EntertainmentService;
 use Modules\Tag\Models\Tag;
 use Modules\World\Models\Country;
+use Illuminate\Support\Str;
 
 class EntertainmentsController extends Controller
 {
@@ -76,7 +77,7 @@ class EntertainmentsController extends Controller
         $data = $request->all();
         $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
         $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
-
+        $data['uuid'] = Str::uuid();
 
         if (isset($data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place

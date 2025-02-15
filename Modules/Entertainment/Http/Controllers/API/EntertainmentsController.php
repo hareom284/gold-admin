@@ -95,6 +95,8 @@ class EntertainmentsController extends Controller
         $movies = $movieList->orderBy('id', 'desc')->paginate($perPage);
         $responseData = MoviesResource::collection($movies);
 
+        // return $responseData;
+
         if ($request->has('is_ajax') && $request->is_ajax == 1) {
             $html = '';
             foreach ($responseData->toArray($request) as $movieData) {
@@ -110,6 +112,9 @@ class EntertainmentsController extends Controller
                 $movieData['is_watch_list'] = $isInWatchList ? true : false;
 
                 }
+
+                // return $movieData;
+                
                 $html .= view('frontend::components.card.card_entertainment', ['value' => $movieData])->render();
 
              }
@@ -144,7 +149,7 @@ class EntertainmentsController extends Controller
 
         if (!$responseData) {
 
-            $movie = Entertainment::where('id', $movieId)->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'entertainmentStreamContentMappings', 'entertainmentDownloadMappings')->first();
+            $movie = Entertainment::where('id', $request->uuid_selection_name)->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'entertainmentStreamContentMappings', 'entertainmentDownloadMappings')->first();
             $movie['reviews'] = $movie->entertainmentReviews ?? null;
 
             if ($request->has('user_id')) {

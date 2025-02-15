@@ -7,14 +7,15 @@
         @if(isset($is_search) && $is_search==1 )
 
         <a href="{{ $value['type'] == 'tvshow'
-        ? route('tvshow-details', ['id' => $value['id'], 'is_search' => request()->has('search') ? 1 : null])
-        : route('movie-details', ['id' => $value['id'], 'is_search' => request()->has('search') ? 1 : null]) }}"
+        ? route('tvshow-details', ['uuid' => $value['uuid'], 'is_search' => request()->has('search') ? 1 : null])
+        : route('movie-details', ['uuid' => $value['uuid'], 'is_search' => request()->has('search') ? 1 : null]) }}"
            class="position-absolute top-0 bottom-0 start-0 end-0">
       </a>
         @else
-        <a href="{{ $value['type'] == 'tvshow' ? route('tvshow-details', ['id' => $value['id']]) : route('movie-details', ['id' => $value['id']]) }}"
+        <a href="{{ $value['type'] == 'tvshow' ? route('tvshow-details', ['id' => $value['uuid']]) : route('movie-details', ['id' => $value['uuid']]) }}"
             class="position-absolute top-0 bottom-0 start-0 end-0">
          </a>
+         <input type="hidden" name="uuid_selection_name" value={{$value['id']}}>
          @endif
       <div class="image-box w-100">
         <img src="{{ $value['poster_image'] }}" alt="movie-card" class="img-fluid object-cover w-100 d-block border-0" >
@@ -52,7 +53,7 @@
                 @if ($value['type'] == 'movie')
                     <i class="ph ph-clock"></i>  {{formatDuration($value['duration'])}}
                 @else
-                    {{$value['season_count']}} seasons
+                    {{$value['season_count']}} season{{ ($value['season_count'] != 1) ? 's' : ''}}
                 @endif
               {{-- <i class="ph ph-clock"></i>
               {{ $value['duration'] ? formatDuration($value['duration']) : '--' }} --}}
