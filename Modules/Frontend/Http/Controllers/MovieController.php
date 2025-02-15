@@ -195,7 +195,6 @@ class MovieController extends Controller
             }
         }
 
-        // return $data;
         return view('frontend::movieDetail', compact('data'));
     }
 

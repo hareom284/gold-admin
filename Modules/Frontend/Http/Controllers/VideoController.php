@@ -2,28 +2,51 @@
 
 namespace Modules\Frontend\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Modules\Video\Models\Video;
+use App\Models\UserSearchHistory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+use Modules\Entertainment\Models\Like;
+use Illuminate\Support\Facades\Response;
+use Modules\Entertainment\Models\Watchlist;
+use Modules\Video\Transformers\VideoResource;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
-use Modules\Entertainment\Transformers\MovieDetailResource;
-use Modules\Entertainment\Models\Watchlist;
-use Modules\Entertainment\Models\Like;
-use Illuminate\Support\Facades\Cache;
-use Modules\Entertainment\Models\EntertainmentDownload;
-use Modules\Video\Models\Video;
-use Modules\Video\Transformers\VideoResource;
 use Modules\Video\Transformers\VideoDetailResource;
-use App\Models\UserSearchHistory;
-use Illuminate\Support\Facades\Crypt;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Modules\Entertainment\Models\EntertainmentDownload;
+use Modules\Entertainment\Transformers\MovieDetailResource;
 
 class VideoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+     public function downloadVideo(){
+        $fileUrl = 'https://video6-moviescdn.b-cdn.net/Chinese-Series/19th%20Floor(2024)/1%2019th%20FLOOR%20FHD.mp4';
+        $fileName = '19th_FLOOR_FHD.mp4';
+
+        $headers = [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+        ];
+
+        return response()->stream(function () use ($fileUrl) {
+            $stream = fopen($fileUrl, 'rb');
+            while (!feof($stream)) {
+                echo fread($stream, 1024 * 8); // Read in 8 KB chunks
+                ob_flush();
+                flush();
+            }
+            fclose($stream);
+        }, 200, $headers);
+     }
 
     public function videoList()
     {

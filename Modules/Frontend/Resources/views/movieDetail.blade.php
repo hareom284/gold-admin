@@ -4,7 +4,6 @@
 
 
 <div id="thumbnail-section">
-
     @include('frontend::components.section.custom-video-detail',  ['data' => $data])
 </div>
 
@@ -100,9 +99,8 @@
             </div>
         </div>
 
-
         <div class="tab-pane mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
-            @include('frontend::components.section.download_link_section')
+            @include('frontend::components.section.download_link_section', ['data' => $data['video_links']])
         </div>
       </div>
 </div>
