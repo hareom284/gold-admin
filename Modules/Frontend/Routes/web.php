@@ -44,6 +44,7 @@ Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name(
 
 
 
+Route::get('download-video', [VideoController::class, 'downloadVideo'])->name('download-video');
 
 Route::get('movies/genre/{genre_id}', [MovieController::class, 'moviesListByGenre'])->middleware('checkModule')->name('movies.genre');
 Route::get('movies/{language}', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies.language');
@@ -54,6 +55,7 @@ Route::get('/tvshow-details/{id}', [TvShowController::class, 'tvshowDetail'])->m
 Route::get('/episode-details/{id}', [TvShowController::class, 'episodeDetail'])->middleware('checkModule')->name('episode-details');
 Route::get('/videos', [VideoController::class, 'videoList'])->middleware('checkModule')->name('videos');
 Route::get('/videos-details/{id}', [VideoController::class, 'videoDetails'])->middleware('checkModule')->name('video-detail');
+
 
 
 Route::get('/comingsoon', [MovieController::class, 'comingSoonList'])->middleware('checkModule')->name('comingsoon');

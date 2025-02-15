@@ -102,9 +102,9 @@
                                                     <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url) }}" class="img-fluid dropdown-user-menu-image" alt="">
                                                 </div>
                                                 <div class="content">
-                                                    <h6 class="mb-1"> {{ auth()->user()->full_name ?? default_user_name() }}</h6>
+                                                    <h6 class="mb-1"> {{ auth()->user()->username ?? default_user_name() }}</h6>
 
-                                                    <span class="font-size-14 dropdown-user-menu-contnet"> {{ auth()->user()->mobile}}</span>
+                                                    <span class="font-size-14 dropdown-user-menu-contnet"> {{ auth()->user()->mobile ?? auth()->user()->email}}</span>
                                                 </div>
                                             </div>
                                             {{-- <div class="link">

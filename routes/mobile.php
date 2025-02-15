@@ -27,7 +27,6 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('send-otp',[OTPController::class,'sendOTP']);
     Route::post('verify-otp', [OTPController::class, 'verifyOTP']);
     Route::post('resend-otp', [OTPController::class, 'resendOTP']);
-    Route::post('check-user-exists', [OTPController::class, 'checkUserExists']);
     Route::post('opt-user-store', [OTPController::class, 'otpUserStore']);
 
 
@@ -37,6 +36,5 @@ Route::group(['prefix'=>'v1'],function(){
     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
-
 
 });

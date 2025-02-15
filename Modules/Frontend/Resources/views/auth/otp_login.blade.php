@@ -12,15 +12,18 @@
                             <div class="text-center auth-heading">
                                 <img src="{{ asset(setting('logo')) }}" class="img-fluid logo h-4 mb-4">
 
-                                <h5>{{ __('frontend.sign_in_title') }}</h5>
-                                <p class="fs-14 text-white">Use your email or mobile number to continue watching <br>  Movies and TV Shows!</p>
+                                <span id="login_initial_heading">
+                                     <h5>{{ __('frontend.sign_in_title') }}</h5>
+                                     <p class="fs-14 text-white">Use your email or mobile number to continue watching <br>  Movies and TV Shows!</p>
+                                </span>
                                 @if (session()->has('error'))
                                     <span class="text-danger">{{ session()->get('error') }}</span>
                                 @endif
                             </div>
-                            <p class="text-danger" id="otp_error_message"></p>
-                            <p class="text-success" id="otp_success_message"></p>
-                            <p class="fs-14" id="otp_subtitle"></p>
+                            <p class="text-danger text-center" id="otp_error_message"></p>
+                            <p class="text-success text-center" id="otp_success_message"></p>
+                            <h5 id="otp_title" class="text-center"></h5>
+                            <p class="fs-14 text-center" id="otp_subtitle"></p>
 
 
                             <!-- Mobile Number Form -->
@@ -76,9 +79,6 @@
                                             {{ __('frontend.continue_with_google') }}
                                         </span>
                                     </a>
-
-                                    {{-- <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a> --}}
-
                                 </div>
 
 
@@ -87,16 +87,19 @@
                             <!-- OTP Verification Form -->
                             <div id="otp-form" style="display: none;">
                                 <form id="verify-otp-form" class="requires-validation" data-toggle="validator" novalidate>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                        <input type="text" name="otp" class="form-control"  value="123456"
-                                            placeholder="{{ __('frontend.enter_otp') }}" aria-describedby="basic-addon1"
-                                            id="otp" required>
-                                        <div class="invalid-feedback" id="otp-error">OTP field is required.</div>
+                                    <div class="input-group border-0 mb-3">
+                                            <div id="otp" style="max-width: 350px" class="inputs d-flex flex-row justify-content-center mt-2 mx-auto">
+                                                <input  class="m-2  text-center form-control rounded border" type="text" id="first" maxlength="1"  />
+                                                <input class="m-2  text-center form-control rounded border" type="text" id="second" maxlength="1" />
+                                                <input class="m-2  text-center form-control rounded border" type="text" id="third" maxlength="1" />
+                                                <input class="m-2  text-center form-control rounded border" type="text" id="fourth" maxlength="1" />
+                                                <input class="m-2  text-center form-control rounded border" type="text" id="fifth" maxlength="1" />
+                                            </div>
+                                        <div class="invalid-feedback text-center" id="otp-error">OTP field is required.</div>
                                     </div>
-                                    <div id="otp-timer" style="color: red; display: none;">You can resend the OTP in <span
-                                            id="timer">
-                                        </span> seconds.</div>
+                                    <div id="otp-timer" class="text-center" style="color:white; display: none;">Resend code in &nbsp;<span style="color: #2347C9;"><span
+                                            id="timer" >
+                                        </span>s</span></div>
                                     <div class="full-button text-center">
                                         <button type="button" id="verify-otp-button" class="btn btn-primary w-100"
                                             onclick="verifyCode()">
@@ -118,11 +121,12 @@
                                     </div>
                                 </form>
                             </div>
-
+                            <!-- OTP Register Form -->
                             <div id="registerForm" style="display: none;">
                                 <form action="{{ route('auth.otp-login-store') }}" method="post"
                                     class="requires-validation" data-toggle="validator" novalidate>
                                     @csrf
+                                    <input type="text" name="otp" id="reg_otp_code" value="1234" hidden>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
                                         <input type="text" name="mobile" id="mobile_number" class="form-control"
@@ -134,23 +138,10 @@
 
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-user"></i></span>
-                                        <input type="text" name="first_name" class="form-control"
-                                            placeholder="{{ __('frontend.enter_fname') }}" required>
-                                        <div class="invalid-feedback" id="first_name_error">First Name field is required
+                                        <input type="text" name="username" class="form-control"
+                                            placeholder="{{ __('frontend.enter_name') }}" required>
+                                        <div class="invalid-feedback" id="name_error">Name field is required
                                         </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text px-0"><i class="ph ph-user"></i></span>
-                                        <input type="text" name="last_name" class="form-control"
-                                            placeholder="{{ __('frontend.enter_lname') }}" required>
-                                        <div class="invalid-feedback" id="last_name_error">Last Name field is required
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text px-0"><i class="ph ph-envelope"></i></span>
-                                        <input type="text" name="email" class="form-control"
-                                            placeholder="{{ __('frontend.enter_email') }}" required>
-                                        <div class="invalid-feedback" id="email_error">Email field is required</div>
                                     </div>
 
                                     <div class="full-button text-center">
@@ -175,31 +166,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 
     <script>
-        var isOtpLoginEnabled = {{ json_encode($isOtpLoginEnabled) }};
+        //otp input numerber
+        document.addEventListener("DOMContentLoaded", function() {
+            function OTPInput() {
+                const inputs = document.querySelectorAll('#otp > input');
+                for (let i = 0; i < inputs.length; i++) {
+                    inputs[i].addEventListener('input', function() {
+                        if (this.value.length > 1) {
+                            this.value = this.value[0]; //
+                        }
+                        if (this.value !== '' && i < inputs.length - 1) {
+                            inputs[i + 1].focus(); //
+                        }
+                    });
 
-        if (isOtpLoginEnabled) {
-            var firebaseConfig = {
-                @foreach ($settings as $setting)
-                    @if (in_array($setting->name, [
-                            'apiKey',
-                            'authDomain',
-                            'databaseURL',
-                            'projectId',
-                            'storageBucket',
-                            'messagingSenderId',
-                            'appId',
-                            'measurementId',
-                        ]))
-                        '{{ $setting->name }}': '{{ $setting->val }}',
-                    @endif
-                @endforeach
-            };
-
-
-            firebase.initializeApp(firebaseConfig);
-        } else {
-            console.log('OTP login is disabled. Firebase not initialized.');
-        }
+                    inputs[i].addEventListener('keydown', function(event) {
+                        if (event.key === 'Backspace') {
+                            this.value = '';
+                            if (i > 0) {
+                                inputs[i - 1].focus();
+                            }
+                        }
+                    });
+                }
+            }
+            OTPInput();
+        });
     </script>
 
     <script type="text/javascript">
@@ -223,11 +215,11 @@
         let timerInterval;
         var number = '';
 
-
         function sendCode() {
             var number = iti.getNumber()
 
             if (iti.isValidNumber()) {
+                document.getElementById('login_initial_heading').classList.add('d-none');
                 document.getElementById('send-otp-button').disabled = true;
                 document.getElementById('send-button-text').classList.add('d-none');
                 document.getElementById('send-button-spinner').classList.remove('d-none');
@@ -248,7 +240,7 @@
                             $('#otp-form').show();
 
                             $('#otp_title').text('Verify OTP');
-                            $('#otp_subtitle').text('We’ve sent an OTP to your mobile number. Please enter it to proceed');
+                            $('#otp_subtitle').text("Code has been sent to "+number.replace(number.substring(4,10), "*******"));
 
                             startOtpTimer();
 
@@ -298,10 +290,9 @@
 
 
         function verifyCode() {
-            var code = $('#otp').val();
-
+            var code = '';
+            document.querySelectorAll('#otp > input').forEach(input => code += input.value);
             if (code == '') {
-
                 $('.invalid-feedback').css('display', 'block');
                 $('#otp-error').text('OTP is required field');
                 return;
@@ -322,49 +313,27 @@
                 success: function (response) {
                     console.log(response);
                     if (response.success == true) {
-                                $.ajax({
-                                url: '{{ route('check.user.exists') }}', // Replace with your API URL
-                                type: 'get', // Use POST method
-                                data: {
-                                    phone_or_email: numbervalue, // Send the mobile number as well
-                                    _token: '{{ csrf_token() }}',
-                                },
-                                success: function(response) {
+                        if (response.is_user_exists == 0) {
+                            $('#otp-form').hide();
+                            $('#otp_title').text('Personal Details');
+                            $('#reg_otp_code').val(code);
+                            $('#otp_subtitle').text(
+                                'Please provide additional details to complete signup');
+                            $('#mobile_number').val(numbervalue);
+                            $('#otp_error_message').text('');
+                            $('#registerForm').show();
+                        }
+                        if (response.status == 406) {
+                            $('#mobile-form').show();
+                            $('#otp-form').hide();
+                            $('#otp_error_message').text(response.message);
+                            $('#otp_error_message').show();
+                        }
 
-                                    if (response.is_user_exists == 0) {
-                                        $('#otp-form').hide();
-                                        $('#otp_title').text('Personal Details');
-                                        $('#otp_subtitle').text(
-                                            'Please provide additional details to complete signup');
-                                        $('#mobile_number').val(numbervalue);
-                                        $('#otp_error_message').text('');
-                                        $('#registerForm').show();
-                                    }
+                        if (response.url && response.is_user_exists == 1) {
+                            window.location = response.url;
+                        }
 
-                                    if (response.status == 406) {
-
-                                        $('#mobile-form').show();
-                                        $('#otp-form').hide();
-                                        $('#otp_error_message').text(response.message);
-                                        $('#otp_error_message').show();
-
-                                    }
-
-                                    if (response.url && response.is_user_exists == 1) {
-                                        window.location = response.url;
-                                    }
-                                },
-                                error: function(error) {
-                                    $('#otp_error_message').text(error);
-                                    $('#otp_error_message').show();
-                                },
-                                complete: function() {
-                                    // Re-enable the button and hide the spinner after the request is complete
-                                    document.getElementById('verify-otp-button').disabled = false;
-                                    document.getElementById('button-text').classList.remove('d-none');
-                                    document.getElementById('button-spinner').classList.add('d-none');
-                                }
-                            });
                     }else{
                         $('#otp_error_message').text(response.message);
                         $('#otp_error_message').show();
@@ -427,16 +396,6 @@
                         }
                     });
                 }
-
-                // firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
-                //     .then(function(confirmationResult) {
-                //         window.confirmationResult = confirmationResult;
-
-                //         startOtpTimer();
-                //     })
-                //     .catch(function(error) {
-                //         $('#otp_error_message').text(error.message).show();
-                //     });
             });
         }
     </script>

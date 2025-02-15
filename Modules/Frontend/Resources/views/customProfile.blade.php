@@ -224,7 +224,7 @@
 
                 // Redirect after 3 seconds
                 setTimeout(function() {
-                    window.location.href = '{{ route('login') }}';
+                    window.location.href = '{{ route('home') }}';
                 }, 3000);
             } else {
                 alert('Error: ' + data.message);

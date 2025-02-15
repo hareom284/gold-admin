@@ -64,65 +64,58 @@ class OTPController extends Controller
             ], 422);
         }
 
+        //get data from otp table by phone_or_email and otp
         $otp = Otp::where('phone_or_email', $request->phone_or_email)
         ->where('otp', $request->otp)->first();
+
+        //check otp exist or not and expire_at is less than now
         if (!$otp || $otp->expire_at < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid OTP',
             ], 422);
-        }
-        $otp->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'OTP verified successfully',
-        ]);
-    }
+        }else{
 
-    public function checkUserExists(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'phone_or_email' => 'required',
-        ]);
+            //change otp status to verified
+            $otp->is_verified = true;
+            $otp->save();
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422);
-        }
+            //if otp is verified , get user by phone number
+            $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
 
-        $user = User::where('mobile', $request->phone_or_email)->where('login_type','otp')->with('subscriptionPackage')->first();
+            //if user exist then login and return token
+            if (!empty($user)) {
+                    if($user->user_type !='user'){
+                        return response()->json([
+                            'success' => false,
+                            'message'=>"Admin doesn't have access to login"
+                        ],406);
+                    }
 
-        if (!empty($user)) {
-                if($user->user_type !='user'){
+                    $otp->delete();
+
+                    $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
-                        'success' => false,
-                        'message'=>"Admin doesn't have access to login"
-                    ],406);
-                }
-                $token = $user->createToken('auth_token')->plainTextToken;
-                return response()->json([
-                    'success' => true,
-                    'message' => 'User login successfully',
-                    'token' => $token,
-                    'user' => $user
-                ],200);
-        }
+                        'success' => true,
+                        'message' => 'User login successfully',
+                        'token' => $token,
+                        'user' => $user
+                    ],200);
+            }
 
-        return response()->json([
-            'success'=>false,
-            'message'=>'User not found,need to create account'
-        ],404);
+            //if user not exist then create new user and login
+            return response()->json([
+                'success'=>false,
+                'message'=>'OTP verified successfully, ples create new user',
+            ],404);
+        }
 
     }
 
     public function otpUserStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'username' => 'required',
             'mobile' => 'required|unique:users',
             'otp' => 'required',
         ]);
@@ -134,10 +127,17 @@ class OTPController extends Controller
             ], 422);
         }
 
+        $otpData = Otp::where('phone_or_email', $request->mobile)->where('is_verified', true)->first();
+
+        if(!$otpData || $otpData->otp != $request->otp){
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid OTP',
+            ], 422);
+        }
+
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' =>  $request->email,
+            'username' => $request->username,
             'mobile' =>  $request->mobile,
             'password' => Hash::make(Str::random(8)),
             'user_type' => 'user',
