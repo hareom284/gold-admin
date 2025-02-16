@@ -19,13 +19,10 @@
 
         {{-- ads banner  --}}
         <div id="adsbanner-section" class="px-0 section-spacing-bottom">
-
             @php
                 $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
             @endphp
-
             @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
-
         </div>
 
     <div class="container-fluid padding-right-0">
@@ -68,9 +65,6 @@
 
             </div>
           @endif
-
-
-
 
           <div id="top-rated-moive-section" class="section-wraper scroll-section section-hidden my-5">
             <div class="card-style-slider movie-shimmer">

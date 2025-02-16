@@ -15,47 +15,6 @@
     <div class="container-fluid">
         <div class="py-2 px-md-5 px-3 movie-detail-menu rounded">
             <div class="d-flex align-items-center gap-2">
-                {{-- <div class="left">
-                    <i class="ph ph-caret-left"></i>
-                </div>
-                <div class="custom-nav-slider">
-                    <ul class="list-inline m-0 p-0 d-flex align-items-center">
-                        @if($data['casts'] != null || $data['directors'] !=null )
-                        <li>
-                            <a href="#movie-cast" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-user-circle-gear align-middle"></i></span>
-                                    <span class="font-size-18">{{ __('frontend.casts') }} & {{ __('frontend.directors') }}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @endif
-
-                        <li id="reviweList" class="flex-shrink-0 @if($data['your_review'] == null && count($data['three_reviews']) == 0) d-none @endif">
-                            <a href="#review-list" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-star align-middle"></i></span>
-                                    <span class="font-size-18">{{ __('frontend.reviews') }}</span>
-                                </span>
-                            </a>
-                        </li>
-
-                        @if(count($data['more_items']) !=0 )
-                        <li>
-                            <a href="#more-like-this" class="link-body-emphasis">
-                                <span class="d-inline-flex align-items-center gap-2">
-                                    <span><i class="ph ph-dots-three-circle align-middle"></i></span>
-                                    <span class="font-size-18">{{__('frontend.more_like_this')}}</span>
-                                </span>
-                            </a>
-                        </li>
-                        @endif
-                    </ul>
-                </div>
-                <div class="right">
-                    <i class="ph ph-caret-right"></i>
-                </div> --}}
-
                   <ul class="nav " role="tablist" id="detail-tab">
                     <li class="nav-item underline-white" role="presentation">
                       <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
@@ -105,32 +64,6 @@
       </div>
 </div>
 
-{{-- <div class="container-fluid padding-right-0">
-    <div class="overflow-hidden">
-        @if(count( $data['casts']) >0)
-        <div id="movie-cast" class="half-spacing">
-            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
-        </div>
-        @endif
-
-        @if(count( $data['directors']) >0)
-        <div id="favorite-personality">
-            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
-        </div>
-        @endif
-    </div>
-</div> --}}
-
-{{-- <div class="container-fluid">
-    <div id="add-review">
-        @include('frontend::components.section.add_review',  ['addreview' => 'Add Review'])
-    </div>
-
-    <div id="review-list" class="@if($data['your_review'] == null && count($data['three_reviews']) == 0) d-none @endif" >
-        @include('frontend::components.section.review_list',  ['data' => $data['three_reviews'], 'your_review'=> $data['your_review'], 'title'=> $data['name'], 'total_review'=>count($data['reviews'])])
-    </div>
-
-</div> --}}
 <div class="container-fluid padding-right-0">
     <div class="overflow-hidden">
         @if(count($data['more_items']) !=0 )

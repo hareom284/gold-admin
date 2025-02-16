@@ -17,6 +17,7 @@ use Modules\Frontend\Http\Controllers\CastCrewController;
 use Modules\Frontend\Http\Controllers\FrontendController;
 use Modules\Frontend\Http\Controllers\Auth\AuthController;
 use Modules\Frontend\Http\Controllers\Auth\UserController;
+use Modules\Frontend\Http\Controllers\DownloadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,9 @@ Route::post('/store-user', [AuthController::class, 'store'])->name('store-user')
 // Route::get('/register', [AuthController::class, 'registration'])->name('register-page');
 Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name('forget-password');
 
-
-
-Route::get('download-video', [VideoController::class, 'downloadVideo'])->name('download-video');
+//download section
+Route::post('predownload',[DownloadController::class, 'predownload'])->name('predownload');
+Route::get('download-video/{id}', [DownloadController::class, 'downloadVideo'])->name('download-video');
 
 Route::get('movies/genre/{genre_id}', [MovieController::class, 'moviesListByGenre'])->middleware('checkModule')->name('movies.genre');
 Route::get('movies/{language}', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies.language');
