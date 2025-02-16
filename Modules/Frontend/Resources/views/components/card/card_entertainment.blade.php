@@ -1,6 +1,7 @@
-
-
-
+@php
+    use Illuminate\Support\Facades\Crypt;
+    $encryptedId = Crypt::encrypt($value['id']);
+@endphp
 <div class="iq-card card-hover entainment-slick-card">
 
     <div class="block-images position-relative w-100">
@@ -12,7 +13,7 @@
            class="position-absolute top-0 bottom-0 start-0 end-0">
       </a>
         @else
-        <a href="{{ $value['type'] == 'tvshow' ? route('tvshow-details', ['id' => $value['uuid']]) : route('movie-details', ['id' => $value['uuid']]) }}"
+        <a href="{{ $value['type'] == 'tvshow' ? route('tvshow-details', ['id' => $encryptedId ]) : route('movie-details', ['id' => $encryptedId ]) }}"
             class="position-absolute top-0 bottom-0 start-0 end-0">
          </a>
          <input type="hidden" name="uuid_selection_name" value={{$value['id']}}>

@@ -14829,7 +14829,8 @@ header .mobile-offcanvas .btn-close:focus {
 }
 
 .iq-nav-menu li.active > a {
-  color: var(--bs-primary);
+  color: #FAFAFA;
+  font-weight: bold;
 }
 .iq-nav-menu li > ul li {
   padding: 0;

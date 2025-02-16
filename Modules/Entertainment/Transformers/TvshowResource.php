@@ -34,7 +34,6 @@ class TvshowResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'uuid' => $this->uuid,
             'name' => $this->name,
             'description' => strip_tags($this->description),
             'trailer_url_type' => $this->trailer_url_type,

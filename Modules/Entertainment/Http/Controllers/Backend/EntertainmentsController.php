@@ -77,7 +77,6 @@ class EntertainmentsController extends Controller
         $data = $request->all();
         $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
         $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
-        $data['uuid'] = Str::uuid();
 
         if (isset($data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place

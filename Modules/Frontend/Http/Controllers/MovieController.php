@@ -63,7 +63,7 @@ class MovieController extends Controller
 
     public function movieDetails(Request $request, $id)
     {
-        $movieId = Entertainment::where('uuid',$id)->value('id');
+        $movieId = Entertainment::where('id',Crypt::decrypt($id))->value('id');
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
 
