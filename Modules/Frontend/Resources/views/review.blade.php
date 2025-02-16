@@ -1,5 +1,10 @@
 @extends('frontend::layouts.master')
 @section('content')
+@php
+
+  use Illuminate\Support\Facades\Crypt;
+
+@endphp
 <div class="review-page section-spacing-bottom px-0">
     <div class="container-fluid">
         <div class="page-title">
@@ -14,7 +19,7 @@
                                 <div class="iq-card">
                                     <div class="block-images position-relative w-100">
 
-                                    <a href="{{$entertainment['type'] == 'tvshow' ? route('tvshow-details', ['id' => $entertainment['id']]) : route('movie-details', ['id' => $entertainment['id']]) }}"  class="position-absolute top-0 bottom-0 start-0 end-0"></a>
+                                    <a href="{{$entertainment['type'] == 'tvshow' ? route('tvshow-details', ['id' => Crypt::encrypt($entertainment['id'])]) : route('movie-details', ['id' => Crypt::encrypt($entertainment['id'])]) }}"  class="position-absolute top-0 bottom-0 start-0 end-0"></a>
 
                                         <!-- <a href="/movie-details" class="position-absolute top-0 bottom-0 start-0 end-0"></a> -->
                                         <div class="image-box w-100">

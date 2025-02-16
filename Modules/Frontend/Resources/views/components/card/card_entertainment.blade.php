@@ -8,8 +8,8 @@
         @if(isset($is_search) && $is_search==1 )
 
         <a href="{{ $value['type'] == 'tvshow'
-        ? route('tvshow-details', ['uuid' => $value['uuid'], 'is_search' => request()->has('search') ? 1 : null])
-        : route('movie-details', ['uuid' => $value['uuid'], 'is_search' => request()->has('search') ? 1 : null]) }}"
+        ? route('tvshow-details', ['id' => $encryptedID, 'is_search' => request()->has('search') ? 1 : null])
+        : route('movie-details', ['id' => $encryptedID, 'is_search' => request()->has('search') ? 1 : null]) }}"
            class="position-absolute top-0 bottom-0 start-0 end-0">
       </a>
         @else
