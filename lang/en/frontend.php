@@ -40,7 +40,7 @@ return[
     'enter_fname'=>'First Name',
     'enter_lname'=>'Last Name',
     'enter_otp'=>'Enter OTP',
-    'enter_mobile'=>'09 xxx xxx xxx',
+    'enter_mobile'=>'9 xxx xxx xxx',
     'enter_email'=>'Email',
     'continue'=>'Continue',
     'mobile'=>'Mobile',
