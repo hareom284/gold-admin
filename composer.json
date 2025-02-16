@@ -44,10 +44,11 @@
         "spatie/laravel-webhook-server": "^3.8",
         "stichoza/google-translate-php": "^5.2",
         "stripe/stripe-php": "^15.9",
+        "symfony/http-foundation": "^7.0",
         "tinymce/tinymce": "^7.2",
+        "twilio/sdk": "^8.3",
         "web-token/jwt-library": "^3.4",
-        "yajra/laravel-datatables-oracle": "^11.0",
-        "symfony/http-foundation": "^7.0"
+        "yajra/laravel-datatables-oracle": "^11.0"
     },
     "require-dev": {
       "barryvdh/laravel-ide-helper": "^3.0",

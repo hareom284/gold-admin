@@ -2,22 +2,25 @@
 
 namespace Modules\Frontend\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Modules\Video\Models\Video;
+use App\Models\UserSearchHistory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+use Modules\Entertainment\Models\Like;
+use Illuminate\Support\Facades\Response;
+use Modules\Entertainment\Models\Watchlist;
+use Modules\Video\Transformers\VideoResource;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
-use Modules\Entertainment\Transformers\MovieDetailResource;
-use Modules\Entertainment\Models\Watchlist;
-use Modules\Entertainment\Models\Like;
-use Illuminate\Support\Facades\Cache;
-use Modules\Entertainment\Models\EntertainmentDownload;
-use Modules\Video\Models\Video;
-use Modules\Video\Transformers\VideoResource;
 use Modules\Video\Transformers\VideoDetailResource;
-use App\Models\UserSearchHistory;
-use Illuminate\Support\Facades\Crypt;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Modules\Entertainment\Models\EntertainmentDownload;
+use Modules\Entertainment\Transformers\MovieDetailResource;
 
 class VideoController extends Controller
 {

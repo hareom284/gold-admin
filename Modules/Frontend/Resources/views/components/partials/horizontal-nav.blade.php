@@ -11,20 +11,20 @@
     </div>
     {{-- @dd(Route::currentRouteName()) --}}
     <ul class="navbar-nav iq-nav-menu ms-5  list-unstyled" id="header-menu">
-      <li class="nav-item me-5 underline-white">
+      <li class="nav-item me-5">
         <a class="nav-link {{Request::routeIs('home')  ? 'active' : ''}}"  href="{{route('home')}}">
           <span class="item-name">{{__('frontend.home')}}</span>
         </a>
       </li>
       @if(isenablemodule('movie'))
-      <li class="nav-item me-5 underline-white">
+      <li class="nav-item me-5">
         <a class="nav-link {{Request::routeIs('movies')  ? 'active' : ''}}"  href="{{ route('movies') }}">
           <span class="item-name">{{__('frontend.movies')}}</span>
         </a>
       </li>
       @endif
       @if(isenablemodule('tvshow'))
-      <li class="nav-item me-5 underline-white">
+      <li class="nav-item me-5">
         <a class="nav-link {{Request::routeIs('tv-shows')  ? 'active' : ''}}"  href="{{ route('tv-shows') }}">
           <span class="item-name">{{__('frontend.tvshows')}}</span>
         </a>
@@ -53,7 +53,7 @@
           $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
       @endphp
 
-      <li class="nav-item me-5 underline-white">
+      <li class="nav-item me-5">
             <a  class="nav-link dropdown-toggle {{Request::routeIs('movies.genre')  ? 'active' : ''}}" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Genres
             </a>

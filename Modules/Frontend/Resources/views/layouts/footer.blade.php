@@ -10,9 +10,13 @@ $footerData = getFooterData();
             <div class="footer-logo mb-4 d-flex justify-content-center align-items-center section-spacing-bottom">
                 <!--Logo -->
                  <div>
-                    @include('frontend::components.partials.logo')
+                    <div class="logo-default">
+                      <a class="navbar-brand text-primary" href="{{route('home')}}">
+                          <img class="img-fluid logo" src="{{ asset(setting('logo')) }}" alt="Gold Channel">
+                      </a>
+                    </div>
                  </div>
-                 <div style="font-size:24px;font-weight:800;color:white;" class="ms-3"></div>
+                 <div style="font-size:24px;font-weight:800;color:white;" class="ms-3">Gold Channel</div>
             </div>
 
             <div class="section-spacing-bottom">

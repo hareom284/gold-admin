@@ -44,12 +44,14 @@ class TvShowController extends Controller
 
     $userId = auth()->id();
 
-    $cacheKey = 'tvshow_' . $tvshow_id;
+    $cacheKey = 'tvshoow_' . $tvshow_id;
 
     $responseData = Cache::get($cacheKey);
 
     if (!$responseData) {
-        $tvshow = Entertainment::where('id', $tvshow_id)
+
+
+        $tvshow = Entertainment::where('id', Crypt::decrypt($tvshow_id))
             ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
             ->first();
 
@@ -86,12 +88,13 @@ class TvShowController extends Controller
         Cache::put($cacheKey, $responseData);
     }
 
+    // return $responseData;
     // Convert response data to array
     $data = $responseData->toArray(request());
 
-    $season_id=Season::where('entertainment_id', $tvshow_id)->value('id');
+    $season_id=Season::where('entertainment_id', Crypt::decrypt($tvshow_id))->value('id');
 
-    $episode=Episode::where('entertainment_id', $tvshow_id)->where('season_id',$season_id)->with('entertainmentdata', 'plan', 'EpisodeStreamContentMapping', 'episodeDownloadMappings')->first();
+    $episode=Episode::where('entertainment_id', Crypt::decrypt($tvshow_id))->where('season_id',$season_id)->with('entertainmentdata', 'plan', 'EpisodeStreamContentMapping', 'episodeDownloadMappings')->first();
 
     if($episode ==null){
 

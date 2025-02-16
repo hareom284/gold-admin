@@ -90,7 +90,6 @@ class AuthController extends Controller
 
         $this->removeDevice($user, $request);
 
-
         return redirect()->route('home');
 
     }
@@ -175,6 +174,7 @@ class AuthController extends Controller
              }
 
              if($user->login_type == 'google'){
+
                 $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
                 $response=$this->CheckDeviceLimit($user, $current_device);
 
@@ -183,8 +183,7 @@ class AuthController extends Controller
                 }
 
                  $this->setDevice($user,$request);
-                 $user1=Auth::login($user);
-
+                 $user = Auth::login($user);
              }
              else
              {

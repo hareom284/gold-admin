@@ -68,7 +68,7 @@ class EntertainmentRepository implements EntertainmentRepositoryInterface
         }
 
         if (isset($data['actors'])) {
-            $this->updateTalentMappings($entertainment->id, $data['actors'], 'actor');
+            $this->updateTalentMappings($entertainment->entertainmentRepositoryid, $data['actors'], 'actor');
         }
 
         if (isset($data['directors'])) {

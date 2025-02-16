@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <div id="thumbnail-section">
     {{-- @include('frontend::components.section.thumbnail',  ['data' => $data['trailer_url'] ,'type'=>$data['trailer_url_type'],'thumbnail_image'=>$data['thumbnail_image']]) --}}
     @include('frontend::components.section.custom-video-detail',  ['data' => $data])
@@ -13,12 +14,11 @@
         @include('frontend::components.section.data_detail',  ['data' => $data])
     </div>
 </div> --}}
-
 <div class="short-menu my-5">
     <div class="container-fluid">
-        <div class=" movie-detail-menu rounded">
+        <div class="py-2 px-md-5 px-3 movie-detail-menu rounded">
             <div class="d-flex align-items-center gap-2">
-                  <ul class="nav " role="tablist" id="detail-tab">
+                  <ul class="nav" role="tablist" id="detail-tab">
                     <li class="nav-item px-3 underline-white" role="presentation">
                       <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
                     </li>

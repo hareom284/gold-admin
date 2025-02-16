@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
 
 <script src="{{ asset('js/entertainment.min.js') }}" defer></script>
 

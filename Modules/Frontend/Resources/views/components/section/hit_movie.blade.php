@@ -1,3 +1,8 @@
+@php
+
+  use Illuminate\Support\Facades\Crypt;
+
+@endphp
 <div class="top-ten-block">
     <div class="d-flex align-items-center justify-content-between my-2">
         <h5 class="main-title text-capitalize fw-bold mb-2">{{$title}} Hits</h5>
@@ -14,7 +19,7 @@
                 <div class="iq-top-ten-block">
                     <div class="block-image position-relative">
                         <div class="img-box">
-                            <a  class="overly-images" href="{{ $data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']]) }}">
+                            <a  class="overly-images" href="{{ $data['type'] == 'tvshow' ? route('tvshow-details', ['id' => Crypt::encrypt($data['id'])]) : route('movie-details', ['id' => Crypt::encrypt($data['id'])]) }}">
                                 <img src="{{ $data['poster_image'] }}" alt="movie-card" class="img-fluid object-cover top-ten-img">
                                 @if($data['movie_access']=='paid')
                                 <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph-fill ph-crown"></i></button>

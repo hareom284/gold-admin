@@ -19,13 +19,10 @@
 
         {{-- ads banner  --}}
         <div id="adsbanner-section" class="px-0 section-spacing-bottom">
-
             @php
                 $ads_banner = Modules\AdBanner\Models\AdBanner::where('status',1)->get();
             @endphp
-
             @include('frontend::components.section.adsbanner', ['data' => $ads_banner ?? []])
-
         </div>
 
     <div class="container-fluid padding-right-0">
@@ -35,7 +32,7 @@
             $is_enable_continue_watching = App\Models\MobileSetting::getValueBySlug('continue-watching');
            @endphp
 
-            {{-- @if($user_id !=null && $is_enable_continue_watching == 1)
+            @if($user_id !=null && $is_enable_continue_watching == 1)
 
             <div id="continue-watch-section" class="section-wraper scroll-section section-hidden">
 
@@ -67,10 +64,7 @@
                </div>
 
             </div>
-          @endif --}}
-
-
-
+          @endif
 
           <div id="top-rated-moive-section" class="section-wraper scroll-section section-hidden my-5">
             <div class="card-style-slider movie-shimmer">
@@ -475,17 +469,17 @@ sections.forEach(section => {
 
 ;
 
-// function fetchContinueWatch() {
-//     fetch(`${envURL}/api/web-continuewatch-list`)
-//         .then(response => response.json())
-//         .then(data => {
-//             document.getElementById('continue-watch-section').innerHTML = data.html;
-//             slickGeneral('slick-general-continue-watch');
-//         })
-//         .catch(error => {
-//             console.error('Error fetching Top 10 Movies:', error);
-//         });
-// }
+function fetchContinueWatch() {
+     fetch(`${envURL}/api/web-continuewatch-list`)
+         .then(response => response.json())
+         .then(data => {
+             document.getElementById('continue-watch-section').innerHTML = data.html;
+             slickGeneral('slick-general-continue-watch');
+         })
+         .catch(error => {
+             console.error('Error fetching Top 10 Movies:', error);
+         });
+ }
 
 // Fetch Top 10 Movies
 // function fetchTop10Movies() {

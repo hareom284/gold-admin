@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Mobile;
 
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\BannerResource;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Modules\CastCrew\Models\CastCrew;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Api\MoviesResource;
-use App\Http\Resources\Api\CastCrewResource;
-use Modules\Banner\Models\Banner;
+use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
-
+use App\Http\Resources\Mobile\Home\BannerResource;
+use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
+use App\Http\Resources\Mobile\Home\ItemListResource;
 
 class ApiController extends Controller
 {
@@ -237,11 +236,8 @@ class ApiController extends Controller
        //HomeBanner
        public function HomeBanner()
        {
-           $user_id = auth()->id();
            $bannerList = Banner::where('status',1)->get();
-           $banners = BannerResource::collection($bannerList->map(function ($banner) use ($user_id) {
-                return new BannerResource($banner, $user_id);
-            }));
+          $banners = BannerResource::collection($bannerList);
 
             return response()->json([
                 'success' => true,
@@ -250,13 +246,92 @@ class ApiController extends Controller
             ],200);
        }
 
-       //top rated movies
+       //continue watching
+       public function ContinueWatching()
+       {
+            $user = User::where('id',auth('sanctum')->id())->first();
+            if($user){
+                $continueWatchList = ContinueWatch::where('user_id', 3)
+                ->whereNotNull('watched_time')
+                ->whereNotNull('total_watched_time')
+                ->whereHas('entertainment', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->with(['entertainment', 'episode', 'video'])
+                ->orderBy('id', 'desc')
+                ->get();
+                $continueWatch = ContinueWatchingResource::collection($continueWatchList);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => "Continue watching list reterived successfully",
+                    'data' => $continueWatch
+                ],200);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => "Continue watching list reterived successfully",
+                'data' => [],
+            ],200);
+
+       }
+
+       //save contiue watch
+       public function saveContinueWatch(Request $request)
+        {
+            $user = auth('sanctum')->user();
+            if(!$user){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No user found',
+                ], 404);
+            }
+            // $user = User::where('id',15)->first();
+            $watch_data = $request->all();
+            $watch_data['total_watched_time'] = isset($watch_data['total_watched_time']) && substr_count($watch_data['total_watched_time'], ':') == 1 ? $watch_data['total_watched_time'] . ':00' : $watch_data['total_watched_time'];
+            $watch_data['user_id'] = $user->id;
+
+            $profile_id=$request->has('profile_id') && $request->profile_id
+            ? $request->profile_id
+            : getCurrentProfile($user->id, $request);
+
+            $watch_data['profile_id'] =  $profile_id;
+
+            $result = ContinueWatch::updateOrCreate(['entertainment_id' => $request->entertainment_id, 'user_id' => $user->id, 'entertainment_type' => $request->entertainment_type,'profile_id'=>$profile_id,'episode_id'=>$request->episode_id], $watch_data);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Continue watching saved successfully",
+                'data' => $result
+            ],200);
+        }
+
+        //delete continue wtch
+        public function deleteContinueWatch(Request $request)
+        {
+            $continuewatch = ContinueWatch::where('id', $request->id)->first();
+
+            if ($continuewatch == null) {
+                return response()->json([
+                    'success'=>false,
+                    'message'=>"Continue watch not found",
+                ],404);
+            }
+            $continuewatch->delete();
+            return response()->json([
+                'success' => true,
+                'message' => "Continue watch deleted successfully",
+            ],200);
+        }
+
+        //top rated movies
        public function TopRatedItems($type)
        {
 
-            $topRatedItems = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where(['status'=>1,'type'=>$type])->take(20)->get();
+            $topRatedItems = Entertainment::whereBetween('IMDb_rating',[6,10])->where(['status'=>1,'type'=>$type])->orderBy('IMDb_rating','desc')->inRandomOrder()->limit(15)->get();
 
-            $top_rated = MoviesResource::collection($topRatedItems);
+            $top_rated = ItemListResource::collection($topRatedItems);
 
            return response()->json([
                "success"=>true,
@@ -268,9 +343,9 @@ class ApiController extends Controller
        //recently added movies
        public function RecentlyAdded()
        {
-            $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
+            $items = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
 
-            $recently_add = MoviesResource::collection($topRatedMovies);
+            $recently_add = ItemListResource::collection($items);
 
            return response()->json([
                "success"=>true,
@@ -279,54 +354,39 @@ class ApiController extends Controller
            ],200);
        }
 
-       //fetch actor
-       public function FetchActor()
-       {
-
-            $fetch_actor = CastCrew::inRandomOrder()->take(20)->get();
-
-            $fetch_actor = CastCrewResource::collection($fetch_actor);
-
-            return response()->json([
-                    "success"=>true,
-                    "message"=>"Actor reterived successfully",
-                    "data"=>$fetch_actor,
-            ],200);
-       }
-
        //hit movies
-       public function HitMovies($ref)
-       {
+    //    public function HitMovies($ref)
+    //    {
+    //         switch($ref){
+    //                 case 'korea';
+    //                     $tag_id = 1;
+    //                     break;
+    //                 case 'india';
+    //                     $tag_id =2;
+    //                     break;
+    //                 case 'china';
+    //                     $tag_id = 3;
+    //                     break;
+    //                 default:
+    //                 return response()->json([
+    //                     "success"=>false,
+    //                     "message"=>"Invalid request",
+    //                     "data"=>[],
+    //                 ],400);
+    //             }
 
-            switch($ref){
-                    case 'korea';
-                        $tag_id = 1;
-                        break;
-                    case 'india';
-                        $tag_id =2;
-                        break;
-                    case 'china';
-                        $tag_id = 3;
-                        break;
-                    default:
-                    return response()->json([
-                        "success"=>false,
-                        "message"=>"Invalid request",
-                        "data"=>[],
-                    ],400);
-                }
+    //             $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
+    //                 $query->where('tag_id', $tag_id);
+    //             })->take(10)->get();
 
-           $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
-             $query->where('tag_id', $tag_id);
-           })->take(10)->get();
+    //             $hit_movie = MoviesResource::collection($hit_movie);
 
-           $hit_movie = MoviesResource::collection($hit_movie);
+    //             return response()->json([
+    //                 "success"=>true,
+    //                 "message"=>"Hit movies reterived successfully",
+    //                 "data"=>$hit_movie,
+    //             ],200);
 
-           return response()->json([
-               "success"=>true,
-               "message"=>"Hit movies reterived successfully",
-               "data"=>$hit_movie,
-           ],200);
-        }
+    //     }
 
 }
