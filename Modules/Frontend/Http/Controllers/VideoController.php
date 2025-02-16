@@ -28,26 +28,6 @@ class VideoController extends Controller
      * Display a listing of the resource.
      */
 
-     public function downloadVideo(){
-        $fileUrl = 'https://video6-moviescdn.b-cdn.net/Chinese-Series/19th%20Floor(2024)/1%2019th%20FLOOR%20FHD.mp4';
-        $fileName = '19th_FLOOR_FHD.mp4';
-
-        $headers = [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
-        ];
-
-        return response()->stream(function () use ($fileUrl) {
-            $stream = fopen($fileUrl, 'rb');
-            while (!feof($stream)) {
-                echo fread($stream, 1024 * 8); // Read in 8 KB chunks
-                ob_flush();
-                flush();
-            }
-            fclose($stream);
-        }, 200, $headers);
-     }
-
     public function videoList()
     {
       return view('frontend::video');
