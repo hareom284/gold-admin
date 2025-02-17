@@ -55,7 +55,7 @@
 
       <li class="nav-item me-5">
             <a  class="nav-link dropdown-toggle {{Request::routeIs('movies.genre')  ? 'active' : ''}}" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Genres
+                {{__('frontend.genres')}}
             </a>
             <ul class="dropdown-menu " style="width:max-content" aria-labelledby="dropdownMenuButton1">
                <div class="row">

@@ -127,7 +127,8 @@ return [
     */
 
     'available_locales' => [
-     
+        'en' => 'English (EN)',
+        'mm' => 'Myanmar (MM)',
     ],
 
     /*

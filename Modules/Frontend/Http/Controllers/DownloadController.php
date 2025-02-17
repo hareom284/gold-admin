@@ -2,12 +2,14 @@
 
 namespace Modules\Frontend\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Modules\Entertainment\Models\Entertainment;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Modules\Entertainment\Models\EntertainmentStreamContentMapping;
 
 class DownloadController extends Controller
@@ -27,23 +29,31 @@ class DownloadController extends Controller
             abort(404);
         }
 
+        //clear and stop output buffering
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $StreamContent = EntertainmentStreamContentMapping::where('id', $id)->first();
 
         $fileUrl =  $StreamContent->url;
-        // $fileUrl = "https://video6-moviescdn.b-cdn.net/Chinese-Series/19th%20Floor(2024)/1%2019th%20FLOOR%20FHD.mp4";
+        // $fileUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
+
+        //get file name from url
         $fileName = urldecode(pathinfo($fileUrl,PATHINFO_BASENAME));
-        // $contentType =get_headers($fileUrl,1)['Content-Type'];
-        // return $contentType;
 
         $headers = [
-            'Content-Type' => 'video/mp4',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+            // 'Content-Type' => 'video/mp4',
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'X-Accel-Buffering'=> 'no',
         ];
 
         return response()->stream(function () use ($fileUrl) {
             $stream = fopen($fileUrl, 'rb');
+            $chunkSize = 1024 * 1024; // 1MB
             while (!feof($stream)) {
-                echo fread($stream, 1024 * 8);
+                echo fread($stream, $chunkSize);
                 ob_flush();
                 flush();
             }

@@ -19,5 +19,5 @@
             </div>
         </div>
     @endforeach
-    <hr class="my-5 border border-light">
+    {{-- <hr class="my-5 border border-light"> --}}
 </div>

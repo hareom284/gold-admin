@@ -16,7 +16,7 @@
         </div>
         <div class="row  text-center mb-5">
             <div class="col">
-                <a id="download_url"  href="{{route('download-video',$id)}}" class="btn btn-primary disabled">Please wait 10</a>
+                <a id="download_url" target="_blank"  href="{{route('download-video',$id)}}" class="btn btn-primary disabled">Please wait 10</a>
             </div>
         </div>
         <div id="adsbanner-section" class="px-0 section-spacing-bottom">
