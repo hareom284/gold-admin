@@ -66,7 +66,7 @@
     const csrf_token = '{{ csrf_token() }}';
     const language = "{{ $language ?? '' }}";
     const genreId = "{{ $genre_id ?? '' }}"; // Get genre_id from the Blade template
-    const threshold = 80; // Threshold for switching to pagination
+    const threshold = 100; // Threshold for switching to pagination
 
     // Initialize the API URL
     let apiUrl = `${envURL}/api/movie-list?page=${currentPage}&is_ajax=1&per_page=${per_page}`;
