@@ -68,7 +68,7 @@ class EntertainmentRepository implements EntertainmentRepositoryInterface
         }
 
         if (isset($data['actors'])) {
-            $this->updateTalentMappings($entertainment->entertainmentRepositoryid, $data['actors'], 'actor');
+            $this->updateTalentMappings($entertainment->id, $data['actors'], 'actor');
         }
 
         if (isset($data['directors'])) {
@@ -161,6 +161,7 @@ class EntertainmentRepository implements EntertainmentRepositoryInterface
 
     public function saveCountryMappings(array $countries, $entertainmentId)
     {
+
         foreach ($countries as $country) {
             $country_data = [
                 'entertainment_id' => $entertainmentId,
