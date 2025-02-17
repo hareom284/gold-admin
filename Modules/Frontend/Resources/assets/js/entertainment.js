@@ -244,8 +244,24 @@ function intializeremoveButton(){
 document.addEventListener('DOMContentLoaded', () => {
 
   loadData();  // Load the first page of movies
+  setupPagination();
+
   window.addEventListener('scroll', handleScroll);  // Attach scroll listener
   initializeWatchlistButtons();
   initializeRemaindButtons();
   intializeremoveButton()
 });
+
+
+function setupPagination() {
+  const paginationContainer = document.getElementById('pagination');
+  paginationContainer.addEventListener('click', (event) => {
+      if (event.target.tagName === 'BUTTON') {
+          const page = parseInt(event.target.getAttribute('data-page'));
+          if (!isNaN(page) && page !== currentPage) {
+              EntertainmentList.innerHTML = '';
+              loadData(page);
+          }
+      }
+  });
+}
