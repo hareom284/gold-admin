@@ -42,10 +42,10 @@ class MovieController extends Controller
     public function moviesListByGenre($genre_id)
     {
         $movies = Entertainment::whereHas('entertainmentGenerMappings', function ($query) use ($genre_id) {
-            $query->where('genre_id', $genre_id);
+            $query->where('genre_id', Crypt::decrypt($genre_id));
         })->get();
 
-        $genre = Genres::where('id',$genre_id)->first();
+        $genre = Genres::where('id',Crypt::decrypt($genre_id))->first();
 
         return view('frontend::movie', compact('movies', 'genre_id','genre'));
     }
