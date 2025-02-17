@@ -10,9 +10,9 @@
                 <form action="{{route('predownload')}}" method="post">
                     @csrf
                     @php
-                        $id = Crypt::encryptString($link->id);
+                        $url = Crypt::encryptString($link->url);
                     @endphp
-                    <input type="hidden" name="id" value="{{$id}}">
+                    <input type="hidden" name="url" value="{{$url}}">
                     <button type="submit" class="btn btn-dark"><i class="ph ph-download-simple"></i></button>
                 </form>
 

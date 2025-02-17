@@ -16,15 +16,15 @@ class DownloadController extends Controller
 {
     public function predownload(Request $request)
     {
-        $id = $request->id;
-        return view('frontend::downloadLinkGenerate', compact('id'));
+        $url = $request->url;
+        return view('frontend::downloadLinkGenerate', compact('url'));
     }
 
-    public function downloadVideo($id)
+    public function downloadVideo($url)
     {
         try{
             //decrypt id
-            $id = Crypt::decryptString($id);
+            $url = Crypt::decryptString($url);
         }catch(\Exception $e){
             abort(404);
         }
@@ -34,9 +34,8 @@ class DownloadController extends Controller
             ob_end_clean();
         }
 
-        $StreamContent = EntertainmentStreamContentMapping::where('id', $id)->first();
 
-        $fileUrl =  $StreamContent->url;
+        $fileUrl =  $url;
         // $fileUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
 
         //get file name from url
