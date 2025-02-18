@@ -83,7 +83,7 @@
     const threshold = 31; // Threshold for switching to pagination
 
     // Initialize the API URL
-    let apiUrl = `${envURL}/api/movie-list?page=${currentPage}&is_ajax=1&per_page=${per_page}`;
+    let apiUrl = `${envURL}/api/tvshow-list?page=${currentPage}&is_ajax=1&per_page=${per_page}`;
 
     // Add query parameters only if they exist
     if (language) {
@@ -259,7 +259,7 @@
         EntertainmentList.innerHTML = ''; // Clear old results
 
         try {
-            const response = await fetch(`${envURL}/api/movie-list?page=${page}&is_ajax=1&per_page=${per_page}`);
+            const response = await fetch(`${envURL}/api/tvshow-list?page=${page}&is_ajax=1&per_page=${per_page}`);
             const data = await response.json();
 
             if (data?.html) {
