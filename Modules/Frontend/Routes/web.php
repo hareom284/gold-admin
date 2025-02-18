@@ -31,7 +31,7 @@ use Modules\Frontend\Http\Controllers\DownloadController;
 */
 Route::middleware(['checkInstallation'])->group(function () {
 
-// Login with Applelo
+// Login with Appleloß
 // Route::get('/auth/apple', [AuthController::class, 'redirectToApple'])->name('auth.apple');
 // Route::get('/auth/apple/callback', [AuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
 
@@ -44,8 +44,8 @@ Route::post('/store-user', [AuthController::class, 'store'])->name('store-user')
 Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name('forget-password');
 
 //download section
-Route::post('predownload',[DownloadController::class, 'predownload'])->name('predownload');
-Route::get('download-video/{id}', [DownloadController::class, 'downloadVideo'])->name('download-video');
+Route::post('gold-predownload',[DownloadController::class, 'predownload'])->name('predownload');
+Route::get('download-video/{url}', [DownloadController::class, 'downloadVideo'])->name('download-video');
 
 Route::get('movies/genre/{genre_id}', [MovieController::class, 'moviesListByGenre'])->middleware('checkModule')->name('movies.genre');
 Route::get('movies/{language}', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies.language');

@@ -52,8 +52,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="tab-pane  mb-5" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">
             <div id="seasons">
                 @include('frontend::components.section.seasons',  ['data' => $data['tvShowLinks']])

@@ -9,8 +9,10 @@
                 <div>Gdrive</div>
                 <form action="{{route('predownload')}}" method="post">
                     @csrf
-                   
-                    <input type="hidden" name="id" value="">
+                    @php
+                        $url = Crypt::encryptString($link->url);
+                    @endphp
+                    <input type="hidden" name="url" value="{{$url}}">
                     <button type="submit" class="btn btn-dark"><i class="ph ph-download-simple"></i></button>
                 </form>
 
@@ -43,3 +45,5 @@
     <hr class="my-5 border border-light">
     </div>
 @endif
+    {{-- <hr class="my-5 border border-light"> --}}
+</div>
