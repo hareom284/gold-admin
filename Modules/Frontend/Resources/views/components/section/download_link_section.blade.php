@@ -10,7 +10,7 @@
                 <form action="{{route('predownload')}}" method="post">
                     @csrf
                     @php
-                        $url = Crypt::encryptString($link->url);
+                        $url = $link->url;
                     @endphp
                     <input type="hidden" name="url" value="{{$url}}">
                     <button type="submit" class="btn btn-dark"><i class="ph ph-download-simple"></i></button>
@@ -29,13 +29,14 @@
                 <div class="d-flex justify-content-around border align-items-center  rounded p-2 me-5" >
                     <div class="text-white">{{$link->quality}}</div>
                     <div class="text-white">1.2 GB</div>
-                    <div>Gdrive</div>
+                    <div>{{$link->type}}</div>
                     <form action="{{route('predownload')}}" method="post">
                         @csrf
                         @php
-                            $id = Crypt::encryptString($link->id);
+                            $url = $link->url;
                         @endphp
-                        <input type="hidden" name="id" value="{{$id}}">
+                        <input type="hidden" name="url" value="{{$url}}">
+
                         <button type="submit" class="btn btn-dark"><i class="ph ph-download-simple"></i></button>
                     </form>
 
