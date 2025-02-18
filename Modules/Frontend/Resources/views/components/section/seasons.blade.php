@@ -73,7 +73,7 @@
                     </ul>
                 </div>
 
-                @if($value['total_episodes'] > 5)
+                {{-- @if($value['total_episodes'] > 5)
                     <div class="viewmore-button-wrapper">
                         <button id="view-more-btn-{{ $value['season_id'] }}"
                                 data-page="6"
@@ -85,7 +85,7 @@
                                 class="btn btn-secondary view-less-btn"
                                 style="display: none;">{{__('frontend.view_less')}}</button>
                     </div>
-                @endif
+                @endif --}}
             @endforeach
         </div>
     </div>
@@ -94,7 +94,6 @@
 <script>
 
 $(document).ready(function() {
-
     const baseUrl = document.querySelector('meta[name="baseUrl"]').getAttribute('content');
     const apiUrl = `${baseUrl}/api/episode-list`;
 

@@ -69,7 +69,7 @@
                                          <span class="ms-1 d-none d-sm-block">Search</span>
                                     </a>
                                 </li> --}}
-                                {{-- <li class="nav-item dropdown dropdown-language-wrapper">
+                                <li class="nav-item dropdown dropdown-language-wrapper">
                                     <button class="btn btn-dark gap-3 px-3 dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         <img src="{{ asset('flags/' . App::getLocale() . '.png') }}" alt="flag" class="img-fluid me-2" style="width: 20px; height: auto; min-width: 15px;"
@@ -87,7 +87,7 @@
                                             </a>
                                         @endforeach
                                     </div>
-                                </li> --}}
+                                </li>
 
                                 @if(auth()->check())
                                 <li class="nav-item flex-shrink-0 dropdown dropdown-user-wrapper">
