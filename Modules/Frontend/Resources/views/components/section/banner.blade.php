@@ -1,10 +1,4 @@
-@php
-
-  use Illuminate\Support\Facades\Crypt;
-
-@endphp
-
-<div class="slick-banner main-banner" data-speed="1000" data-autoplay="true" data-center="false" data-infinite="false" data-navigation="true" data-pagination="true" data-spacing="0">
+<div class="slick-banner main-banner" data-speed="1000" data-autoplay="true" data-center="false" data-infinite="true" data-navigation="true" data-pagination="true" data-spacing="0">
 
     @foreach($data as $slider)
 

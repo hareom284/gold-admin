@@ -1,3 +1,19 @@
+<style>
+
+.movie-related-links {
+    color: #8F8F8F;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.movie-related-links:hover {
+    color: #FFF;
+    font-weight: bold;
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+</style>
 <div class="container-fluid">
     <div class="row" >
             <div class="col-md-4 col-12">
@@ -19,22 +35,30 @@
                         @if ($data['type'] == 'movie')
                              {{formatDuration($data['duration'])}}
                         @else ()
-                        {{count($data['tvShowLinks'])}} seasons
+                        {{count($data['tvShowLinks'])}} season{{count($data['tvShowLinks']) != 1 ? 's' : ''}}
                         @endif
                     </div>
                     <p class="p-0 my-4 text-white" style="font-weight: 400;font-size:16px;line-htight:32px;">{{$data['description']}}</p>
                     <div class="p-0 mt-3" style="font-weight: 400;font-size:16px;line-height:32px;">
                         Genres &nbsp;&nbsp;&nbsp;
                         <span class="text-white">
+                            <div class="flex">
                             @foreach ($data['genres'] as $genre)
-                                {{isset($genre->name) ? $genre->name : ''}}
+                                @isset($genre->name)  
+                                <a class="nav-menu-drop-down cursor-pointer movie-related-links" href="{{route("movies.genre", Crypt::encrypt($genre->id))}}">{{$genre->name}}</a>
                                 @if ($loop->last == false)
                                     ,
                                 @endif
+                                @else
+                                    ''
+                                @endisset
+                                
                             @endforeach
+                            </div>
                         </span> <br>
 
-                        Language &nbsp;&nbsp;&nbsp; <a href="{{route('movies.language',$data['language'])}}" class="text-white">{{ucfirst($data['language'])}}</a>
+                        <h6 style="font-weight: 400;font-size:16px;line-height:32px;">Language</h6>
+                        <small><a href="{{route('movies.language',$data['language'])}}" class="text-white movie-related-links">{{ucfirst($data['language'])}}</a></small>
                     </div>
                 </div>
              </div>

@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserSearchHistory;
 use Modules\Season\Models\Season;
 use Modules\Entertainment\Transformers\SeasonResource;
+use Illuminate\Support\Facades\Crypt;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\CastCrew\Transformers\CastCrewListResource;
 
@@ -69,7 +70,7 @@ class EntertainmentsController extends Controller
         if ($request->filled('genre_id')) {
             $genreId = $request->genre_id;
             $movieList->whereHas('entertainmentGenerMappings', function ($query) use ($genreId) {
-                $query->where('genre_id', $genreId);
+                $query->where('genre_id', Crypt::decrypt($genreId));
             });
         }
     
