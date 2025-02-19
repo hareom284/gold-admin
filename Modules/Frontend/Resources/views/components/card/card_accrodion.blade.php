@@ -1,5 +1,4 @@
-<div class="accordion" id="accordionExample{{$index}}">
-    <div class="accordion-item">
+    <div class="accordion-item mt-2">
         <h2 class="accordion-header" id="heading{{$index}}">
           <button class="accordion-button collapsed border" style="background-color: #000000" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$index}}" aria-expanded="false" aria-controls="collapse{{$index}}">
             <img src="{{ $data['poster_image'] }}" alt="movie image" class="object-fit-cover img-fluid   rounded " style="width
@@ -24,4 +23,4 @@
           </div>
         </div>
       </div>
-</div>
+

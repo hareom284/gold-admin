@@ -36,6 +36,7 @@ class MovieController extends Controller
     public function movieList($language=null)
     {
         $movies = Entertainment::where('language', $language)->get();
+        // return $movies;
         return view('frontend::movie', compact('movies', 'language'));
     }
 
@@ -319,4 +320,5 @@ class MovieController extends Controller
     {
         //
     }
+
 }

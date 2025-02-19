@@ -191,10 +191,8 @@ img {
   --bs-dark-border-subtle: #F5F6FA;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 34, 41, 46;
-  /* --bs-font-sans-serif: "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
+  --bs-font-sans-serif: "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: "Roboto", sans-serif, "Liberation Mono", "Courier New", monospace;
-  --bs-font-sans-serif: "Lato", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
   --bs-body-font-size: 1rem;
@@ -4336,9 +4334,7 @@ textarea.form-control-lg {
   --bs-navbar-padding-x: 0;
   --bs-navbar-padding-y: 0.5rem;
   --bs-navbar-color: rgba(var(--bs-emphasis-color-rgb), 0.55);
-  /* --bs-navbar-hover-color: rgba(var(--bs-emphasis-color-rgb), 0.8); */
-  --bs-navbar-hover-color: #FAFAFA;
-
+  --bs-navbar-hover-color: rgba(var(--bs-emphasis-color-rgb), 0.8);
   --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.3);
   --bs-navbar-active-color: rgba(var(--bs-emphasis-color-rgb), 1);
   --bs-navbar-brand-padding-y: 1.30625rem;
@@ -14416,10 +14412,10 @@ header .navbar-brand {
   margin: 0;
   display: inline-block;
 }
-/* header .navbar-brand img.logo {
+header .navbar-brand img.logo {
   height: 2.0625rem;
   max-height: 2.0625rem;
-} */
+}
 header .navbar-brand svg {
   width: 10rem;
 }
@@ -15157,7 +15153,7 @@ header .mobile-offcanvas .btn-close:focus {
     border-left: 0;
   }
   .iq-nav-menu > li > a {
-    font-size: 18px;
+    font-size: 0.975rem;
     padding: 1rem var(--bs-navbar-nav-link-padding-x);
     line-height: 1.5rem;
     z-index: 9;
@@ -15265,8 +15261,8 @@ header .mobile-offcanvas .btn-close:focus {
   background-color: #232a2e !important;
 }
 .season-tab .nav-item .nav-link.active, .season-tab .nav-item .nav-link:hover {
-  background-color: #FAFAFA !important;
-  color: #FAFAFA !important;
+  background-color: #232a2e !important;
+  color: red !important;
 }
 
 .tab-content.iq-tab-fade-up .tab-pane.fade {
@@ -15432,9 +15428,9 @@ header .mobile-offcanvas .btn-close:focus {
   padding: 0.5rem 1rem;
 }
 
-/* .footer .footer-logo .logo {
+.footer .footer-logo .logo {
   width: 154px;
-} */
+}
 .footer .footer-top {
   padding: 50px 0 0px;
   background-color: var(--bs-gray-900);
@@ -15637,7 +15633,7 @@ header .mobile-offcanvas .btn-close:focus {
   top: 0;
   bottom: 0;
   width: 0;
-  background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
   z-index: 1;
   transition: all 0.45s ease 0s;
 }
@@ -17741,13 +17737,10 @@ body {
 
 .iq-nav-menu > li > a.active {
   font-weight: bold !important;
-  color: #FAFAFA !important;
 }
 
 .iq-nav-menu > li > a:hover {
-  color: #FAFAFA !important;
   font-weight: bold !important;
-
 }
 
 a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
