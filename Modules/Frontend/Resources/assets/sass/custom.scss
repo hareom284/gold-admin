@@ -176,12 +176,13 @@ body{
 
 .iq-nav-menu > li > a.active{
   font-weight: bold !important;
-  color: red !important;
+  // color: red !important;
 }
 
 
 .iq-nav-menu > li > a:hover{
-   color: rgb(233, 14, 14) !important;
+  //  color: rgb(233, 14, 14) !important;
+  font-weight: bold !important;
 }
 
 a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
@@ -199,3 +200,5 @@ a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
 .underline-white:has(a.active) {
   border-bottom: 1px solid #fff; /* Or any color you like */
 }
+
+

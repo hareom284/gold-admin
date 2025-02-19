@@ -735,7 +735,6 @@ function fetchHitMovies(country) {
 function slickGeneral(className) {
     jQuery(`.${className}`).each(function () {
 
-
     let slider = jQuery(this);
 
     let slideSpacing = slider.data("spacing");
@@ -753,6 +752,7 @@ function slickGeneral(className) {
         autoplay: slider.data("autoplay"),
         centerMode: slider.data("center"),
         infinite: slider.data("infinite"),
+        // infinite: true,
         arrows: slider.data("navigation"),
         dots: slider.data("pagination"),
         prevArrow: "<span class='slick-arrow-prev'><span class='slick-nav'><i class='ph ph-caret-left'></i></span></span>",

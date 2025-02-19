@@ -33,7 +33,8 @@
                                 @endif
                             @endforeach
                         </span> <br>
-                        Language &nbsp;&nbsp;&nbsp; <span class="text-white">{{ucfirst($data['language'])}}</span>
+
+                        Language &nbsp;&nbsp;&nbsp; <a href="{{route('movies.language',$data['language'])}}" class="text-white">{{ucfirst($data['language'])}}</a>
                     </div>
                 </div>
              </div>

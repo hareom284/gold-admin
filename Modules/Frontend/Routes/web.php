@@ -47,8 +47,9 @@ Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name(
 Route::post('gold-predownload',[DownloadController::class, 'predownload'])->name('predownload');
 Route::get('download-video/{url}', [DownloadController::class, 'downloadVideo'])->name('download-video');
 
+
 Route::get('movies/genre/{genre_id}', [MovieController::class, 'moviesListByGenre'])->middleware('checkModule')->name('movies.genre');
-Route::get('movies/{language}', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies.language');
+Route::get('movies/{language}', [MovieController::class, 'movieList'])->name('movies.language');
 Route::get('/movies', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies');
 Route::get('/movie-details/{id}', [MovieController::class, 'movieDetails'])->middleware('checkModule')->name('movie-details');
 Route::get('/tv-shows', [TvShowController::class, 'tvShowList'])->middleware('checkModule')->name('tv-shows');
