@@ -43,7 +43,7 @@
                   </ul>
             </div>
         </div>
-    </div
+    </div>
 </div>
 
 <div class="container-fluid mt-4">
