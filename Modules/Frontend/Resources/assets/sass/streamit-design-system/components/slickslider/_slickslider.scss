@@ -28,7 +28,7 @@
     }
 
     // default
-    .slick-arrow {
+   .slick-arrow {
         &.slick-arrow-prev {
             .slick-nav {
                 left: -2rem;
@@ -42,7 +42,7 @@
                 top: 0;
                 bottom: 0;
                 width: 0;
-                background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+                background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
                 z-index: 1;
                 transition: all .45s ease 0s;
             }
@@ -91,6 +91,70 @@
         }
 
     }
+    //for top rated section
+    .slick-general-top-rated .slick-arrow {
+      &.slick-arrow-prev {
+          .slick-nav {
+              left: -2rem;
+          }
+
+          &::after {
+              position: absolute;
+              content: "";
+              left: 0;
+              right: auto;
+              top: 0;
+              bottom: 0;
+              width: 0;
+              background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+              z-index: 1;
+              transition: all .45s ease 0s;
+          }
+      }
+
+      &.slick-arrow-next {
+          .slick-nav {
+              right: -2rem;
+          }
+
+          &::after {
+              position: absolute;
+              content: "";
+              left: auto;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              width: 0;
+              background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+              transition: all .45s ease 0s;
+          }
+      }
+
+      &:not(.slick-disabled) {
+          &.slick-arrow-prev {
+              .slick-nav {
+                  left: 1rem;
+              }
+
+              &::after {
+                  width: 100px;
+              }
+          }
+
+          &+.slick-list {
+              &+.slick-arrow-next {
+                  .slick-nav {
+                      right: 1rem;
+                  }
+
+                  &::after {
+                      width: 100px;
+                  }
+              }
+          }
+      }
+
+  }
 
     // on hover
     &:hover {
