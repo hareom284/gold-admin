@@ -15,11 +15,12 @@ class EpisodeRequest extends FormRequest
             'description' => 'required|string',
             'access' => 'required',
             'IMDb_rating' => 'required|numeric|min:1|max:10',
+            'TMDb_rating' => 'numeric|min:1|max:10',
             'plan_id' => 'required_if:access,paid',
             'season_id'=> ['required'],
             'duration'=> ['required'],
             'release_date'=> ['required'],
-        
+
         ];
     }
 
@@ -31,9 +32,9 @@ class EpisodeRequest extends FormRequest
             'entertainment_id.required' => 'TV Show is required.',
             'season_id.required' => 'Season is required.',
             'duration.required' => 'Duration is required.',
-            'IMDb_rating.required' => 'IMDb rating is required.', 
-            'IMDb_rating.numeric' => 'IMDb rating must be a number.', 
-            'IMDb_rating.min' => 'IMDb rating must be at least 1.', 
+            'IMDb_rating.required' => 'IMDb rating is required.',
+            'IMDb_rating.numeric' => 'IMDb rating must be a number.',
+            'IMDb_rating.min' => 'IMDb rating must be at least 1.',
             'IMDb_rating.max' => 'IMDb rating cannot be more than 10.',
             'release_date.required' => 'Release Date is required.',
         ];

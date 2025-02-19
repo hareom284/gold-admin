@@ -22,6 +22,8 @@ return[
     'lbl_genres'=>'Genres',
     'lbl_tags'=>'Tags',
     'lbl_imdb_rating'=>'IMDb Rating',
+    'lbl_tmdb_rating'=>'TMDb Rating',
+    'lbl_tags'=>'Tags',
     'lbl_content_rating'=>'Content Rating',
     'lbl_duration'=>'Duration',
     'lbl_release_date'=>'Release Date',

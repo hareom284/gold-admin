@@ -11,7 +11,7 @@
                 <h6 class="me-3 text-center ">Filter by language </h6>
                 <div class="btn-group">
                     <button class="btn dropdown-toggle py-2 px-5 text-white" style="background: #353535;width:150px"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{request()->route('language')}}
+                      {{ucfirst(request()->route('language'))}}
                     </button>
                     <ul class="dropdown-menu" style="background: #171717;padding:0px;" >
                         @foreach ($languages as $lang)

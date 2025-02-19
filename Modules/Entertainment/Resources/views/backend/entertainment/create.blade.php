@@ -243,21 +243,21 @@
 
                     </div>
 
-<div class="col-md-6 col-lg-4">
-    {{ html()->label(__('movie.lbl_countries'), 'countries')->class('form-label') }}
-    {{ html()->select('countries[]', $countries->pluck('name', 'id'), old('countries'))
-        ->class('form-control select2')
-        ->id('countries')
-        ->multiple()}}
-    @error('countries')
-        <span class="text-danger">{{ $message }}</span>
-    @enderror
-    <div class="invalid-feedback" id="country-error">Country field is required</div>
-</div>
+                    <div class="col-md-6 col-lg-4">
+                        {{ html()->label(__('movie.lbl_countries'), 'countries')->class('form-label') }}
+                        {{ html()->select('countries[]', $countries->pluck('name', 'id'), old('countries'))
+                            ->class('form-control select2')
+                            ->id('countries')
+                            ->multiple()}}
+                        @error('countries')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="invalid-feedback" id="country-error">Country field is required</div>
+                    </div>
 
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger">*</span>', 'IMDb_rating')->class('form-label') }}
+                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger"></span>', 'IMDb_rating')->class('form-label') }}
                         {{ html()->text('IMDb_rating')
                                 ->attribute('value', old('IMDb_rating'))
                                 ->placeholder(__('movie.lbl_imdb_rating'))
@@ -268,6 +268,19 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class="text-danger">*</span>', 'TMDb_rating')->class('form-label') }}
+                        {{ html()->text('TMDb_rating')
+                                ->attribute('value', old('TMDb_rating'))
+                                ->placeholder(__('movie.lbl_tmdb_rating'))
+                                ->class('form-control')
+                                ->required() }}
+
+                        @error('TMDb_rating')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="invalid-feedback" id="tmdb-error">TMDB Rating field is required</div>
                     </div>
                     <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
@@ -586,8 +599,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         FileInput.classList.remove('d-none');
                         URLInput.classList.add('d-none');
                         URLInputField.removeAttribute('required');
-                    } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
-                        selectedValue === 'Vimeo') {
+                    } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' || selectedValue === 'Vimeo' || selectedValue === 'G-Drive' || selectedValue === 'MegaLink') {
                         URLInput.classList.remove('d-none');
                         FileInput.classList.add('d-none');
                         URLInputField.setAttribute('required', 'required');
@@ -704,8 +716,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         videourl.removeAttribute('required');
                         videofile.setAttribute('required', 'required');
                         fileError.style.display = 'block';
-                    } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue ===
-                        'HLS' || selectedtypeValue === 'Vimeo') {
+                    } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue === 'HLS' || selectedtypeValue === 'Vimeo' || selectedtypeValue === 'G-Drive' || selectedtypeValue === 'MegaLink') {
                         VideoURLInput.classList.remove('d-none');
                         VideoFileInput.classList.add('d-none');
                         videourl.setAttribute('required', 'required');
