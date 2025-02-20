@@ -1,6 +1,6 @@
 @extends('frontend::layouts.master')
 @section('content')
-
+<h1>ssss</h1>
 <div class="list-page">
     <div class="container-fluid mt-4">
         <div class="row justify-content-center">

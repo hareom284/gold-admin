@@ -53,11 +53,19 @@
           $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
       @endphp
 
-      <li class="nav-item me-5">
-            <a  class="nav-link dropdown-toggle {{Request::routeIs('movies.genre')  ? 'active' : ''}}" type="button" data-bs-auto-close="true" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item me-5 dropdown d-none">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{__('frontend.genres')}}
             </a>
-            <ul class="dropdown-menu " style="width:max-content" aria-labelledby="dropdownMenuButton1">
+            <ul class="dropdown-menu">
+            </ul>
+        </li>
+
+      <li class="nav-item me-5 dropdown ">
+            <a  class="nav-link dropdown-toggle {{Request::routeIs('movies.genre')  ? 'active' : ''}}"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{__('frontend.genres')}}
+            </a>
+            <ul class="dropdown-menu " style="width:max-content" >
                <div class="row">
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
@@ -75,7 +83,6 @@
                     </div>
                </div>
             </ul>
-         </ul>
       </li>
 
     </ul>
