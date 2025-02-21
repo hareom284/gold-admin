@@ -20,7 +20,7 @@ class EntertainmentRequest extends FormRequest
             'actors'=> ['required'],
             'directors'=> ['required'],
             'IMDb_rating' => 'required|numeric|min:1|max:10',
-            'TMDb_rating' => 'numeric|min:1|max:10',
+            'TMDb_rating' => 'nullable|numeric|min:1|max:10',
             'duration'=> ['required'],
             'release_date' => ['required'],
             'description' => ['required', 'string'],

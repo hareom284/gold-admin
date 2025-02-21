@@ -315,7 +315,7 @@
                             ->attribute('value', old('TMDb_rating'))
                             ->placeholder(__('movie.lbl_tmdb_rating'))
                             ->class('form-control')
-                            ->required() }}
+                             }}
 
                     @error('TMDb_rating')
                         <span class="text-danger">{{ $message }}</span>

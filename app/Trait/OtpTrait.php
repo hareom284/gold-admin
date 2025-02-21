@@ -78,11 +78,11 @@ trait OtpTrait
 
    public function callOTPService($phone_or_email, $otp)
    {
-         //for local testing
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'OTP sent successfully'
-        // ],200);
+        // for local testing
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully'
+        ],200);
 
         try{
             $sid = env('TWILIO_SID');

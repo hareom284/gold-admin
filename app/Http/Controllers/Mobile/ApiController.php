@@ -9,13 +9,18 @@ use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Api\MoviesResource;
+use Modules\Entertainment\Models\Watchlist;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
 use App\Http\Resources\Mobile\Home\BannerResource;
-use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
+use App\Http\Resources\Mobile\Genral\WatchListResource;
+use App\Http\Resources\Mobile\Detail\MovieDetailResource;
+use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
+use Modules\Entertainment\Models\Like;
 
 class ApiController extends Controller
 {
@@ -388,5 +393,171 @@ class ApiController extends Controller
     //             ],200);
 
     //     }
+
+    public function MovieDetails($id)
+    {
+        $movie = Entertainment::where('id', $id)
+                ->with([
+                    'entertainmentGenerMappings',
+                    'plan',
+                    'entertainmentReviews.user',
+                    'entertainmentTalentMappings',
+                    'entertainmentStreamContentMappings',
+                    'entertainmentDownloadMappings'
+                ])
+                ->first();
+
+            $data = new MovieDetailResource($movie);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Movie details reterived successfully',
+                'data'=>$data,
+            ],200);
+    }
+
+    public function  Rating(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'id'=>'nullable',
+            'entertainment_id' => 'required',
+            'rating' => 'required|numeric|min:1|max:5',
+            'review' => 'required|string',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors(),
+            ],422);
+        }
+
+        $user_id = auth('sanctum')->id();
+        Review::updateOrCreate([
+                'entertainment_id' => $request->entertainment_id,
+                'user_id' => $user_id,
+                'rating' => $request->rating,
+                'review' => $request->review
+            ]);
+        return response()->json([
+            'success'=>true,
+            'message'=>'Rating added successfully',
+        ],200);
+    }
+
+    public function DeleteRating($id)
+    {
+        $user_id = auth('sanctum')->id();
+        $review = Review::where('id',$id)->where('user_id',$user_id)->first();
+        if($review){
+            $review->delete();
+            return response()->json([
+                'success'=>true,
+                'message'=>'Rating deleted successfully',
+            ],200);
+        }
+        return response()->json([
+            'success'=>false,
+            'message'=>'Rating not found',
+        ],404);
+    }
+
+    public function WatchList()
+    {
+        $user_id = auth('sanctum')->id();
+        $watchList = Watchlist::where('user_id', $user_id)
+        ->orderBy('updated_at', 'desc')->get();
+        // $entertainment = Entertainment::whereIn('id', $watchList->pluck('entertainment_id'))->get();
+        // return $entertainment;
+        $data = WatchListResource::collection($watchList);
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'Watchlist reterived successfully',
+            'data'=>$data,
+        ],200);
+
+    }
+
+    public function saveWatchList(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'entertainment_id' => 'required',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors(),
+            ],422);
+        }
+        $entertainment = Entertainment::find($request->entertainment_id);
+        if(!$entertainment){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Entertainment not found',
+            ],404);
+        }
+
+        $user_id = auth('sanctum')->id();
+        Watchlist::create([
+            'entertainment_id' => $request->entertainment_id,
+            'user_id' => $user_id,
+        ]);
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'Watchlist added successfully',
+        ],200);
+    }
+
+    public function deleteWatchList($id)
+    {
+        $user_id = auth('sanctum')->id();
+        $watchlist = Watchlist::where('id',$id)->where('user_id',$user_id)->first();
+        if($watchlist){
+            $watchlist->forceDelete();
+            return response()->json([
+                'success'=>true,
+                'message'=>'Watchlist deleted successfully',
+            ],200);
+        }
+        return response()->json([
+            'success'=>false,
+            'message'=>'Watchlist not found',
+        ],404);
+    }
+
+    public function  LikeDislike($entertainment_id)
+    {
+        $user_id = auth('sanctum')->id();
+        $entertainment = Entertainment::where('id', $entertainment_id)->first();
+        if(!$entertainment){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Entertainment not found',
+            ],404);
+        }
+
+        $like = Like::where('entertainment_id', $entertainment_id)->where('user_id', $user_id)->first();
+        if($like){
+            $like->is_like = !$like->is_like;
+            $like->save();
+            return response()->json([
+                'success'=>true,
+                'message'=>'Like status updated successfully',
+            ],200);
+        }else{
+            Like::create([
+                'entertainment_id' => $entertainment_id,
+                'user_id' => $user_id,
+                'type' => $entertainment->type,
+                'is_like' => 1,
+            ]);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Like added successfully',
+            ],200);
+        }
+
+    }
 
 }

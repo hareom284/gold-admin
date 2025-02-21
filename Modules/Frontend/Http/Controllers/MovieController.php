@@ -64,6 +64,7 @@ class MovieController extends Controller
 
     public function movieDetails(Request $request, $id)
     {
+
         $movieId = $id;
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
@@ -158,10 +159,12 @@ class MovieController extends Controller
             ->first();
 
         $genres = $movie->entertainmentGenerMappings;
+
         $genre_ids = $genres->pluck('genre_id')->toArray();
         $entertainment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)
             ->pluck('entertainment_id')
             ->toArray();
+
         $more_items = Entertainment::whereIn('id', $entertainment_ids)
             ->where('type', 'movie')
             ->where('status', 1)

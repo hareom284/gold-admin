@@ -302,7 +302,7 @@
                                 ->attribute('value', old('TMDb_rating', $data->TMDb_rating)) // Use old value or the existing movie value
                                 ->placeholder(__('movie.lbl_tmdb_rating'))
                                 ->class('form-control')
-                                ->required() }}
+                                 }}
 
                         @error('TMDb_rating')
                             <span class="text-danger">{{ $message }}</span>
