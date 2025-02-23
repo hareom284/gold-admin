@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Api\MoviesResource;
 use Modules\Entertainment\Models\Watchlist;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
@@ -46,23 +45,20 @@ class ApiController extends Controller
                ], 422);
            }
 
-           // Retrieve Google user using the callback token
-           $googleUser = Socialite::driver('google')->userFromToken($request->callback_token);
+            $auth = app('firebase.auth');
+            $verifiedIdToken =  $auth->verifyIdToken($request->callback_token);
+            $email = $verifiedIdToken->claims()->get('email');
+            $name = $verifiedIdToken->claims()->get('name');
+
 
            // Check if a user with the email exists
-           $existingUser = User::where('email', $googleUser->getEmail())->first();
+           $existingUser = User::where('email', $email)->first();
 
                if (!$existingUser) {
                    // Register new user
-                   $fullName = $googleUser->getName();
-                   $nameParts = explode(' ', $fullName);
-                   $firstName = $nameParts[0] ?? '';
-                   $lastName = $nameParts[1] ?? $firstName;
-
                    $data = [
-                       'first_name' => $firstName,
-                       'last_name' => $lastName,
-                       'email' => $googleUser->getEmail(),
+                       'username' => $name,
+                       'email' => $email,
                        'password' => Hash::make(Str::random(8)), // Generate a random password
                        'user_type' => 'user',
                        'login_type' => 'google',

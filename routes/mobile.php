@@ -9,7 +9,7 @@ Route::group(['prefix'=>'v1'],function(){
 
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
-    Route::get('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
+    Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
 
     //otpp login api
     Route::post('send-otp',[OTPController::class,'sendOTP']);
