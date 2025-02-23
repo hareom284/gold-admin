@@ -23,27 +23,27 @@ Route::group(['prefix'=>'v1'],function(){
         //continue watch api
         Route::post('save-continuewatch', [ApiController::class, 'saveContinueWatch']);
         Route::post('delete-continuewatch', [ApiController::class, 'deleteContinueWatch']);
-
-        //home page api
-        Route::get('home-banner',[ApiController::class,'HomeBanner']);
-        Route::get('continue-watching',[ApiController::class,'ContinueWatching']);
-        Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
-        Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
-        Route::get('fetch-actor',[ApiController::class,'FetchActor']);
-
-        //details page api
-        Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
-
-        //reating and review
-        Route::post('rating',[ApiController::class,'Rating']);
-        Route::delete('rating/{id}',[ApiController::class,'DeleteRating']);
-
-        //like and dislike
-        Route::post('like-dislike/{id}',[ApiController::class,'LikeDislike']);
-
-        //wathch list
-        Route::get('watch-list',[ApiController::class,'WatchList']);
-        Route::post('save-watchlist', [ApiController::class, 'saveWatchList']);
-        Route::delete('delete-watchlist/{id}', [ApiController::class, 'deleteWatchList']);
     });
+
+     //home page api
+     Route::get('home-banner',[ApiController::class,'HomeBanner']);
+     Route::get('continue-watching',[ApiController::class,'ContinueWatching']);
+     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
+     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
+     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
+
+     //details page api
+     Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
+
+     //reating and review
+     Route::post('rating',[ApiController::class,'Rating']);
+     Route::delete('rating/{id}',[ApiController::class,'DeleteRating']);
+
+     //like and dislike
+     Route::post('like-dislike/{id}',[ApiController::class,'LikeDislike']);
+
+     //wathch list
+     Route::get('watch-list',[ApiController::class,'WatchList']);
+     Route::post('save-watchlist', [ApiController::class, 'saveWatchList']);
+     Route::delete('delete-watchlist/{id}', [ApiController::class, 'deleteWatchList']);
 });
