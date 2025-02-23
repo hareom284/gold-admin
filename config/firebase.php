@@ -50,7 +50,7 @@ return [
              *
              */
 
-            'credentials' => env('FIREBASE_CREDENTIALS', base_path('public/firebase/firebase.json')),
+            'credentials' => env('FIREBASE_CREDENTIALS', base_path('storage/app/data/firebase.json')),
 
             /*
              * ------------------------------------------------------------------------
