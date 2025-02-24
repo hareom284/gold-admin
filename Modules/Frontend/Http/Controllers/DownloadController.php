@@ -24,7 +24,7 @@ class DownloadController extends Controller
     {
         try{
             //decrypt id
-            $url = Crypt::decryptString($url);
+            $url = Crypt::decrypt($url);
         }catch(\Exception $e){
             abort(404);
         }

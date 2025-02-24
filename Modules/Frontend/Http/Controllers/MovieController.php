@@ -43,10 +43,10 @@ class MovieController extends Controller
     public function moviesListByGenre($genre_id)
     {
         $movies = Entertainment::whereHas('entertainmentGenerMappings', function ($query) use ($genre_id) {
-            $query->where('genre_id', $genre_id);
+            $query->where('genre_id', Crypt::decrypt($genre_id));
         })->get();
 
-        $genre = Genres::where('id',$genre_id)->first();
+        $genre = Genres::where('id',Crypt::decrypt($genre_id))->first();
 
         return view('frontend::movie', compact('movies', 'genre_id','genre'));
     }
@@ -65,7 +65,7 @@ class MovieController extends Controller
     public function movieDetails(Request $request, $id)
     {
 
-        $movieId = $id;
+        $movieId = Entertainment::where('id',Crypt::decrypt($id))->value('id');
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
 
@@ -209,7 +209,7 @@ class MovieController extends Controller
         $livetvId = $id;
         $userId = auth()->id();
 
-            $livetv = LiveTvChannel::where('id',$livetvId)->with('TvCategory','plan','TvChannelStreamContentMappings')->  first();
+            $livetv = LiveTvChannel::where('id',$livetvId)->with('TvCategory','plan','TvChannelStreamContentMappings')->first();
             $suggestions = LiveTvChannel::where('category_id', $livetv->category_id)
             ->where('id', '!=', $livetvId) // Exclude the current channel
             ->with('TvCategory') // Eager load the category

@@ -12,7 +12,7 @@ $footerData = getFooterData();
                  <div>
                     <div class="logo-default">
                       <a class="navbar-brand text-primary" href="{{route('home')}}">
-                          <img class="img-fluid logo" src="{{ asset(setting('logo')) }}" alt="Gold Channel">
+                          <img class="img-fluid logo" src="{{ asset(setting('dark_logo')) }}" alt="Gold Channel">
                       </a>
                     </div>
                  </div>
