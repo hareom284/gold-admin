@@ -1,6 +1,24 @@
 @extends('frontend::layouts.master')
 
 @section('content')
+@push('after-styles')
+<style>
+
+    .movie-related-links {
+        color: #8F8F8F;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+    
+    .movie-related-links:hover {
+        color: #FFF;
+        font-weight: bold;
+        transform: scale(1.05);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+    
+</style>
+@endpush
 
 
 <div id="thumbnail-section">
@@ -17,15 +35,15 @@
             <div class="d-flex align-items-center gap-2">
                   <ul class="nav " role="tablist" id="detail-tab">
                     <li class="nav-item underline-white" role="presentation">
-                      <a class="active text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
+                      <a class="active text-white movie-related-links" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-0" data-bs-toggle="tab" href="#simple-tabpanel-0" role="tab" aria-controls="simple-tabpanel-0" aria-selected="true">Cast & Crew</a>
                     </li>
-                    <li class="nav-item underline-white" role="presentation">
+                    <li class="nav-item underline-white movie-related-links" role="presentation">
                       <a class="text-white" style="font-weight: 600;font-size:18px;line-height:39px;" id="simple-tab-1" data-bs-toggle="tab" href="#simple-tabpanel-1" role="tab" aria-controls="simple-tabpanel-1" aria-selected="false">Download</a>
                     </li>
                   </ul>
             </div>
         </div>
-    </div
+    </div>
 </div>
 
 <div class="container-fluid mt-4">

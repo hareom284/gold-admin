@@ -77,7 +77,7 @@
                     </div>
                     @endif
                       <div class="flex-grow-1">
-                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']])) }}" class="btn btn-dark">
+                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => Crypt::encrypt($data['id'])]) : route('movie-details', ['id' => Crypt::encrypt($data['id'] )])) }}" class="btn btn-dark">
                            <span class="d-flex align-items-center justify-content-center gap-2">
                                <span><i class="ph-fill ph-info"></i></span>
                                <span class="text-nowrap">{{__('frontend.more_info_home')}}</span>

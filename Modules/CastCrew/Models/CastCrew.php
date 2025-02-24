@@ -12,7 +12,7 @@ class CastCrew extends BaseModel
 
      protected $table = 'cast_crew';
 
-     protected $fillable = ['name', 'type','file_url','tmdb_id','bio','place_of_birth','dob','designation'];
+     protected $fillable = ['name','uuid','type','file_url','tmdb_id','bio','place_of_birth','dob','designation'];
 
 
      public function entertainmentTalentMappings()

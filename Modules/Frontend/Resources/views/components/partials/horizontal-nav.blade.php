@@ -50,7 +50,10 @@
       </li> --}}
       @endif
       @php
+          use Illuminate\Support\Facades\Crypt;
+
           $genres =  Modules\Genres\Models\Genres::where('status',1)->get();
+
       @endphp
 
         <li class="nav-item me-5 dropdown d-none">
@@ -70,14 +73,14 @@
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if($loop->even)
-                                <li class="nav-link  {{Route::current()->parameter('genre_id') == $genre->id ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                <li class="nav-link  {{Route::current()->parameter('genre_id') == Crypt::encrypt($genre->id) ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre",Crypt::encrypt($genre->id))}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>
                     <div class="col-12 col-md-6 ">
                         @foreach ($genres as $genre)
                             @if ($loop->odd)
-                                    <li class="nav-link {{Route::current()->parameter('genre_id') == $genre->id ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre",$genre->id)}}">{{$genre->name}}</a></li>
+                                    <li class="nav-link {{Route::current()->parameter('genre_id') == Crypt::encrypt($genre->id) ? 'active' : ''}}"><a class="dropdown-item nav-menu-drop-down cursor-pointer " href="{{route("movies.genre", Crypt::encrypt($genre->id))}}">{{$genre->name}}</a></li>
                             @endif
                         @endforeach
                     </div>
