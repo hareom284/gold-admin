@@ -29,6 +29,7 @@ class Entertainment extends BaseModel
         'status',
         'language',
         'IMDb_rating',
+        'TMDb_rating',
         'content_rating',
         'duration',
         'release_date',

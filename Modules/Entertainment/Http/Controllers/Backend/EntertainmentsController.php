@@ -82,6 +82,10 @@ class EntertainmentsController extends Controller
             // Round the IMDb rating to 1 decimal place
             $data['IMDb_rating'] = round($data['IMDb_rating'], 1);
         }
+        if (isset($data['TMDb_rating'])) {
+            // Round the IMDb rating to 1 decimal place
+            $data['TMDb_rating'] = round($data['TMDb_rating'], 1);
+        }
 
         if($request->trailer_url_type == 'Local'){
             $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
@@ -210,6 +214,11 @@ class EntertainmentsController extends Controller
         if (isset($request_data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
             $request_data['IMDb_rating'] = round($request_data['IMDb_rating'], 1);
+        }
+
+        if (isset($request_data['TMDb_rating'])) {
+            // Round the IMDb rating to 1 decimal place
+            $request_data['TMDb_rating'] = round($request_data['TMDb_rating'], 1);
         }
 
         $entertainment = $this->entertainmentService->getById($id);

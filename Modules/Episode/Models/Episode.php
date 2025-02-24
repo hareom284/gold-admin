@@ -23,6 +23,7 @@ class Episode extends BaseModel
                           'access',
                           'plan_id',
                           'IMDb_rating',
+                          'TMDb_rating',
                           'content_rating',
                           'duration',
                           'release_date',
@@ -39,7 +40,7 @@ class Episode extends BaseModel
                           'status',
                           'video_quality_url','tmdb_id','tmdb_season','episode_number'];
 
-            
+
     protected static function boot()
     {
         parent::boot();
@@ -50,7 +51,7 @@ class Episode extends BaseModel
 
              $episode->EpisodeStreamContentMapping()->forceDelete();
              $episode->episodeDownloadMappings()->forceDelete();
-             
+
          } else {
 
              $episode->EpisodeStreamContentMapping()->delete();
@@ -73,7 +74,7 @@ class Episode extends BaseModel
         return $this->belongsTo(Entertainment::class,'entertainment_id')->with('entertainmentGenerMappings');
     }
 
- 
+
     public function seasondata()
     {
         return $this->belongsTo(Season::class,'season_id');

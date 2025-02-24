@@ -154,8 +154,9 @@ class AuthController extends Controller
 
 
                 $data = [
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
+                    // 'first_name' => $firstName,
+                    // 'last_name' => $lastName,
+                    'username'=>$fullName,
                     'email' =>  $googleUser->getEmail(),
                     'password' => Hash::make(Str::random(8)),
                     'user_type' => 'user',

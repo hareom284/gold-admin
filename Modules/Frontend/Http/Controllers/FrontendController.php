@@ -97,7 +97,6 @@ class FrontendController extends Controller
     $tvshowList = $entertainment_data->where('type', 'tvshow')->take(10)->get();
     $tvshowData = (isenablemodule('tvshow') == 1) ? TvshowResource::collection($tvshowList) : [];
 
-
         return view('frontend::search', compact('movieData', 'tvshowData'));
     }
 

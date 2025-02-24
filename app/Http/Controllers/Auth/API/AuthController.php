@@ -431,8 +431,8 @@ class AuthController extends Controller
         }
 
         $request->validate([
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'mobile' => 'required|unique:users,mobile,' . $user->id,
+            'email' => 'required_without:mobile|nullable|email|unique:users,email,' . $user->id,
+            'mobile' => 'required_without:email|nullable|unique:users,mobile,' . $user->id,
 
         ]);
 

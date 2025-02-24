@@ -17,12 +17,6 @@ return [
      * ------------------------------------------------------------------------
      */
 
-    'credentials' => storage_path('app/firebase/firebase-credentials.json'),
-    'database' => [
-        'url' => env('FIREBASE_DATABASE_URL'),
-    ],
-
-
     'projects' => [
         'app' => [
 
@@ -56,7 +50,7 @@ return [
              *
              */
 
-            'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+            'credentials' => env('FIREBASE_CREDENTIALS', base_path('storage/app/data/firebase.json')),
 
             /*
              * ------------------------------------------------------------------------
