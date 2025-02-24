@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Frontend\Http\Controllers\DashboardController;
@@ -21,7 +22,7 @@ Route::get('latest-movie', [DashboardController::class, 'LatestMovies']);
 Route::get('fetch-languages', [DashboardController::class, 'FetchLanguages']);
 Route::get('popular-movie', [DashboardController::class, 'PopularMovies']);
 Route::get('top-channels', [DashboardController::class, 'TopChannels']);
-Route::get('popular-tvshows', [DashboardController::class, 'PopularTVshows']);
+Route::get('popular-tvshows', [DashboardController::class, 'PopulxarTVshows']);
 Route::get('favorite-personality', [DashboardController::class, 'favoritePersonality']);
 Route::get('free-movie', [DashboardController::class, 'FreeMovies']);
 Route::get('get-gener', [DashboardController::class, 'GetGener']);
@@ -37,5 +38,11 @@ Route::get('web-continuewatch-list', [DashboardController::class, 'Continuewatch
 
 
 
+//add new route
+Route::get('top-rated-movie',[DashboardController::class,'TopRatedMovies']);
+Route::get('recently-added-movie',[DashboardController::class,'RecentlyAddedMovies']);
+Route::get('most-watch-movie',[DashboardController::class,'MostWatchdMovies']);
+Route::get('fetch-actor',[DashboardController::class,'FetchActor']);
+Route::get('hit-movie/{ref}',[DashboardController::class,'HitMovie']);
 
 

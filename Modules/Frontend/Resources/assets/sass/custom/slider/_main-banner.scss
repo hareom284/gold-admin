@@ -1,11 +1,11 @@
 // main banner
-.main-banner{
+.main-banner, .ads-banner{
     .slick-item{
         background-size: cover;
         background-repeat: no-repeat;
         // background-position: center center;
-        height: 100%;
-        min-height: 100vh;
+        height: 650px;
+        // min-height: 100vh;
         position: relative;
         z-index: 1;
 
@@ -50,6 +50,11 @@
     }
 
 }
+
+.ads-banner .slick-dots , .ads-banner .slick-arrow-prev ,.ads-banner .slick-arrow-next{
+  display: none  !important;
+}
+
 
 // livetv banner
 .livetv-banner-wrapper{
@@ -109,7 +114,7 @@
                 font-size: 14px;
                 color: var(--bs-gray-900);
                 background-color: var(--bs-heading-color);
-        
+
                 &::before {
                     content: '';
                     position: absolute;
@@ -166,7 +171,7 @@
 }
 
 @include media-breakpoint-down(xxl){
-    .main-banner{
+    .main-banner, .ads-banner{
         .slick-dots {
             left: 2rem;
         }
@@ -174,7 +179,7 @@
 }
 
 @include media-breakpoint-down(xl){
-    .main-banner {
+    .main-banner, .ads-banner {
         .slick-item{
             height: 500px;
             min-height: inherit;
@@ -199,7 +204,7 @@
 }
 
 @include media-breakpoint-down(md) {
-    .main-banner {
+    .main-banner , .ads-banner{
         .slick-item {
             height: 450px;
 

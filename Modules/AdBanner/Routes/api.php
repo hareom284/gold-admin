@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('adbanner', fn (Request $request) => $request->user())->name('adbanner');
-});
+// Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
+//     Route::get('adbanner', fn (Request $request) => $request->user())->name('adbanner');
+// });

@@ -89,6 +89,7 @@ class TvShowController extends Controller
     // Convert response data to array
     $data = $responseData->toArray(request());
 
+
     $season_id=Season::where('entertainment_id', $tvshow_id)->value('id');
 
     $episode=Episode::where('entertainment_id', $tvshow_id)->where('season_id',$season_id)->with('entertainmentdata', 'plan', 'EpisodeStreamContentMapping', 'episodeDownloadMappings')->first();

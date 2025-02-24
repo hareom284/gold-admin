@@ -55,14 +55,14 @@ class GenerateMenus
             ]);
 
 
-            // $this->mainRoute($menu, [
-            //     'icon' => 'ph ph-tag',
-            //     'route' => 'backend.tags.index',
-            //     'title' => __('sidebar.tags'),
-            //     'active' => ['app/tags'],
-            //     'permission' => ['view_genres'],
-            //     'order' => 0,
-            // ]);
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-tag',
+                'route' => 'backend.tags.index',
+                'title' => __('sidebar.tags'),
+                'active' => ['app/tags'],
+                'permission' => ['view_genres'],
+                'order' => 0,
+            ]);
 
             if(isenablemodule('movie')==1){
             $this->mainRoute($menu, [
@@ -287,14 +287,14 @@ class GenerateMenus
         //         'order' => 0,
         //     ]);
 
-        //     $this->mainRoute($menu, [
-        //         'icon' => 'ph ph-target',
-        //         'title' => __('sidebar.ads_banner'),
-        //         'route' => 'backend.adbanner.index',
-        //         'active' => ['app/adbanner'],
-        //         'permission' =>['view_banners'],
-        //         'order' => 0,
-        //     ]);
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-target',
+                'title' => __('sidebar.ads_banner'),
+                'route' => 'backend.adbanner.index',
+                'active' => ['app/adbanner'],
+                'permission' =>['view_banners'],
+                'order' => 0,
+            ]);
 
         //     $this->mainRoute($menu, [
         //         'icon' => 'fa-brands fa-intercom',
@@ -305,21 +305,21 @@ class GenerateMenus
         //         'order' => 0,
         //     ]);
 
-        //     $mobile_setting = $this->parentMenu($menu, [
-        //         'icon' => 'ph ph-device-mobile',
-        //         'route' => '',
-        //         'title' => __('sidebar.mobile_setting'),
-        //         'nickname' => 'mobile_setting',
-        //         'order' => 0,
-        //     ]);
-        //     $this->childMain($mobile_setting, [
-        //         'icon' => 'ph ph-gear',
-        //         'title' => __('sidebar.dashboard_setting'),
-        //         'route' => 'backend.mobile-setting.index',
-        //         'active' => 'app/mobile-setting',
-        //         'permission' => ['view_setting'],
-        //         'order' => 0,
-        //     ]);
+            $mobile_setting = $this->parentMenu($menu, [
+                'icon' => 'ph ph-device-mobile',
+                'route' => '',
+                'title' => __('sidebar.mobile_setting'),
+                'nickname' => 'mobile_setting',
+                'order' => 0,
+            ]);
+            $this->childMain($mobile_setting, [
+                'icon' => 'ph ph-gear',
+                'title' => __('sidebar.dashboard_setting'),
+                'route' => 'backend.mobile-setting.index',
+                'active' => 'app/mobile-setting',
+                'permission' => ['view_setting'],
+                'order' => 0,
+            ]);
 
         //     if(auth()->user()->hasRole('admin')){
 
@@ -371,14 +371,14 @@ class GenerateMenus
 
 
 
-        //     $this->mainRoute($menu, [
-        //         'icon' => 'ph ph-gear-six',
-        //         'title' => __('sidebar.settings'),
-        //         'route' => 'backend.settings.general',
-        //         'active' => 'app/setting/general-setting',
-        //         // 'permission' => ['view_setting'],
-        //         'order' => 0,
-        //     ]);
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-gear-six',
+                'title' => __('sidebar.settings'),
+                'route' => 'backend.settings.general',
+                'active' => 'app/setting/general-setting',
+                // 'permission' => ['view_setting'],
+                'order' => 0,
+            ]);
 
         //     if(auth()->user()->hasRole('admin')){
 

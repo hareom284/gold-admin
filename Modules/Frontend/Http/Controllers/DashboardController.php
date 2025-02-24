@@ -22,6 +22,7 @@ use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Transformers\ContinueWatchResource;
 use Auth;
 use Modules\CastCrew\Transformers\CastCrewListResource;
+use PhpParser\Node\Expr\Cast;
 
 class DashboardController extends Controller
 {
@@ -32,6 +33,162 @@ class DashboardController extends Controller
     {
         $this->recommendationService = $recommendationService;
 
+    }
+
+    public function TopRatedMovies()
+    {
+        $cacheKey = 'top_rated_movies';
+        $top_rated = Cache::get($cacheKey);
+
+         $html='';
+
+        if (!$top_rated) {
+            $top_rated=[];
+
+                $topRatedMovies = Entertainment::whereNotNull('IMDb_rating')->orderBy('IMDb_rating','desc')->where('status', 1)->take(20)->get();
+
+                $top_rated = MoviesResource::collection($topRatedMovies);
+                $top_rated = $top_rated->toArray(request());
+
+            Cache::put($cacheKey, $top_rated);
+        }
+
+        if(!empty($top_rated)){
+          $html = view('frontend::components.section.top_rated_movie', ['top_rated' => $top_rated])->render();
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function RecentlyAddedMovies()
+    {
+        $cacheKey = 'recently_add_movies';
+        $recently_add = Cache::get($cacheKey);
+
+         $html='';
+
+        if (!$recently_add) {
+            $recently_add=[];
+
+                $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
+
+                $recently_add = MoviesResource::collection($topRatedMovies);
+                $recently_add = $recently_add->toArray(request());
+
+
+            Cache::put($cacheKey, $recently_add);
+        }
+
+        if(!empty($recently_add)){
+          $html = view('frontend::components.section.entertainment', ['data' =>  $recently_add , 'title' =>'Recently Added','type' => 'movie','slug'=>'recently-movie'] )->render();
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function FetchActor()
+    {
+        $cacheKey = 'fetch_actor';
+        $fetch_actor = Cache::get($cacheKey);
+
+        $html='';
+
+        if(!$fetch_actor){
+
+          $fetch_actor=[];
+
+
+           $fetch_actor = CastCrew::inRandomOrder()->take(20)->get();
+
+           Cache::put($cacheKey, $fetch_actor);
+        }
+
+        if(!empty($fetch_actor)){
+
+            $html = view('frontend::components.section.actor', ['fetch_actor' =>  $fetch_actor , 'title' =>__('frontend.fetch_actor')]) ->render();
+
+        }
+
+      return response()->json(['html' => $html]);
+    }
+
+    public function HitMovie($ref)
+    {
+        $cacheKey = $ref.'_hit';
+        $hit_movie = Cache::get($cacheKey);
+
+        $html='';
+
+        $country = "";
+
+        switch($ref){
+            case 'korea';
+                $tag_id = 1;
+                $country = "Korean";
+                break;
+            case 'india';
+                $tag_id =2;
+                $country = "Indian";
+                break;
+            case 'china';
+                $tag_id = 3;
+                $country = "Chinese";
+                break;
+            default:
+                $tag_id = 1;
+        }
+
+        if(!$hit_movie){
+
+          $hit_movie=[];
+
+
+           $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
+             $query->where('tag_id', $tag_id);
+           })->with('season')->take(10)->get();
+
+           $hit_movie = MoviesResource::collection($hit_movie);
+           $hit_movie = $hit_movie->toArray(request());
+
+
+           Cache::put($cacheKey, $hit_movie);
+        }
+
+
+
+        if(!empty($hit_movie)){
+
+            $html = view('frontend::components.section.entertainment', ['data' =>  $hit_movie , 'title' =>$country.' Hits','type' => 'movie','slug'=>$ref.'-hit'] )->render();
+
+        }
+
+       return response()->json(['html' => $html]);
+    }
+
+
+    public function MostWatchdMovies()
+    {
+        $cacheKey = 'most_watch_movies';
+        $most_watch = Cache::get($cacheKey);
+
+         $html='';
+
+        if (!$most_watch) {
+            $most_watch=[];
+
+                $topRatedMovies = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
+
+                $most_watch = MoviesResource::collection($topRatedMovies);
+                $most_watch = $most_watch->toArray(request());
+
+            Cache::put($cacheKey, $most_watch);
+        }
+
+        if(!empty($most_watch)){
+          $html = view('frontend::components.section.most_watch_movie', ['most_watch' => $most_watch])->render();
+        }
+
+        return response()->json(['html' => $html]);
     }
 
 
@@ -101,6 +258,7 @@ class DashboardController extends Controller
          if($languageIds != null){
             $popular_language = Constant::whereIn('id', json_decode($languageIds))->get();
           }
+        $popular_language = CastCrew::inRandomOrder()->take(20)->get();
 
           Cache::put($cacheKey, $popular_language);
        }

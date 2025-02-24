@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 // Check if registration is enabled
 if (user_registration()) {
     Route::middleware('guest')->group(function () {
-        Route::get('register', [RegisteredUserController::class, 'create'])
-            ->name('register');
+        Route::get('register',function(){
+            return redirect()->route('login');
+        });
+        // Route::get('register', [RegisteredUserController::class, 'create'])
+        //     ->name('register');
 
-        Route::post('register', [RegisteredUserController::class, 'store']);
+        // Route::post('register', [RegisteredUserController::class, 'store']);
     });
 }
 

@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': csrfToken
-        },
+        }, 
         body: JSON.stringify({
           entertainment_id: entertainmentId,
           entertainment_type: entertainmentType,

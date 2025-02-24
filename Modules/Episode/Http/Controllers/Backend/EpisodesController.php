@@ -195,6 +195,12 @@ class EpisodesController extends Controller
             $data['IMDb_rating'] = round($data['IMDb_rating'], 1);
         }
 
+
+        if (isset($data['TMDb_rating'])) {
+            // Round the IMDb rating to 1 decimal place
+            $data['TMDb_rating'] = round($data['TMDb_rating'], 1);
+        }
+
         if($request->trailer_url_type == 'Local'){
             $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
         }

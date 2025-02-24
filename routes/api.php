@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use App\Http\Controllers\Backend\API\NotificationsController;
@@ -52,3 +53,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
+
+
+require __DIR__.'/mobile.php';

@@ -103,7 +103,7 @@ return [
     'user_details_successfull' => 'User details retrieved successfully!',
     'delete_account' => 'Your account has been scheduled for deletion.',
     'data_not_available'=>'Data Not avaible',
-    'unknown_user'=>'Streamit User',
+    'unknown_user'=>'Gold Channel User',
     'myprofile'=>'My Profile',
     'logout'=>'Logout',
     'change_language'=>'Change Language',

@@ -36,6 +36,7 @@ class MovieController extends Controller
     public function movieList($language=null)
     {
         $movies = Entertainment::where('language', $language)->get();
+        // return $movies;
         return view('frontend::movie', compact('movies', 'language'));
     }
 
@@ -63,13 +64,16 @@ class MovieController extends Controller
 
     public function movieDetails(Request $request, $id)
     {
+
         $movieId = $id;
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
-    
+
+        // return $movieId;
+
         // Retrieve cached data
         $data = Cache::get($cacheKey);
-    
+
         if (!$data) {
             $movie = Entertainment::where('id', $movieId)
                 ->with([
@@ -81,53 +85,53 @@ class MovieController extends Controller
                     'entertainmentDownloadMappings'
                 ])
                 ->first();
-    
+
             $reviews = $movie->entertainmentReviews ?? collect();
-    
+
             // Encrypt the trailer URL
             if (!empty($movie->trailer_url) && $movie->trailer_url_type != 'Local') {
                 $movie['trailer_url'] = Crypt::encryptString($movie->trailer_url);
             }
-    
+
             if (!empty($movie->video_url_input) && $movie->video_upload_type != 'Local') {
                 $movie['video_url_input'] = Crypt::encryptString($movie->video_url_input);
             }
-    
+
             if ($userId) {
                 $movie['is_watch_list'] = WatchList::where('entertainment_id', $movieId)
                     ->where('user_id', $userId)
                     ->exists();
-    
+
                 $movie['is_likes'] = Like::where('entertainment_id', $movieId)
                     ->where('user_id', $userId)
                     ->where('is_like', 1)
                     ->exists();
-    
+
                 $movie['is_download'] = EntertainmentDownload::where('entertainment_id', $movieId)
                     ->where('user_id', $userId)
                     ->where('entertainment_type', 'movie')
                     ->where('is_download', 1)
                     ->exists();
-    
+
                 $yourReview = $reviews->where('user_id', $userId)->first();
-    
+
                 $movie['your_review'] = $yourReview;
                 $movie['reviews'] = $yourReview ? $reviews->where('user_id', '!=', $userId) : $reviews;
-    
+
                 $movie['total_review'] = $movie->entertainmentReviews->count();
-    
+
                 $continueWatch = ContinueWatch::where('entertainment_id', $movieId)
                     ->where('user_id', $userId)
                     ->where('entertainment_type', 'movie')
                     ->first();
-    
+
                 $movie['continue_watch'] = $continueWatch;
             } else {
                 $movie['reviews'] = $reviews;
             }
-    
+
             $genres = $movie->entertainmentGenerMappings;
-    
+
             $genre_ids = $genres->pluck('genre_id')->toArray();
             $entertainment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)
                 ->pluck('entertainment_id')
@@ -138,48 +142,50 @@ class MovieController extends Controller
                 ->limit(7)
                 ->get()
                 ->except($id);
-    
+
             $data = new MovieDetailResource($movie);
             $data['more_items'] = MoviesResource::collection($more_items);
-    
+
             // Cache the base data
             Cache::put($cacheKey, $data);
         }
-    
+
         // Convert data to array for manipulation
         $data = $data->toArray($request);
-    
+
         // Dynamically append more_items (non-cached)
         $movie = Entertainment::where('id', $movieId)
             ->with('entertainmentGenerMappings')
             ->first();
-    
+
         $genres = $movie->entertainmentGenerMappings;
+
         $genre_ids = $genres->pluck('genre_id')->toArray();
         $entertainment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)
             ->pluck('entertainment_id')
             ->toArray();
+
         $more_items = Entertainment::whereIn('id', $entertainment_ids)
             ->where('type', 'movie')
             ->where('status', 1)
             ->limit(7)
             ->get()
             ->except($id);
-    
+
         $data['more_items'] = MoviesResource::collection($more_items);
-    
+
         if ($request->has('is_search') && $request->is_search == 1) {
             $user_id = auth()->user()->id ?? $request->user_id;
-    
+
             if ($user_id) {
                 $currentProfile = GetCurrentProfile($user_id, $request);
-    
+
                 if ($currentProfile) {
                     $existingSearch = UserSearchHistory::where('user_id', $user_id)
                         ->where('profile_id', $currentProfile)
                         ->where('search_query', $data['name'])
                         ->first();
-    
+
                     if (!$existingSearch) {
                         UserSearchHistory::create([
                             'user_id' => $user_id,
@@ -192,17 +198,17 @@ class MovieController extends Controller
                 }
             }
         }
-    
+
         return view('frontend::movieDetail', compact('data'));
     }
-    
-    
+
+
 
     public function liveTvDetails($id)
     {
         $livetvId = $id;
         $userId = auth()->id();
-      
+
             $livetv = LiveTvChannel::where('id',$livetvId)->with('TvCategory','plan','TvChannelStreamContentMappings')->  first();
             $suggestions = LiveTvChannel::where('category_id', $livetv->category_id)
             ->where('id', '!=', $livetvId) // Exclude the current channel
@@ -217,8 +223,8 @@ class MovieController extends Controller
 
 
           $data = new LiveTvChannelResource($livetv);
-           
-  
+
+
         $data=$data->toArray(request());
 
         // Encrypt the trailer URL
@@ -317,4 +323,5 @@ class MovieController extends Controller
     {
         //
     }
+
 }

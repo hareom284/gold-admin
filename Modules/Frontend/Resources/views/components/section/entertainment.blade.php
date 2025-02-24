@@ -3,9 +3,9 @@
 @endphp
 <div class="streamit-block">
     <div class="d-flex align-items-center justify-content-between my-2 me-2">
-        <h5 class="main-title text-capitalize mb-0">{{ $title }}</h5>
+        <h5 class="main-title text-capitalize  fw-bold mb-2 ">{{ $title }}</h5>
 
-        @if(count($data)>6)
+        @if(count($data)>6 && $slug != 'latest_movie')
 
             @if(!empty($is_watch_list ))
                 <a href="{{ route('watchList') }}" class="view-all-button text-decoration-none flex-none"><span>{{__('frontend.view_all')}}</span> <i class="ph ph-caret-right"></i></a>
@@ -21,6 +21,14 @@
 
     if ($slug == 'latest_movie') {
         $additionalClass = 'slick-general-latest-movie';
+    }  elseif ($slug == 'recently-movie') {
+        $additionalClass = 'slick-general-recently-movie';
+    }elseif ($slug == 'korea-hit') {
+        $additionalClass = 'slick-general-korea-hit';
+    }elseif ($slug == 'china-hit') {
+        $additionalClass = 'slick-general-china-hit';
+    }elseif ($slug == 'india-hit') {
+        $additionalClass = 'slick-general-india-hit';
     } elseif ($slug == 'popular_movie') {
         $additionalClass = 'slick-general-popular-movie';
     }else if($slug == 'popular_tvshow'){

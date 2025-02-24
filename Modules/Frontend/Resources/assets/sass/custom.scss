@@ -38,3 +38,167 @@
 // Pages
 @import "./custom/pages/index";
 
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Maname&display=swap');
+
+body{
+  font-family: "Lato", serif;
+  background-color: #030303 !important;
+}
+.maname-regular {
+  font-family: "Maname", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lato-thin {
+  font-family: "Lato", serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.lato-light {
+  font-family: "Lato", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.lato-regular {
+  font-family: "Lato", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lato-bold {
+  font-family: "Lato", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lato-black {
+  font-family: "Lato", serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.lato-thin-italic {
+  font-family: "Lato", serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.lato-light-italic {
+  font-family: "Lato", serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.lato-regular-italic {
+  font-family: "Lato", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.lato-bold-italic {
+  font-family: "Lato", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.lato-black-italic {
+  font-family: "Lato", serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
+.imdb_rating_icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  background-color: rgba(20,20,20,0.6);
+  padding: 0.125rem 1rem;
+}
+
+.btn-custom-button-one {
+  --bs-btn-color: #564A19;
+  --bs-btn-bg: white;
+  --bs-btn-border-color: #f8f9fa;
+  --bs-btn-hover-color: #a78b1d;
+  --bs-btn-hover-bg:white;
+  --bs-btn-hover-border-color: #c6c7c8;
+  --bs-btn-focus-shadow-rgb: 211, 212, 213;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #c6c7c8;
+  --bs-btn-active-border-color: #babbbc;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #000;
+  --bs-btn-disabled-bg: #f8f9fa;
+  --bs-btn-disabled-border-color: #f8f9fa;
+}
+
+.product-premium {
+  background:rgba(20, 20, 20,0.6) !important;
+  border-radius: 5px 0px 5px 0px !important;
+  color: hsl(48, 100%, 50%) !important;
+  height: 3rem;
+  line-height: 1.9rem;
+  position: absolute;
+  left: 0 !important;
+  text-align: center;
+  top: 0 !important;
+  width: 3rem;
+  z-index: 100;
+  i {
+    font-size: 2rem;
+  }
+}
+
+.imdb_rating_icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  background-color: rgba(20, 20, 20, 0.6);
+  padding: 0.125rem 1rem;
+  border-radius: 5px 0px 0px 0px ;
+}
+
+#detail-tab li a.active{
+  color: white;
+}
+
+.iq-nav-menu > li > a{
+  color: #EEEEEE !important;
+  font-weight: 400;
+}
+
+.iq-nav-menu > li > a.active{
+  font-weight: bold !important;
+  // color: red !important;
+}
+
+
+.iq-nav-menu > li > a:hover{
+  //  color: rgb(233, 14, 14) !important;
+  font-weight: bold !important;
+}
+
+a.dropdown-item.nav-menu-drop-down.cursor-pointer:hover {
+  color: white !important;
+}
+
+.section-spacing-bottom-for-top-rated{
+   margin-bottom: 100px !important;
+}
+
+.footer .footer-top, .footer .footer-bottom {
+  background-color: #080808  !important;
+}
+
+.underline-white:has(a.active) {
+  border-bottom: 1px solid #fff; /* Or any color you like */
+}
+
+

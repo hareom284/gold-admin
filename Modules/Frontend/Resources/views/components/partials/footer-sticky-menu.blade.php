@@ -1,7 +1,7 @@
 <div class="footer-stcky-menu">
     <ul class="list-unstyled m-0 p-0 d-flex align-items-center justify-content-between gap-3">
       <li class="nav-item">
-        <a class="nav-link text-center"  href="{{ route('user.login')  }}">
+        <a class="nav-link text-center"  href="{{ route('home')  }}">
           <i class="ph ph-house-line"></i>
           <span class="item-name">{{__('frontend.home')}}</span>
         </a>

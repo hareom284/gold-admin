@@ -1,4 +1,4 @@
-<div class="slick-banner main-banner" data-speed="1000" data-autoplay="true" data-center="false" data-infinite="false" data-navigation="true" data-pagination="true" data-spacing="0">
+<div class="slick-banner main-banner" data-speed="1000" data-autoplay="true" data-center="false" data-infinite="true" data-navigation="true" data-pagination="true" data-spacing="0">
 
     @foreach($data as $slider)
 
@@ -11,11 +11,11 @@
       <div class="slick-item" style="background-image: url({{ setBaseUrlWithFileName($slider['poster_url']) }});">
         <div class="movie-content h-100">
           <div class="container-fluid h-100">
-            <div class="row align-items-center h-100">
+            <div class="row mt-5 h-100">
               <div class="col-xxl-4 col-lg-6">
                 <div class="movie-info">
                   <div class="movie-tag mb-3">
-                    <ul class="list-inline m-0 p-0 d-flex align-items-center flex-wrap movie-tag-list">
+                    {{-- <ul class="list-inline m-0 p-0 d-flex align-items-center flex-wrap movie-tag-list">
                         @if(!empty($data['genres']))
                         @foreach($data['genres'] as $genres)
                             <li>
@@ -23,11 +23,11 @@
                             </li>
                         @endforeach
                     @endif
-                    </ul>
+                    </ul> --}}
                   </div>
-                  <h4 class="mb-2">{{ $data['name'] }}</h4>
-                  <p class="mb-0 font-size-14 line-count-3">{{ $data['description'] }}</p>
-                  <ul class="list-inline mt-4 mb-0 mx-0 p-0 d-flex align-items-center flex-wrap gap-3">
+                  <h4 class="mb-2 text-nowrap" style="font-size: 36px;font-weight:800;">{{ $data['name'] }}</h4>
+                  <p class="mb-0 font-size-14 line-count-2" style="font-size: 30px;font-weight:400;">{{ $data['description'] }}</p>
+                  {{-- <ul class="list-inline mt-4 mb-0 mx-0 p-0 d-flex align-items-center flex-wrap gap-3">
 
                     <li>
                         @if(!empty($data['release_date']))
@@ -60,17 +60,27 @@
                       </span>
                     </li>
                     @endif
-                  </ul>
+                  </ul> --}}
                   <div class="mt-5">
-                    <div class="d-flex align-items-center gap-3">
-                    @if($slider['type']!="livetv")
+                    <div class="d-flex gap-1">
+                    {{-- @if($slider['type']!="livetv")
                       <x-watchlist-button :entertainment-id="$data['id']" :in-watchlist="$data['is_watch_list']" customClass="watch-list-btn" />
+                    @endif --}}
+                    @if ($slider['data']['movie_access']=='paid')
+                    <div class="">
+                        <a href="#" class="btn btn-custom-button-one">
+                         <span class="d-flex align-items-center justify-content-center gap-2">
+                             <span><i class="ph-fill ph-crown"></i></span>
+                             <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
+                         </span>
+                     </a>
+                    </div>
                     @endif
                       <div class="flex-grow-1">
-                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']])) }}" class="btn btn-primary">
+                          <a href="{{ $slider['type'] == 'livetv' ? route('livetv-details', ['id' => $data['id']]) : ($data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']])) }}" class="btn btn-dark">
                            <span class="d-flex align-items-center justify-content-center gap-2">
-                               <span><i class="ph-fill ph-play"></i></span>
-                               <span>{{__('frontend.play_now')}}</span>
+                               <span><i class="ph-fill ph-info"></i></span>
+                               <span class="text-nowrap">{{__('frontend.more_info_home')}}</span>
                            </span>
                        </a>
                       </div>

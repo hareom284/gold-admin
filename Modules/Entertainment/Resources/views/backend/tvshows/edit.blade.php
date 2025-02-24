@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     trailerfileError.style.display = 'block';
                     URLInputField.removeAttribute('required');
                 } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
-                    selectedValue === 'Vimeo') {
+                    selectedValue === 'Vimeo' || selectedValue === 'G-Drive' || selectedValue === 'MegaLink') {
                     URLInput.classList.remove('d-none');
                     FileInput.classList.add('d-none');
                     URLInputField.setAttribute('required', 'required');

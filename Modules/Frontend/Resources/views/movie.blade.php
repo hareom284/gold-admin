@@ -4,7 +4,25 @@
 <div class="list-page section-spacing-bottom px-0">
     <div class="page-title" id="page_title">
         @if (request()->route('language'))
-            <h4 class="m-0 text-center"> {{ ucfirst(request()->route('language')) }} </h4>
+            @php
+                $languages = Modules\Constant\Models\Constant::where('type','movie_language')->get();
+            @endphp
+            <div class="d-flex justify-content-center align-items-center">
+                <h6 class="me-3 text-center ">Filter by language </h6>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle py-2 px-5 text-white" style="background: #353535;width:150px"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ucfirst(request()->route('language'))}}
+                    </button>
+                    <ul class="dropdown-menu" style="background: #171717;padding:0px;" >
+                        @foreach ($languages as $lang)
+                      <li><a class="dropdown-item"
+                          onmouseover="this.style.backgroundColor='#353535';"
+                          onmouseout="this.style.backgroundColor='#171717';"
+                         style="border-radius:0px;" href="{{route('movies.language',$lang->value)}}">{{$lang->name}}</a></li>
+                        @endforeach
+                    </ul>
+                  </div>
+            </div>
         @elseif (request()->route('genre_id'))
             <h4 class="m-0 text-center"> {{ ucfirst($genre->name) }} </h4>
         @else
@@ -27,7 +45,7 @@
             </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
 
 <script src="{{ asset('js/entertainment.min.js') }}" defer></script>
 

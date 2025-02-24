@@ -22,20 +22,7 @@
       transition: all 0.4s ease-out;
       z-index: 2;
     }
-    .product-premium {
-      background: var(--bs-warning);
-      border-radius: 100%;
-      color: var(--bs-white);
-      height: 1.75rem;
-      left: auto;
-      line-height: 1.9rem;
-      position: absolute;
-      right: 1rem;
-      text-align: center;
-      top: .875rem;
-      width: 1.75rem;
-      z-index: 100;
-    }
+
   }
   &:hover {
     .block-image {

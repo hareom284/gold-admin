@@ -46,9 +46,11 @@ class FrontendController extends Controller
         $sliders = Cache::get($cacheKey);
         if (!$sliders) {
            $sliderList = Banner::where('status', 1)->get();
+
            $sliders = SliderResource::collection($sliderList->map(function ($slider) use ($user_id) {
                 return new SliderResource($slider, $user_id);
            }));
+
 
            $sliders = $sliders->toArray(request());
            Cache::put($cacheKey, $sliders);
@@ -94,7 +96,6 @@ class FrontendController extends Controller
     // Fetch TV shows
     $tvshowList = $entertainment_data->where('type', 'tvshow')->take(10)->get();
     $tvshowData = (isenablemodule('tvshow') == 1) ? TvshowResource::collection($tvshowList) : [];
-
 
         return view('frontend::search', compact('movieData', 'tvshowData'));
     }
@@ -432,7 +433,6 @@ class FrontendController extends Controller
         // Return the generated PDF as a download
         return $pdf->download('invoice.pdf');
     }
-
 
 
 }

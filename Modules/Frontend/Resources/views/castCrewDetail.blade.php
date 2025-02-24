@@ -8,7 +8,7 @@
         </div>
 
         <div id="castcrewdetail-section">
-        @include('frontend::components.card.card_castcrewdetail',['data' => $data])
+        {{-- @include('frontend::components.card.card_castcrewdetail',['data' => $data]) --}}
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
 <div class="section-spacing px-0">
     <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between my-2">
-            <h5 class="main-title text-capitalize mb-0">{{__('frontend.cast_movies_tvshows')}} {{  $data['name'] }}</h5>
+            {{-- <h5 class="main-title text-capitalize mb-0">{{__('frontend.cast_movies_tvshows')}} {{  $data['name'] }}</h5> --}}
         </div>
         <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5" id="entertainment-list">
 

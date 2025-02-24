@@ -872,7 +872,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 60,
                 'name' => 'apiKey',
-                'val' => 'AIzaSyBFQ9fiQoNoErlFUIP2Njh0Lj34pzAxyrs',
+                'val' => 'AIzaSyA3MRq_2eln4dX5U3aoCI9flsHvfgOjTtw',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -886,7 +886,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 61,
                 'name' => 'authDomain',
-                'val' => 'streamit-laravel-flutter.firebaseapp.com',
+                'val' => 'gold-channel-d9c03.firebaseapp.com',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -914,7 +914,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 63,
                 'name' => 'projectId',
-                'val' => 'streamit-laravel-flutter',
+                'val' => 'gold-channel-d9c03',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -928,7 +928,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 64,
                 'name' => 'storageBucket',
-                'val' => 'streamit-laravel-flutter.appspot.com',
+                'val' => 'gold-channel-d9c03.firebasestorage.app',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -942,7 +942,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 65,
                 'name' => 'messagingSenderId',
-                'val' => '215579898202',
+                'val' => '553441839359',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -956,7 +956,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 66,
                 'name' => 'appId',
-                'val' => '1:215579898202:web:0f25cc0b276ee1c2e24363',
+                'val' => '1:553441839359:web:ba779c59fa6cba5c6964ca',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -970,7 +970,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 67,
                 'name' => 'measurementId',
-                'val' => 'G-V6YW8LYZ2G',
+                'val' => 'G-RN2RSCG4R2',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -981,7 +981,7 @@ class SettingSeeder extends Seeder
                 'deleted_at' => NULL,
             ),
 
-            
+
         ));
         foreach ($data as $setting) {
             $service = Setting::create($setting);

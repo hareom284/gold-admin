@@ -80,7 +80,7 @@ class AuthController extends Controller
         Artisan::call('config:cache');
         Artisan::call('route:clear');
 
-        return response()->json(['status' => true, 'message' => __('messages.successfully_register')]);
+        return response()->json(['status' => true, 'message' => __('messages.successfully_register')],200);
     }
 
     public function Logout(Request $request){
@@ -90,8 +90,7 @@ class AuthController extends Controller
 
         $this->removeDevice($user, $request);
 
-
-        return redirect()->route('user.login');
+        return redirect()->route('home');
 
     }
 
@@ -132,7 +131,6 @@ class AuthController extends Controller
      // Redirect to Google
      public function redirectToGoogle()
      {
-
          return Socialite::driver('google')->redirect();
      }
 
@@ -156,8 +154,9 @@ class AuthController extends Controller
 
 
                 $data = [
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
+                    // 'first_name' => $firstName,
+                    // 'last_name' => $lastName,
+                    'username'=>$fullName,
                     'email' =>  $googleUser->getEmail(),
                     'password' => Hash::make(Str::random(8)),
                     'user_type' => 'user',
@@ -176,6 +175,7 @@ class AuthController extends Controller
              }
 
              if($user->login_type == 'google'){
+
                 $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
                 $response=$this->CheckDeviceLimit($user, $current_device);
 
@@ -184,8 +184,7 @@ class AuthController extends Controller
                 }
 
                  $this->setDevice($user,$request);
-                 $user1=Auth::login($user);
-
+                 $user = Auth::login($user);
              }
              else
              {
@@ -200,7 +199,6 @@ class AuthController extends Controller
              return Redirect::to('/login')->with('error', 'Something went wrong!');
          }
      }
-
 
      // Redirect to Apple
      public function redirectToApple()
