@@ -36,6 +36,7 @@ class MovieController extends Controller
     public function movieList($language=null)
     {
         $movies = Entertainment::where('language', $language)->get();
+        // return $movies;
         return view('frontend::movie', compact('movies', 'language'));
     }
 
@@ -63,6 +64,7 @@ class MovieController extends Controller
 
     public function movieDetails(Request $request, $id)
     {
+
         $movieId = Entertainment::where('id',Crypt::decrypt($id))->value('id');
         $userId = auth()->id();
         $cacheKey = 'movie_' . $movieId;
@@ -157,10 +159,12 @@ class MovieController extends Controller
             ->first();
 
         $genres = $movie->entertainmentGenerMappings;
+
         $genre_ids = $genres->pluck('genre_id')->toArray();
         $entertainment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)
             ->pluck('entertainment_id')
             ->toArray();
+
         $more_items = Entertainment::whereIn('id', $entertainment_ids)
             ->where('type', 'movie')
             ->where('status', 1)
@@ -319,4 +323,5 @@ class MovieController extends Controller
     {
         //
     }
+
 }

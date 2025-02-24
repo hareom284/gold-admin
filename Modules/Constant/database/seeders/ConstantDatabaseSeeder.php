@@ -26,7 +26,7 @@ class ConstantDatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $arr1 = [
-         
+
 
             [
                 'type' => 'language',
@@ -52,8 +52,8 @@ class ConstantDatabaseSeeder extends Seeder
                 'name' => 'Vietnamese',
                 'sequence' => 4,
             ],
-           
-        
+
+
             [
                 'type' => 'PAYMENT_STATUS',
                 'name' => 'Paid',
@@ -92,6 +92,21 @@ class ConstantDatabaseSeeder extends Seeder
                 'type' => 'upload_type',
                 'name' => 'HLS',
                 'value' => 'HLS',
+            ],
+            [
+                'type' => 'upload_type',
+                'name' => 'Vimeo',
+                'value' => 'Vimeo',
+            ],
+            [
+                'type' => 'upload_type',
+                'name' => 'G-Drive',
+                'value' => 'G-Drive',
+            ],
+            [
+                'type' => 'upload_type',
+                'name' => 'Mega Link',
+                'value' => 'MegaLink',
             ],
             [
                 'type' => 'upload_type',
@@ -211,7 +226,7 @@ class ConstantDatabaseSeeder extends Seeder
                 'name' => 'Embedded',
                 'value' => 'Embedded',
             ],
-            
+
         ];
 
         foreach ($arr1 as $key => $val) {

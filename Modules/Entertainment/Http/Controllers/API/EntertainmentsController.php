@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserSearchHistory;
 use Modules\Season\Models\Season;
 use Modules\Entertainment\Transformers\SeasonResource;
+use Illuminate\Support\Facades\Crypt;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\CastCrew\Transformers\CastCrewListResource;
 
@@ -69,7 +70,7 @@ class EntertainmentsController extends Controller
         if ($request->filled('genre_id')) {
             $genreId = $request->genre_id;
             $movieList->whereHas('entertainmentGenerMappings', function ($query) use ($genreId) {
-                $query->where('genre_id', $genreId);
+                $query->where('genre_id', Crypt::decrypt($genreId));
             });
         }
     
@@ -545,36 +546,36 @@ class EntertainmentsController extends Controller
                     ])->render();
                 }
             }
-            if ($videoData && $videoData->isNotEmpty()) {
+            // if ($videoData && $videoData->isNotEmpty()) {
 
-                foreach ($videoData->toArray($request) as $index => $value) {
-                    $html .= view('frontend::components.card.card_video', [
-                        'data' => $value,
-                        'index' => $index,
-                        'is_search'=>1,
-                    ])->render();
-                }
-            }
-            if ($seasonData && $seasonData->isNotEmpty()) {
+            //     foreach ($videoData->toArray($request) as $index => $value) {
+            //         $html .= view('frontend::components.card.card_video', [
+            //             'data' => $value,
+            //             'index' => $index,
+            //             'is_search'=>1,
+            //         ])->render();
+            //     }
+            // }
+            // if ($seasonData && $seasonData->isNotEmpty()) {
 
-                foreach ($seasonData->toArray($request) as $index => $value) {
-                    $html .= view('frontend::components.card.card_season', [
-                        'value' => $value,
-                        'index' => $index,
-                        'is_search'=>1,
-                    ])->render();
-                }
-            }
-            if ($episodeData && $episodeData->isNotEmpty()) {
+            //     foreach ($seasonData->toArray($request) as $index => $value) {
+            //         $html .= view('frontend::components.card.card_season', [
+            //             'value' => $value,
+            //             'index' => $index,
+            //             'is_search'=>1,
+            //         ])->render();
+            //     }
+            // }
+            // if ($episodeData && $episodeData->isNotEmpty()) {
 
-                foreach ($episodeData->toArray($request) as $index => $value) {
-                    $html .= view('frontend::components.card.card_season', [
-                        'value' => $value,
-                        'index' => $index,
-                        'is_search'=>1,
-                    ])->render();
-                }
-            }
+            //     foreach ($episodeData->toArray($request) as $index => $value) {
+            //         $html .= view('frontend::components.card.card_season', [
+            //             'value' => $value,
+            //             'index' => $index,
+            //             'is_search'=>1,
+            //         ])->render();
+            //     }
+            // }
             if ($actorData && $actorData->isNotEmpty()) {
 
                 foreach ($actorData->toArray($request) as $index => $value) {

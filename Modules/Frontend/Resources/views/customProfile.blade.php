@@ -52,24 +52,24 @@
                                                     @csrf
                                                     <div class="input-group mb-3">
                                                         <span class="input-style-text input-group-text px-0"><i class="ph ph-user"></i></span>
-                                                        <input type="text" name="first_name" class="form-control input-style-box" value="{{ $user->first_name }}" placeholder="{{__('frontend.enter_fname')}}" >
-                                                        <div class="invalid-feedback" id="first_name_error">First Name field is required</div>
+                                                        <input type="text" name="username" class="form-control input-style-box" value="{{ $user->username }}" placeholder="{{__('frontend.enter_name')}}" >
+                                                        <div class="invalid-feedback" id="user_name_error">Name field is required</div>
                                                     </div>
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text input-style-text px-0"><i class="ph ph-user"></i></span>
-                                                        <input type="text" name="last_name" class="form-control input-style-box" value="{{ $user->last_name }}" placeholder="{{__('frontend.enter_lname')}}">
-                                                        <div class="invalid-feedback" id="last_name_error">Last Name field is required</div>
-                                                    </div>
+                                                    @if ($user->login_type == 'google')
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text input-style-text px-0"><i class="ph ph-envelope"></i></span>
                                                         <input type="email" name="email" class="form-control input-style-box" value="{{ $user->email }}" @if ($user->login== 'google') readonly @endif>
                                                         <div class="invalid-feedback" id="email_error">Email is required</div>
                                                     </div>
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text input-style-text px-0"><i class="ph ph-phone"></i></span>
-                                                        <input type="tel" class="form-control input-style-box" value="{{ $user->mobile }}" id="mobileInput"  @if ($user->login== 'otp') readonly @endif>
-                                                        <div class="invalid-feedback" id="mobile_error">Mobile number is required</div>
-                                                    </div>
+                                                    @endif
+
+                                                    @if ($user->login_type == 'otp')
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text input-style-text px-0"><i class="ph ph-phone"></i></span>
+                                                            <input type="tel" class="form-control input-style-box" value="{{ $user->mobile }}" id="mobileInput" >
+                                                            <div class="invalid-feedback" id="mobile_error">Mobile number is required</div>
+                                                        </div>
+                                                    @endif
 
                                                     <div class="d-grid gap-2 col-12">
                                                         <button type="button" id="updateProfileBtn" class="btn btn-primary mt-5">{{__('frontend.update')}}</button>
@@ -279,13 +279,13 @@ function previewProfileImage(event) {
 
                 const fieldsToValidate = [
                     {
-                        name: 'first_name',
-                        errorElement: '#first_name_error'
+                        name: 'username',
+                        errorElement: '#user_name_error'
                     },
-                    {
-                        name: 'last_name',
-                        errorElement: '#last_name_error'
-                    },
+                    // {
+                    //     name: 'last_name',
+                    //     errorElement: '#last_name_error'
+                    // },
 
                 ];
 
@@ -301,13 +301,13 @@ function previewProfileImage(event) {
                 const mobileInput = $('#mobileInput');
 
                     const mobileValue = mobileInput.val().trim();
-                    if (!mobileValue) {
-                        $('#mobileInput').addClass('is-invalid');
-                        $('#mobile_error').show().text('Mobile number is required');
-                        valid = false;
-                    } else {
-                        $('#mobile_error').hide();
-                    }
+                    // if (!mobileValue) {
+                    //     $('#mobileInput').addClass('is-invalid');
+                    //     $('#mobile_error').show().text('Mobile number is required');
+                    //     valid = false;
+                    // } else {
+                    //     $('#mobile_error').hide();
+                    // }
 
                 if (!valid) {
                     return;

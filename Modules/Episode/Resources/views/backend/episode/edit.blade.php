@@ -261,6 +261,19 @@
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
                     </div>
                     <div class="col-md-6 col-lg-4">
+                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class="text-danger"></span>', 'TMDb_rating')->class('form-label') }}
+                        {{ html()->text('TMDb_rating')
+                                ->attribute('value', old('TMDb_rating', $data->TMDb_rating)) // Use old value or the existing movie value
+                                ->placeholder(__('movie.lbl_tmdb_rating'))
+                                ->class('form-control')
+                                 }}
+
+                        @error('TMDb_rating')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="invalid-feedback" id="imdb-error">TMDB Rating field is required</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_release_date'). ' <span class="text-danger">*</span>' , 'release_date')->class('form-label') }}
                         {{ html()->date('release_date')->attribute('value', $data->release_date)->placeholder(__('movie.lbl_release_date'))->class('form-control datetimepicker')->attribute('required','required') }}
                         @error('release_date')
@@ -645,7 +658,7 @@ tinymce.init({
                     URLInputField.removeAttribute('required');
 
                 } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
-                    selectedValue === 'Vimeo') {
+                    selectedValue === 'Vimeo' ||  selectedValue === 'G-Drive' || selectedValue === 'MegaLink') {
                     URLInput.classList.remove('d-none');
                     FileInput.classList.add('d-none');
                     URLInputField.setAttribute('required', 'required');
@@ -766,7 +779,7 @@ function handleVideoUrlTypeChange(selectedtypeValue) {
         videourl.value = '';
         urlError.style.display = 'none';
         urlPatternError.style.display = 'none';
-    } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue === 'HLS' || selectedtypeValue === 'Vimeo') {
+    } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue === 'HLS' || selectedtypeValue === 'Vimeo' ||  selectedtypeValue === 'G-Drive' || selectedtypeValue === 'MegaLink') {
         VideoURLInput.classList.remove('d-none');
         VideoFileInput.classList.add('d-none');
         videourl.setAttribute('required', 'required');

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('access')->nullable();
             $table->unsignedBigInteger('plan_id')->nullable();
             $table->string('IMDb_rating')->nullable();
+            $table->string('TMDb_rating')->nullable();
             $table->longtext('content_rating')->nullable();
             $table->string('duration')->nullable();
             $table->date('release_date')->nullable();

@@ -23,7 +23,7 @@
 
             <h5 class="iq-title text-capitalize line-count-1"> {{ $value['name']  ?? '--'}} </h5>
             <div class="d-flex align-items-center gap-3">
-                 
+
             </div>
             <div class="d-flex align-items-center gap-3 mt-3">
 

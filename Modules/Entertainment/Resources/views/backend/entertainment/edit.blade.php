@@ -297,6 +297,20 @@
                     </div>
 
                     <div class="col-md-6 col-lg-4">
+                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class="text-danger"></span>', 'tMDb_rating')->class('form-label') }}
+                        {{ html()->text('TMDb_rating')
+                                ->attribute('value', old('TMDb_rating', $data->TMDb_rating)) // Use old value or the existing movie value
+                                ->placeholder(__('movie.lbl_tmdb_rating'))
+                                ->class('form-control')
+                                 }}
+
+                        @error('TMDb_rating')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="invalid-feedback" id="tmdb-error">TMDB Rating field is required</div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
                         {{ html()->text('content_rating')->attribute('value', $data->content_rating)->placeholder(__('placeholder.lbl_content_rating'))->class('form-control')->attribute('required','required') }}
                         @error('content_rating')
@@ -721,8 +735,7 @@ tinymce.init({
                     if (trailervideourl) {
                         trailervideourl.value = '';
                     }
-                } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
-                    selectedValue === 'Vimeo') {
+                } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' || selectedValue === 'Vimeo' || selectedValue === 'G-Drive' || selectedValue === 'MegaLink') {
                     URLInput.classList.remove('d-none');
                     FileInput.classList.add('d-none');
                     URLInputField.setAttribute('required', 'required');
@@ -880,7 +893,7 @@ document.addEventListener('DOMContentLoaded', function() {
             videourl.value = '';
         }
      } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue ===
-         'HLS' || selectedtypeValue === 'Vimeo') {
+         'HLS' || selectedtypeValue === 'Vimeo' || selectedtypeValue === 'G-Drive' || selectedtypeValue === 'MegaLink') {
          VideoURLInput.classList.remove('d-none');
          VideoFileInput.classList.add('d-none');
          videourl.setAttribute('required', 'required');
