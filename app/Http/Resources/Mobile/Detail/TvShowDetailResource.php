@@ -4,17 +4,17 @@ namespace App\Http\Resources\Mobile\Detail;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Modules\Entertainment\Models\Like;
+use Modules\Entertainment\Models\Watchlist;
 use Modules\Entertainment\Models\Entertainment;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Mobile\Genral\GenresResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
+use App\Http\Resources\Mobile\Detail\EpisodeResource;
 use App\Http\Resources\Mobile\Genral\CastCrewListResource;
-use App\Http\Resources\Mobile\Genral\DownloadLinkResource;
 use Modules\Entertainment\Models\EntertainmentGenerMapping;
-use Modules\Entertainment\Models\Like;
-use Modules\Entertainment\Models\Watchlist;
 
-class MovieDetailResource extends JsonResource
+class TvShowDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -43,15 +43,12 @@ class MovieDetailResource extends JsonResource
         ->pluck('entertainment_id')
         ->toArray();
         $more_items = Entertainment::whereIn('id', $entertainment_ids)
-            ->where('type', 'movie')
+            ->where('type', 'tvshow')
             ->where('status', 1)
             ->limit(7)
             ->get()
             ->except($this->id);
 
-
-        //download_links
-        $download_links = $this->entertainmentStreamContentMappings;
 
         //like
         $like = Like::where('entertainment_id', $this->id)->where('user_id', auth('sanctum')->id())
@@ -78,6 +75,22 @@ class MovieDetailResource extends JsonResource
             ];
         }
 
+        $seasons_data =[];
+        foreach($this->season as $season){
+            $episodes = $season->episodes;
+            $totalEpisodes = $episodes->count();
+            $seasons_data[] = [
+                'season_id' => $season->id,
+                'name' => $season->name,
+                'total_episodes' => $totalEpisodes,
+                'episodes' => EpisodeResource::collection(
+                                    $episodes->map(function ($episode) {
+                                        return new EpisodeResource($episode, $this->user_id);
+                                    })
+                                ),
+            ];
+        }
+
         return [
             'id'=>$this->id,
             'name'=>$this->name,
@@ -98,8 +111,8 @@ class MovieDetailResource extends JsonResource
             'watchlist' => $is_watchlist,
             'review_count'  => $review_count,
             'review_data' => $review_data,
-            'video_url' => $this->video_upload_type=='Local' ? setBaseUrlWithFileName($this->video_url_input) : $this->video_url_input,
-            'download_links' => DownloadLinkResource::collection($download_links),
+            'seasons_count' => $this->season->count(),
+            'seasons_data' => $seasons_data,
         ];
     }
 }

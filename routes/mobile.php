@@ -7,6 +7,9 @@ use App\Http\Controllers\Mobile\OTPController;
 
 Route::group(['prefix'=>'v1'],function(){
 
+    //test firebase
+    Route::post('test-message',[ApiController::class, 'sendMessage']);
+    Route::post('token',[ApiController::class, 'Token']);
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
@@ -47,4 +50,5 @@ Route::group(['prefix'=>'v1'],function(){
 
      //details page api
      Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
+     Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
 });

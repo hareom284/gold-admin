@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Modules\Entertainment\Models\Like;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
@@ -18,11 +19,35 @@ use App\Http\Resources\Mobile\Home\BannerResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
 use App\Http\Resources\Mobile\Genral\WatchListResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
+use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
-use Modules\Entertainment\Models\Like;
 
 class ApiController extends Controller
 {
+        public function sendMessage()
+        {
+            $database = app('firebase.database');
+            $database->getReference('users/user2')->push([
+                'name' => 'user2',
+                'email' => 'john.doe@example.com',
+            ]);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Message sent successfully',
+            ],200);
+        }
+
+        public function Token()
+        {
+            $auth = app('firebase.auth');
+            $customToken = $auth->createCustomToken('user1');
+            return response()->json([
+                'success'=>true,
+                'message'=>'Token generated successfully',
+                'data'=>$customToken,
+            ],200);
+        }
+
         // Redirect to Google
         public function redirectToGoogle()
         {
@@ -402,6 +427,12 @@ class ApiController extends Controller
                     'entertainmentDownloadMappings'
                 ])
                 ->first();
+            if(!$movie){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'Movie not found',
+                ],404);
+            }
 
             $data = new MovieDetailResource($movie);
             return response()->json([
@@ -409,6 +440,27 @@ class ApiController extends Controller
                 'message'=>'Movie details reterived successfully',
                 'data'=>$data,
             ],200);
+    }
+
+    public function TvShowDetails($id)
+    {
+        $tvshow = Entertainment::where('id', $id)
+            ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
+            ->first();
+
+        if(!$tvshow){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Tvshow not found',
+            ],404);
+        }
+
+         $data = new TvShowDetailResource($tvshow);
+         return response()->json([
+            'success'=>true,
+            'message'=>'Tvshow details reterived successfully',
+            'data'=>$data,
+        ],200);
     }
 
     public function  Rating(Request $request)
