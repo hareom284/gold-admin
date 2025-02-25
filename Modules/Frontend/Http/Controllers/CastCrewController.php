@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\CastCrew\Models\CastCrew;
+use Illuminate\Support\Facades\Crypt;
 use Modules\CastCrew\Transformers\CastCrewListResource;
 use Modules\Entertainment\Models\Entertainment;
 use App\Models\UserSearchHistory;
@@ -28,7 +29,7 @@ class CastCrewController extends Controller
     }
     public function castCrewDetail(Request $request, $id)
     {
-        $castcrew = CastCrew::where('id',$id)->first();
+        $castcrew = CastCrew::where('id',Crypt::decrypt($id))->first();
 
         $responseData = New CastCrewListResource($castcrew);
 

@@ -14,6 +14,11 @@ Route::group(['prefix'=>'v1'],function(){
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
 
+
+    // //phone number login api
+    // Route::post('/auth/otp-login-store', [ApiController::class, 'otpLoginStore']);
+    // Route::get('/auth/check-user-exists', [ApiController::class, 'checkUserExists']);
+
     //otpp login api
     Route::post('send-otp',[OTPController::class,'sendOTP']);
     Route::post('verify-otp', [OTPController::class, 'verifyOTP']);
