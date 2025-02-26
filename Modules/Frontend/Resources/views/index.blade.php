@@ -126,7 +126,7 @@
            </div>
         </div>
 
-        <div id="actor-section" class="section-wraper scroll-section section-hidden" style="margin-bottom: 200px;">
+        <div id="actor-section" class="section-wraper scroll-section section-hidden" style="margin-bottom: 20px;">
             <div class="card-style-slider movie-shimmer">
                 <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                    @for ($i = 0; $i < 6; $i++)
