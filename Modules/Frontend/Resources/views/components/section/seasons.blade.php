@@ -70,10 +70,11 @@
                     <ul id="episode-list-{{ $value['season_id'] }}" class="list-inline m-0 p-0 d-flex flex-column gap-4 episode-list">
                         <div class="accordion" id="accordionExample">
                         @foreach($value['episodes']->toArray(request()) as $episodeIndex => $episode)
-                            <li>
+                        <div class="accordion" id="accordionExample">
+
                                 {{-- @include('frontend::components.card.card_episode', ['data' => $episode, 'index' => $episodeIndex]) --}}
                                 @include('frontend::components.card.card_accrodion', [ 'data' => $episode, 'index' => $episodeIndex])
-                            </li>
+                        </div>
                         @endforeach
                         </div>
                     </ul>
