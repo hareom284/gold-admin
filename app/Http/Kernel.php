@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\CheckAdmin::class,
         'checkModule' => \App\Http\Middleware\CheckModule::class,
         'checkInstallation' => \App\Http\Middleware\CheckInstallation::class,
+        'isUserSubscribe' => \App\Http\Middleware\IsUserSubscribe::class,
     ];
 }

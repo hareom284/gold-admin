@@ -80,7 +80,10 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
     Route::group(['prefix' => 'subscription', 'as' => 'subscription.'], function () {
         Route::group(['prefix' => '/account', 'as' => 'account.'], function () {
         });
-
-
     });
+});
+
+//user subscription routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('subscription', [SubscriptionController::class, 'storeWebSubscription'])->name('subscription.store');
 });

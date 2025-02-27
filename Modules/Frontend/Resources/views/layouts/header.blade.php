@@ -169,7 +169,7 @@
                                 </li>
                                     @if(auth()->user()->user_type == 'user')
                                         <li class="nav-item">
-
+                                            {{-- @dd(auth()->user()->subscriptionPackage) --}}
                                             @if(auth()->user()->is_subscribe==0)
                                             <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
                                                 {{__('frontend.subscribe')}}

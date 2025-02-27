@@ -25,7 +25,7 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('resend-otp', [OTPController::class, 'resendOTP']);
     Route::post('opt-user-store', [OTPController::class, 'otpUserStore']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::group(['middleware' => 'auth:sanctum,isUserSubscribe'], function () {
         //logout api
         Route::post('logout', [ApiController::class, 'logout']);
 

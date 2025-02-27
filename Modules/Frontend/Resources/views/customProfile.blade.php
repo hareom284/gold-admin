@@ -93,41 +93,36 @@
                                     <h5>Subscription</h5>
                                     <small class="text-muted">Plan Details</small>
                                 </div>
-                                <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
-                                    <input class="form-check-input me-2" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label w-100" for="flexRadioDefault1">
-                                        <div class="list-group">
-                                            <div class="list-group-item  p-4 ">
-                                                <div>
-                                                    <span>Monthly Plan</span>
+                                @php
+                                    $plans = Modules\Subscriptions\Models\Plan::all();
+                                @endphp
+                             <form action="{{route('subscription.store')}}" method="POST">
+                                @csrf
+                                    @foreach ($plans as $plan)
+                                        <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
+                                            <input class="form-check-input me-2" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}"{{$plan->id == $user->subscriptionPackage->plan_id ? 'checked' : ''}}>
+
+
+                                            <label class="form-check-label w-100" for="flexRadioDefault1">
+                                                <div class="list-group">
+                                                    <div class="list-group-item  p-4 ">
+                                                        <div>
+                                                            <span>{{$plan->name}}</span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                                            <span class="text-bold text-white">{{$plan->duration_value}} {{$plan->duration}}</span>
+                                                            <span class="text-bold text-white">{{$plan->total_price}} MMK</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                                    <span class="text-bold text-white">31 Days</span>
-                                                    <span class="text-bold text-white">3,000 MMK</span>
-                                                </div>
-                                            </div>
+                                            </label>
                                         </div>
-                                    </label>
-                                  </div>
-                                  <div class="form-check align-items-center col-12 col-md-6 " style="display: flex !important">
-                                    <input class="form-check-input me-2" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                    <label class="form-check-label w-100" for="flexRadioDefault2">
-                                        <div class="list-group">
-                                            <div class="list-group-item  p-4 ">
-                                                <div>
-                                                    <span>Yearly Plan</span>
-                                                </div>
-                                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                                    <span class="text-bold text-white">365 Days</span>
-                                                    <span class="text-bold text-white">35,000 MMK</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
+                                    @endforeach
+
                                 <div class="d-grid gap-2 w-50 mt-3">
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Subscribe</button>
+                                    <button class="btn btn-primary" type="submit">Subscribe</button>
                                 </div>
+                            </form>
 
                             </div>
                         </div>
