@@ -2,14 +2,15 @@
 
 namespace Modules\Subscriptions\Http\Controllers\Backend;
 
+use Currency;
 use Carbon\Carbon;
-use Illuminate\Contracts\Support\Renderable;
 // use Illuminate\Routing\Controller;
-use Modules\Subscriptions\Models\Subscription;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
-use Currency;
-use Illuminate\Http\Request;
+use Modules\Subscriptions\Models\Plan;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Subscriptions\Models\Subscription;
 
 
 class SubscriptionController extends Controller
@@ -38,6 +39,66 @@ class SubscriptionController extends Controller
      *
      * @return Renderable
      */
+    public function storeWebSubscription(Request $request)
+    {
+        $user = auth()->user();
+        $plan = Plan::find($request->plan_id);
+
+        // Validate plan existence
+        if (!$plan) {
+            return redirect()->back()->with('error', 'Invalid plan.');
+        }
+
+        // Check existing subscription
+        $subscription = Subscription::where('user_id', $user->id)->first();
+
+        if ($subscription) {
+            return $this->handleExistingSubscription($subscription, $plan);
+        }
+
+        // Create a new subscription if none exists
+        $this->createNewSubscription($user->id, $plan);
+
+        return redirect()->back()->with('message', 'Subscription created successfully.');
+    }
+
+    private function handleExistingSubscription($subscription, $plan)
+    {
+        if ($subscription->end_date > Carbon::now()) {
+            return redirect()->back()->with('error', 'You already have an active subscription.');
+        }
+
+        // Update expired subscription
+        $subscription->update([
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth()->user()->update(['is_subscribe' => true]);
+
+        return redirect()->back()->with('message', 'Your subscription has been renewed successfully.');
+    }
+
+
+    private function createNewSubscription($userId, $plan)
+    {
+        Subscription::create([
+            'user_id' => $userId,
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth()->user()->update(['is_subscribe' => true]);
+    }
+
     public function index(Request $request)
     {
         $module_action = 'User List';
