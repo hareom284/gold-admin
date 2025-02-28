@@ -17,7 +17,7 @@ class IsUserSubscribe
     {
         if($this->authCheck()){
             $user = $this->authUser();
-            $end_date = $user->subscriptionPackage->end_date;
+            $end_date = $user->subscriptionPackage?->end_date;
             if( $end_date < now()){
                 $user->update(['is_subscribe' => false]);
                 $user->subscriptionPackage()->update(['status' => 'expired']);

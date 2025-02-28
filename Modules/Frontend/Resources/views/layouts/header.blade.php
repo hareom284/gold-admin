@@ -169,15 +169,15 @@
                                 </li>
                                     @if(auth()->user()->user_type == 'user')
                                         <li class="nav-item">
-                                            {{-- @dd(auth()->user()->subscriptionPackage) --}}
                                             @if(auth()->user()->is_subscribe==0)
-                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
+                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('accountSetting') }}'">
                                                 {{__('frontend.subscribe')}}
                                             </button>
                                             @else
 
-                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
-                                                {{__('frontend.upgrade')}}
+                                            <button class="btn btn-custom-button-one font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('accountSetting') }}'">
+                                                {{-- {{__('frontend.upgrade')}} --}}
+                                                {{auth()->user()->subscriptionPackage->plan->name}}
                                             </button>
 
                                             @endif
