@@ -87,42 +87,85 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="subscription" role="tabpanel">
-                        <div class="card  p-5">
+                        <div class="upgrade-plan d-flex flex-wrap gap-3 align-items-center justify-content-between rounded p-4 bg-warning-subtle border border-warning">
+                            <div class="d-flex justify-content-center align-items-center gap-4">
+                                <i class="ph ph-crown text-warning"></i>
+                                <div>
+                                    @if(!empty($activeSubscriptions))
+                                        <h6 class="super-plan">{{ $activeSubscriptions->name }}</h6>
+                                        <p class="mb-0 text-body">{{__('frontend.expiring_on')}} {{ \Carbon\Carbon::parse($activeSubscriptions->end_date)->format('d F, Y') }}</p>
+                                    @else
+                                        <h6 class="super-plan">{{__('frontend.no_active_plan')}}</h6>
+                                        <p class="mb-0 text-body">{{__('frontend.not_active_subscription')}}</p>
+                                    @endif
+                                </div>
+                            </div>
+                                {{-- <div class="d-flex gap-3">
+                                    @if(!empty($activeSubscriptions))
+                                        <button class="btn btn-light subscription-btn">{{ __('frontend.upgrade') }}</button>
+                                    @else
+                                        <button class="btn btn-light subscription-btn">{{ __('frontend.subscribe') }}</button>
+                                    @endif
+                                </div> --}}
+                        </div>
+                        <div class="card p-5">
                             <div class="card-body ">
                                 <div class="edit-profile-content mb-5">
                                     <h5>Subscription</h5>
-                                    <small class="text-muted">Plan Details</small>
+                                    @if ($user->subscriptionPackage)
+                                      <small class="text-muted">Current Plan</small>
+                                    @else
+                                       <small class="text-muted">Plan Details</small>
+                                    @endif
                                 </div>
-                                @php
-                                    $plans = Modules\Subscriptions\Models\Plan::all();
-                                @endphp
-                             <form action="{{route('subscription.store')}}" method="POST">
-                                @csrf
-                                    @foreach ($plans as $plan)
-                                        <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
-                                            <input class="form-check-input me-2" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}"{{$plan->id == $user->subscriptionPackage->plan_id ? 'checked' : ''}}>
 
-
-                                            <label class="form-check-label w-100" for="flexRadioDefault1">
-                                                <div class="list-group">
-                                                    <div class="list-group-item  p-4 ">
-                                                        <div>
-                                                            <span>{{$plan->name}}</span>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                                            <span class="text-bold text-white">{{$plan->duration_value}} {{$plan->duration}}</span>
-                                                            <span class="text-bold text-white">{{$plan->total_price}} MMK</span>
-                                                        </div>
+                                @if ($user->subscriptionPackage)
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-check-label w-100" for="flexRadioDefault1">
+                                            <div class="list-group">
+                                                <div class="list-group-item  p-4 ">
+                                                    <div>
+                                                        <span>{{$user->subscriptionPackage->plan->name}}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                                        <span class="text-bold text-white">{{$user->subscriptionPackage->plan->duration_value}} {{$user->subscriptionPackage->plan->duration}}</span>
+                                                        <span class="text-bold text-white">{{$user->subscriptionPackage->plan->total_price}} MMK</span>
                                                     </div>
                                                 </div>
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                            </div>
+                                        </label>
+                                    </div>
+                                @else
+                                    @php
+                                        $plans = Modules\Subscriptions\Models\Plan::all();
+                                    @endphp
+                                    <form action="{{route('subscription.store')}}" method="POST">
+                                        @csrf
+                                            @foreach ($plans as $plan)
+                                                <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
+                                                    <input class="form-check-input me-2" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}">
 
-                                <div class="d-grid gap-2 w-50 mt-3">
-                                    <button class="btn btn-primary" type="submit">Subscribe</button>
-                                </div>
-                            </form>
+                                                    <label class="form-check-label w-100" for="flexRadioDefault1">
+                                                        <div class="list-group">
+                                                            <div class="list-group-item  p-4 ">
+                                                                <div>
+                                                                    <span>{{$plan->name}}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                                                    <span class="text-bold text-white">{{$plan->duration_value}} {{$plan->duration}}</span>
+                                                                    <span class="text-bold text-white">{{$plan->total_price}} MMK</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+
+                                        <div class="d-grid gap-2 w-50 mt-3">
+                                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                                        </div>
+                                    </form>
+                                @endif
 
                             </div>
                         </div>
@@ -617,7 +660,6 @@ function previewProfileImage(event) {
         })
         .catch(error => {
             window.successSnackbar(error)
-
         });
 
     }

@@ -2,28 +2,38 @@
 
 namespace App\Http\Controllers\Mobile;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Device;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Modules\Entertainment\Models\Like;
+use Modules\Subscriptions\Models\Plan;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
 use Modules\Entertainment\Models\Watchlist;
+use Modules\Entertainment\Models\UserReminder;
+use Modules\Subscriptions\Models\Subscription;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
+use App\Http\Resources\Mobile\Genral\PlanResource;
 use App\Http\Resources\Mobile\Home\BannerResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
 use App\Http\Resources\Mobile\Genral\WatchListResource;
+use Modules\Entertainment\Models\EntertainmentDownload;
+use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 
 class ApiController extends Controller
 {
+        //test firebase connection
         public function sendMessage()
         {
             $database = app('firebase.database');
@@ -34,17 +44,6 @@ class ApiController extends Controller
             return response()->json([
                 'success'=>true,
                 'message'=>'Message sent successfully',
-            ],200);
-        }
-
-        public function Token()
-        {
-            $auth = app('firebase.auth');
-            $customToken = $auth->createCustomToken('user1');
-            return response()->json([
-                'success'=>true,
-                'message'=>'Token generated successfully',
-                'data'=>$customToken,
             ],200);
         }
 
@@ -251,12 +250,32 @@ class ApiController extends Controller
        //logout api
        public function logout()
        {
-           $user = User::where('id',auth('sanctum')->id)->first();
-           $user->tokens()->delete();
+           auth('sanctum')->user()->tokens()->delete();
            return response()->json([
-                'success' => true,
-                'message' => "Logout successfully"
+               'success'=>true,
+               'message'=>'Logout successfully',
            ],200);
+       }
+
+       //accoutn delete api
+       public function deleteAccount()
+       {
+            $user = auth('sanctum')->user();
+            Device::where('user_id', $user->id)->forceDelete();
+            UserMultiProfile::where('user_id', $user->id)->forceDelete();
+            Subscription::where('user_id', $user->id)->update(['status' => 'deactivated']);
+            User::where('id', $user->id)->forceDelete();
+            ContinueWatch::where('user_id', $user->id)->delete();
+            Watchlist::where('user_id',$user->id)->delete();
+            EntertainmentDownload::where('user_id',$user->id)->delete();
+            UserReminder::where('user_id', $user->id)->delete();
+
+            $user->forceDelete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Account deleted successfully',
+            ], 200);
        }
 
        //HomeBanner
@@ -606,6 +625,105 @@ class ApiController extends Controller
             ],200);
         }
 
+    }
+
+    public function PlansList()
+    {
+        $plans = Plan::all();
+        $data = PlanResource::collection($plans);
+        return response()->json([
+            'success'=>true,
+            'message'=>'Plans reterived successfully',
+            'data'=>$data,
+        ],200);
+    }
+
+    public function Subscription(Request $request)
+    {
+        $user_id = auth('sanctum')->id();
+        $validator = Validator::make($request->all(),[
+            'plan_id' => 'required',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors(),
+            ],422);
+        }
+        $plan = Plan::find($request->plan_id);
+
+        // Validate plan existence
+        if (!$plan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Plan not found',
+            ], 404);
+        }
+
+        // Check existing subscription
+        $subscription = Subscription::where('user_id', $user_id)->first();
+
+        if ($subscription) {
+            return $this->handleExistingSubscription($subscription, $plan);
+        }
+
+        // Create a new subscription if none exists
+        return $this->createNewSubscription($user_id, $plan);
+
+    }
+
+    private function handleExistingSubscription($subscription, $plan)
+    {
+        if ($subscription->end_date > Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You already have an active subscription.',
+            ], 400);
+        }
+
+        // Update expired subscription
+        $subscription->update([
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth('sanctum')->user()->update(['is_subscribe' => true]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Subscription renewed successfully.',
+        ], 200);
+    }
+
+
+    private function createNewSubscription($userId, $plan)
+    {
+        Subscription::create([
+            'user_id' => $userId,
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth('sanctum')->user()->update(['is_subscribe' => true]);
+    }
+
+    public function profile()
+    {
+        $user =auth('sanctum')->user();
+
+        $Profile=UserMultiProfile::where('user_id', $user->id)->get();
+
+        $userProfile = UserMultiProfileResource::collection($Profile);
+
+        return $userProfile;
     }
 
 }

@@ -9,7 +9,6 @@ Route::group(['prefix'=>'v1'],function(){
 
     //test firebase
     Route::post('test-message',[ApiController::class, 'sendMessage']);
-    Route::post('token',[ApiController::class, 'Token']);
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
@@ -25,7 +24,7 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('resend-otp', [OTPController::class, 'resendOTP']);
     Route::post('opt-user-store', [OTPController::class, 'otpUserStore']);
 
-    Route::group(['middleware' => 'auth:sanctum,isUserSubscribe'], function () {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         //logout api
         Route::post('logout', [ApiController::class, 'logout']);
 
@@ -45,6 +44,15 @@ Route::group(['prefix'=>'v1'],function(){
         Route::get('watch-list',[ApiController::class,'WatchList']);
         Route::post('save-watchlist', [ApiController::class, 'saveWatchList']);
         Route::delete('delete-watchlist/{id}', [ApiController::class, 'deleteWatchList']);
+
+        //subsciption
+        Route::get('plans',[ApiController::class,'PlansList']);
+        Route::post('subscription',[ApiController::class,'Subscription']);
+
+        //profile
+        Route::get('profile',[ApiController::class,'Profile']);
+        Route::post('logout',[ApiController::class,'Logout']);
+        Route::post('delete-account',[ApiController::class,'deleteAccount']);
     });
 
      //home page api
