@@ -27,13 +27,13 @@
         $current_plan_level= $current_user_plan->level ?? 0;
         @endphp
 
-        @if($value['plan_level'] > $current_plan_level)
+        {{-- @if($value['plan_level'] > $current_plan_level) --}}
         <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph-fill ph-crown"></i></button>
         @if ($value['imdb_rating'] != null)
             <span class=" imdb_rating_icon">
             <i class="ph-fill ph-star"></i> {{ $value['imdb_rating'] }}
             </span>
-        @endif
+        {{-- @endif --}}
         @endif
         @endif
     </div>

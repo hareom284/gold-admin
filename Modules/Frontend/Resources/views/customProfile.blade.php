@@ -1,38 +1,38 @@
 @extends('frontend::layouts.master')
 @section('content')
-<div class="section-spacing-bottom">
-    <div class="container mt-3">
+<div class="section-spacing-bottom bg-white ">
+    <div class="container">
         <div class="row">
-            <div class="col-lg-3 ps-md-0 ps-3">
-                <ul class="nav nav-tabs flex-column gap-4">
-                    <a class="nav-link p-3 text-center d-flex align-items-center gap-3"  href="{{route('home')}}">
-                        <i class="ph-fill ph-arrow-u-up-left fs-4 text-white"></i><h6 class="m-0">Back to Home</h6>
+            <div class="col-lg-3 ps-md-0 ps-3 border-end border-light">
+                <ul class="nav nav-tabs flex-column ms-md-5 ps-md-5 ">
+                    <a class=" p-3 text-center d-flex align-items-center gap-3"  href="{{route('home')}}">
+                        <i class="ph-fill ph-arrow-u-up-left fs-4 " style="color: #686868"></i><h6 class="m-0" style="color: #686868">Back to Home</h6>
                     </a>
                     <li class="nav-item">
-                        <a class="nav-link active p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#editProfile">
-                            <i class="ph-fill ph-gear fs-4 text-white"></i><h6 class="m-0">Profile Setting</h6>
+                        <a class="nav-link  p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#editProfile">
+                            <i class="ph-fill ph-gear fs-4 "></i><h6 class="m-0">Profile Setting</h6>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#subscription">
-                            <i class="ph-fill ph-cardholder fs-4 text-white"></i><h6 class="m-0">Subscription</h6>
+                        <a class="nav-link active p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#subscription">
+                            <i class="ph-fill ph-cardholder fs-4 "></i><h6 class="m-0">Subscription</h6>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#paymentLog">
-                            <i class="ph-fill ph-credit-card fs-4 text-white"></i><h6 class="m-0">Payment Log</h6>
+                            <i class="ph-fill ph-credit-card fs-4 "></i><h6 class="m-0">Payment Log</h6>
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-9 mt-lg-0 mt-5">
+            <div class="col-lg-9 mt-lg-0 mt-5 min-vh-100" style="background:#F5F5F5" >
                 <div class="tab-content">
-                    <div class="tab-pane active fade show" id="editProfile" role="tabpanel">
-                        <div class="card user-login-card p-5">
+                    <div class="tab-pane  fade " id="editProfile" role="tabpanel">
+                        <div class="card user-login-card p-5 " style="background:#F5F5F5">
                             <div class="edit-profile-content">
                                 <div class="edit-profile-details">
                                     <div class=" rounded p-5">
-                                        <h6 class="mb-3">{{__('frontend.profiles_details')}}</h6>
+                                        <h6 class="mb-3 text-black">{{__('frontend.profiles_details')}}</h6>
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="select-profile-card text-center position-relative">
@@ -51,28 +51,28 @@
                                                 <form id="editProfileDetail">
                                                     @csrf
                                                     <div class="input-group mb-3">
-                                                        <span class="input-style-text input-group-text px-0"><i class="ph ph-user"></i></span>
-                                                        <input type="text" name="username" class="form-control input-style-box" value="{{ $user->username }}" placeholder="{{__('frontend.enter_name')}}" >
+                                                        <span class="input-style-text input-group-text px-0"><i class="ph ph-user" style="color: black"></i></span>
+                                                        <input type="text" name="username" class="form-control input-style-box " style="color: black" value="{{ $user->username }}" placeholder="{{__('frontend.enter_name')}}" >
                                                         <div class="invalid-feedback" id="user_name_error">Name field is required</div>
                                                     </div>
                                                     @if ($user->login_type == 'google')
                                                     <div class="input-group mb-3">
-                                                        <span class="input-group-text input-style-text px-0"><i class="ph ph-envelope"></i></span>
-                                                        <input type="email" name="email" class="form-control input-style-box" value="{{ $user->email }}" @if ($user->login== 'google') readonly @endif>
+                                                        <span class="input-group-text input-style-text px-0"><i class="ph ph-envelope" style="color: black"></i></span>
+                                                        <input type="email" name="email"  class="form-control input-style-box" style="color: black" value="{{ $user->email }}" @if ($user->login== 'google') readonly @endif>
                                                         <div class="invalid-feedback" id="email_error">Email is required</div>
                                                     </div>
                                                     @endif
 
                                                     @if ($user->login_type == 'otp')
                                                         <div class="input-group mb-3">
-                                                            <span class="input-group-text input-style-text px-0"><i class="ph ph-phone"></i></span>
-                                                            <input type="tel" class="form-control input-style-box" value="{{ $user->mobile }}" id="mobileInput" >
+                                                            <span class="input-group-text input-style-text px-0"><i class="ph ph-phone" style="color: black"></i></span>
+                                                            <input type="tel" class="form-control input-style-box" value="{{ $user->mobile }}" id="mobileInput"  style="color: black">
                                                             <div class="invalid-feedback" id="mobile_error">Mobile number is required</div>
                                                         </div>
                                                     @endif
 
                                                     <div class="d-grid gap-2 col-12">
-                                                        <button type="button" id="updateProfileBtn" class="btn btn-primary mt-5">{{__('frontend.update')}}</button>
+                                                        <button type="button" id="updateProfileBtn" class="btn btn-custom-button-two mt-5">{{__('frontend.save')}}</button>
                                                     </div>
                                                 </form>
                                                 <hr class="my-5" style="color:white;height:2px">
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="subscription" role="tabpanel">
+                    <div class="tab-pane active show fade mt-3" id="subscription" role="tabpanel">
                         <div class="upgrade-plan d-flex flex-wrap gap-3 align-items-center justify-content-between rounded p-4 bg-warning-subtle border border-warning">
                             <div class="d-flex justify-content-center align-items-center gap-4">
                                 <i class="ph ph-crown text-warning"></i>
@@ -108,14 +108,14 @@
                                     @endif
                                 </div> --}}
                         </div>
-                        <div class="card p-5">
+                        <div class="card p-5 " style="background:#F5F5F5">
                             <div class="card-body ">
                                 <div class="edit-profile-content mb-5">
-                                    <h5>Subscription</h5>
+                                    <h5 class="text-black">Subscription</h5>
                                     @if ($user->subscriptionPackage)
-                                      <small class="text-muted">Current Plan</small>
+                                      <small style="color:#686868">Current Plan</small>
                                     @else
-                                       <small class="text-muted">Plan Details</small>
+                                       <small style="color:#686868">Plan Details</small>
                                     @endif
                                 </div>
 
@@ -123,13 +123,13 @@
                                     <div class="col-12 col-md-6">
                                         <label class="form-check-label w-100" for="flexRadioDefault1">
                                             <div class="list-group">
-                                                <div class="list-group-item  p-4 ">
+                                                <div class="list-group-item  p-4 border-0" style="background: #d3cfcf">
                                                     <div>
-                                                        <span>{{$user->subscriptionPackage->plan->name}}</span>
+                                                        <span class="fw-bold text-black">{{$user->subscriptionPackage->plan->name}}</span>
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center mt-3">
-                                                        <span class="text-bold text-white">{{$user->subscriptionPackage->plan->duration_value}} {{$user->subscriptionPackage->plan->duration}}</span>
-                                                        <span class="text-bold text-white">{{$user->subscriptionPackage->plan->total_price}} MMK</span>
+                                                        <span class="text-bold text-black">{{$user->subscriptionPackage->plan->duration_value}} {{$user->subscriptionPackage->plan->duration}}</span>
+                                                        <span class="text-bold text-black">{{$user->subscriptionPackage->plan->total_price}} MMK</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,17 +143,17 @@
                                         @csrf
                                             @foreach ($plans as $plan)
                                                 <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
-                                                    <input class="form-check-input me-2" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}">
+                                                    <input class="form-check-input me-5" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}">
 
-                                                    <label class="form-check-label w-100" for="flexRadioDefault1">
-                                                        <div class="list-group">
-                                                            <div class="list-group-item  p-4 ">
+                                                    <label class="form-check-label w-100 " for="flexRadioDefault1">
+                                                        <div class="list-group " >
+                                                            <div class="list-group-item  p-4 " style="background:#F5F5F5">
                                                                 <div>
-                                                                    <span>{{$plan->name}}</span>
+                                                                    <span class="text-black">{{$plan->name}}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                                                    <span class="text-bold text-white">{{$plan->duration_value}} {{$plan->duration}}</span>
-                                                                    <span class="text-bold text-white">{{$plan->total_price}} MMK</span>
+                                                                    <span class="fw-bold text-black">{{$plan->duration_value}} {{$plan->duration}}</span>
+                                                                    <span class="fw-bold text-black">{{$plan->total_price}} MMK</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -162,7 +162,7 @@
                                             @endforeach
 
                                         <div class="d-grid gap-2 w-50 mt-3">
-                                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                                            <button class="btn btn-custom-button-two" type="submit">Subscribe</button>
                                         </div>
                                     </form>
                                 @endif
@@ -170,34 +170,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="paymentLog" role="tabpanel">
-                        <div class="card p-5">
+                    <div class="tab-pane fade mt-3" id="paymentLog" role="tabpanel">
+                        <div class="card p-5 " style="background:#F5F5F5">
                             <div class="card-body">
                                 <div class="edit-profile-content mb-5">
-                                    <h5>Payment Logs</h5>
-                                    <small class="text-muted">Logs Details</small>
+                                    <h5 class="text-black">Payment Logs</h5>
+                                    <small style="color:#686868">Logs Details</small>
                                 </div>
                                 <div class="list-group">
-                                    <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0">
+                                    <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
                                         <div>
-                                            <span>ID: 002461</span>
+                                            <span  style="color:#686868">ID: 002461</span>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="text-white">Monthly Plan</span>
-                                            <span>01/02/2024</span>
-                                            <span>3,000 MMKs</span>
+                                            <span class="text-black fw-bold">Monthly Plan</span>
+                                            <span class="text-black">01/02/2024</span>
+                                            <span class="text-black">3,000 MMKs</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="list-group">
-                                    <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0">
+                                    <div class="list-group-item  w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
                                         <div>
-                                            <span>ID: 002461</span>
+                                            <span  style="color:#686868">ID: 002461</span>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="text-white">Monthly Plan</span>
-                                            <span>01/02/2024</span>
-                                            <span>3,000 MMKs</span>
+                                            <span class="text-black fw-bold">Monthly Plan</span>
+                                            <span class="text-black">01/02/2024</span>
+                                            <span class="text-black">3,000 MMKs</span>
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@
 <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-acoount-card">
         <div class="modal-content position-relative">
-            <button type="button" class="btn btn-primary custom-close-btn rounded-2" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-custom-button-two custom-close-btn rounded-2" data-bs-dismiss="modal">
             <i class="ph ph-x text-white fw-bold align-middle"></i>
             </button>
         <div class="modal-body modal-acoount-info text-center">
@@ -223,7 +223,7 @@
             <h4 class="mt-5 pt-4">{{__('frontend.permanent_delete')}}</h4>
             <p class="pb-4 mb-0">{{__('frontend.permanent_deleted')}}</p>
             <div class="d-flex justify-content-center gap-3 mt-4 pt-3">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
+                <button type="button" class="btn btn-custom-button-two" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
                 <button type="button" class="btn btn-dark" onclick="proceedToDeleteAccount()">{{__('frontend.proceed')}}</button>
             </div>
         </div>

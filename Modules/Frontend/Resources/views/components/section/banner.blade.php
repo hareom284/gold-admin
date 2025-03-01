@@ -66,9 +66,9 @@
                     {{-- @if($slider['type']!="livetv")
                       <x-watchlist-button :entertainment-id="$data['id']" :in-watchlist="$data['is_watch_list']" customClass="watch-list-btn" />
                     @endif --}}
-                    @if ($slider['data']['movie_access']=='paid')
+                    @if ($slider['data']['movie_access']=='paid' && auth()->user()?->is_subscribe ==0)
                     <div class="">
-                        <a href="#" class="btn btn-custom-button-one">
+                        <a href="{{route('accountSetting')}}" class="btn btn-custom-button-one">
                          <span class="d-flex align-items-center justify-content-center gap-2">
                              <span><i class="ph-fill ph-crown"></i></span>
                              <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>

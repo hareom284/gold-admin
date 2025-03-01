@@ -10,7 +10,9 @@
                     <div class="col-lg-5 col-md-8 col-11 align-self-center">
                         <div class="user-login-card card my-5">
                             <div class="text-center auth-heading">
-                                <img src="{{ asset(setting('logo')) }}" class="img-fluid logo h-4 mb-4">
+                                <a href="{{route('home')}}">
+                                    <img src="{{ asset(setting('logo')) }}" class="img-fluid logo h-4 mb-4">
+                                </a>
 
                                 <span id="login_initial_heading">
                                      <h5>{{ __('frontend.sign_in_title') }}</h5>
@@ -39,7 +41,7 @@
                                     </div>
                                     <div id="recaptcha-container" class="d-none"></div>
                                     <div class="full-button text-center">
-                                        <button type="button" id="send-otp-button" class="btn btn-primary w-100"
+                                        <button type="button" id="send-otp-button" class="btn btn-custom-button-one w-100"
                                             onclick="sendCode()">
                                             <span id="send-button-text">
                                                 <i class="fa-solid fa-paper-plane"></i> {{ __('frontend.send_otp') }}
@@ -60,7 +62,7 @@
                                 <div class="text-center">
 
                                     <a href="{{ route('auth.google') }}" class="d-block">
-                                        <span id="google-login" class="btn btn-dark w-100">
+                                        <span id="google-login" class="btn btn-light w-100">
                                             <svg class="me-1" width="16" height="16" viewBox="0 0 16 16"
                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -101,7 +103,7 @@
                                             id="timer" >
                                         </span>s</span></div>
                                     <div class="full-button text-center">
-                                        <button type="button" id="verify-otp-button" class="btn btn-primary w-100"
+                                        <button type="button" id="verify-otp-button" class="btn btn-custom-button-one w-100"
                                             onclick="verifyCode()">
                                             <span id="button-text">
                                                 <i class="fa-solid fa-floppy-disk"></i> {{ __('frontend.verify_otp') }}
@@ -145,7 +147,7 @@
                                     </div>
 
                                     <div class="full-button text-center">
-                                        <button type="submit" id="register-button" class="btn btn-primary w-100"
+                                        <button type="submit" id="register-button" class="btn btn-custom-button-one w-100"
                                             data-signup-text="{{ __('frontend.sign_up') }}">
                                             {{ __('frontend.sign_up') }}
                                         </button>
