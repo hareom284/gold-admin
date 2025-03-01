@@ -35,11 +35,21 @@
 </head>
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
-    @include('frontend::layouts.header')
+    @php
+        $route_name = Route::currentRouteName()
+    @endphp
+   @if ($route_name != 'accountSetting')
+      @include('frontend::layouts.header')
+   @else
+      @include('frontend::layouts.account_setting_header')
+   @endif
 
     @yield('content')
 
-     @include('frontend::layouts.footer')
+    @if ($route_name != 'accountSetting')
+       @include('frontend::layouts.footer')
+    @endif
+
 
     @include('frontend::components.partials.back-to-top')
 

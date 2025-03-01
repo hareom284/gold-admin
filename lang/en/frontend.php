@@ -21,6 +21,7 @@ return[
     'verify_otp'=>'Verify OTP',
     'send_otp'=>'Get verification Code',
     'resend_otp'=>'Resend OTP',
+    'save'=>'Save',
     'not_receive_otp'=>'Didn’t receive an OTP?',
     'continue_with_google'=>'Sign in with Google',
     'not_have_account'=>'Don\'t have an account?',

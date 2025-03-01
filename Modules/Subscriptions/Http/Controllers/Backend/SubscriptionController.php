@@ -53,7 +53,7 @@ class SubscriptionController extends Controller
         $subscription = Subscription::where('user_id', $user->id)->first();
 
         if ($subscription) {
-            return $this->handleExistingSubscription($subsc ription, $plan);
+            return $this->handleExistingSubscription($subscription, $plan);
         }
 
         // Create a new subscription if none exists
