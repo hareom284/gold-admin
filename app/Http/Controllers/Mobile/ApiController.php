@@ -87,6 +87,7 @@ class ApiController extends Controller
                     'username' => $request->username,
                     'password' => Hash::make($request->password),
                 ]);
+                $user->assignRole('user');
                 $token = $user->createToken('authToken')->plainTextToken;
                 return response()->json([
                     'success' => true,

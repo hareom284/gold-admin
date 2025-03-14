@@ -149,7 +149,6 @@ class AuthController extends Controller
                     'active_profile'=> $profile->id ?? null,
                 ]
             );
-
             $loginResource = new LoginResource($user);
             $message = __('messages.user_login');
 

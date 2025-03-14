@@ -20,22 +20,26 @@
                             @endif
                         </div>
                         <p class="text-danger" id="login_error_message"></p>
-                        <form action="post" id="login-form" class="requires-validation" data-toggle="validator" novalidate>
+                        <form action="{{route('login')}}" method="POST">
+                            @csrf
                             <div class="input-group">
                                 <span class="input-group-text px-0"><i class="ph ph-user"></i></span>
-                                <input type="text" name="user_name" class="form-control" placeholder="{{__('frontend.user_name')}}"  aria-describedby="basic-addon1" required>
-                                <div class="invalid-feedback" id="user_name-error">Username field is required.</div>
+                                <input type="text" name="username" class="form-control" placeholder="{{__('frontend.user_name')}}"  aria-describedby="basic-addon1" >
+                                @error('username')
+                                   <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
+                                @enderror
+
                             </div>
+
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                <input type="password" name="password" class="form-control" id="password" placeholder="{{__('messages.enter_password')}}" aria-describedby="basic-addon1" required>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="{{__('messages.enter_password')}}" aria-describedby="basic-addon1" >
                                 <span class="input-group-text px-0" id="togglePassword"> <i class="ph ph-eye"></i></span>
-                                <div class="invalid-feedback" id="password-error">Password field is required.</div>
+                                @error('password')
+                                    <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
+                                @enderror
                             </div>
-                            {{-- <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                <label class="list-group-item d-flex align-items-center"><input class="form-check-input m-0 me-2" type="checkbox">{{__('frontend.remember_me')}}</label>
-                                <a href="/forget-password" >{{__('frontend.forgot_password')}}</a>
-                            </div> --}}
+
                             <div class="full-button text-center">
                                 <button type="submit"  id="login-button" class="btn btn-custom-button-one w-100">
                                     {{__('frontend.sign_in')}}
@@ -61,21 +65,6 @@
                                     </span>
                                 </a>
 
-                                {{-- <a href="{{route('login')}}" class="d-block mt-3">
-                                    <span  id="otp-login" class="btn btn-dark w-100">
-                                    {{__('frontend.login_with_otp')}}
-                                    </span>
-                                </a>
-
-                                <a href="{{route('auth.apple')}}" class="d-block mt-3">
-                                    <span  id="apple-login" class="btn btn-dark w-100">
-                                        <svg class="me-2" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.28668 2.70328C9.58072 2.36438 9.80491 1.97075 9.94639 1.54496C10.0879 1.11918 10.1439 0.669645 10.1111 0.222168C9.20841 0.295036 8.37046 0.7196 7.77779 1.40439C7.49398 1.73259 7.27891 2.11441 7.14531 2.52722C7.01171 2.94004 6.9623 3.37547 7.00001 3.80772C7.44035 3.81139 7.87562 3.71369 8.27214 3.52217C8.66866 3.33065 9.0158 3.05046 9.28668 2.70328ZM11.2467 8.48995C11.2519 7.89396 11.4089 7.30914 11.7028 6.79066C11.9968 6.27218 12.418 5.83715 12.9267 5.52661C12.6056 5.06402 12.1812 4.68259 11.6871 4.41258C11.193 4.14257 10.6427 3.9914 10.08 3.97106C8.86668 3.84661 7.74668 4.67883 7.10112 4.67883C6.45557 4.67883 5.54557 3.98661 4.53446 4.00217C3.87345 4.02394 3.22936 4.21666 2.66503 4.56154C2.10069 4.90641 1.63537 5.39165 1.31446 5.96995C-0.0544317 8.34995 0.964457 11.8888 2.33335 13.8099C2.95557 14.7511 3.73335 15.8166 4.76001 15.7777C5.78668 15.7388 6.12112 15.1399 7.31112 15.1399C8.50112 15.1399 8.86668 15.7777 9.87779 15.7544C10.8889 15.7311 11.6045 14.7899 12.2578 13.8488C12.7206 13.1656 13.0821 12.419 13.3311 11.6322C12.7147 11.3693 12.1888 10.9316 11.8184 10.3732C11.4479 9.81476 11.2492 9.16006 11.2467 8.48995Z" fill="white"/>
-                                        </svg>
-                                       {{__('frontend.apple_login')}}
-                                    </span>
-                                </a> --}}
-
                             </div>
                         </form>
                     </div>
@@ -84,10 +73,7 @@
         </div>
     </div>
 </div>
-
 <script src="{{ asset('js/auth.min.js') }}" defer></script>
-
-
 @endsection
 
 

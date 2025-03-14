@@ -16,37 +16,33 @@
                             <p class="font-size-14">{{ __('frontend.sign_sub_title') }}</p>
                         </div>
                         <p class="text-danger" id="error_message"></p>
-                        <form id="registerForm" action="post" class="requires-validation" data-toggle="validator" novalidate>
-
+                        <form  action="{{route('store-user')}}"  method="POST">
+                            @csrf
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-user"></i></span>
-                                <input type="text" name="user_name" class="form-control" placeholder="{{ __('frontend.user_name') }}" required >
-                                <div class="invalid-feedback" id="user_name_error">Username field is required</div>
+                                <input type="text" name="username" class="form-control" placeholder="{{ __('frontend.user_name') }}"  >
+                                @error('username')
+                                    <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
+                                @enderror
                             </div>
-                            {{-- <div class="input-group mb-3">
-                                <span class="input-group-text px-0"><i class="ph ph-user"></i></span>
-                                <input type="text" name="last_name" class="form-control" placeholder="{{ __('frontend.last_name') }}"  required>
-                                <div class="invalid-feedback" id="last_name_error">Last Name field is required</div>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text px-0"><i class="ph ph-envelope"></i></span>
-                                <input type="text" name="email" class="form-control" placeholder="{{ __('frontend.email') }}" required>
-                                <div class="invalid-feedback" id="email_error">Email field is required</div>
-                            </div> --}}
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('frontend.password') }}" required>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('frontend.password') }}" >
                                 <span class="input-group-text px-0"><i class="ph ph-eye" id="togglePassword"></i></span>
-                                <div class="invalid-feedback" id="password_error">Password field is required</div>
+                                @error('password')
+                                    <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
+                                @enderror
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                <input type="password" name="confirm_password" class="form-control" id="confirm_password" placeholder="{{ __('frontend.confirm_password') }}" required >
+                                <input type="password" name="password_confirmation" class="form-control" id="confirm_password" placeholder="{{ __('frontend.confirm_password') }}"  >
                                 <span class="input-group-text px-0"><i class="ph ph-eye" id="toggleConfirmPassword"></i></span>
-                                <div class="invalid-feedback" id="confirm_password_error">Confirm Password field is required</div>
+                                @error('confirm_password')
+                                    <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
+                                @enderror
                             </div>
                             <div class="full-button text-center">
-                                <button type="submit" id="register-button" class="btn btn-custom-button-one w-100" data-signup-text="{{ __('frontend.sign_up') }}">
+                                <button type="submit" class="btn btn-custom-button-one w-100" data-signup-text="{{ __('frontend.sign_up') }}">
                                     {{ __('frontend.sign_up') }}
                                 </button>
                                 <p class="mt-2 mb-0 fw-normal"> {{ __('frontend.already_have_account') }} <a href="{{ route('login') }}" class="ms-1">{{ __('frontend.login') }}</a></p>

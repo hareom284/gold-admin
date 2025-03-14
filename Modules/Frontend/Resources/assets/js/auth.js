@@ -166,6 +166,7 @@ if (loginForm) {
 
     try {
       const formData = new FormData(this);
+
       const response = await fetch(`${baseUrl}/api/login?is_ajax=1`, {
         method: 'POST',
         headers: {
@@ -174,7 +175,7 @@ if (loginForm) {
         body: formData
       });
 
-      console.log("data",response);
+
 
       const data = await response.json();
 
