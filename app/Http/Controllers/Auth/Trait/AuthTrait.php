@@ -31,28 +31,27 @@ trait AuthTrait
 
     protected function registerTrait($request, $model = null)
     {
-
         try {
             $request->validate([
-                'first_name' => ['required', 'string', 'max:191'],
-                'last_name' => ['required', 'string', 'max:191'],
-                'email' => ['required', 'string', 'email', 'max:191'],
+                'user_name' => ['required', 'string', 'max:191','unique:users,username'],
+                // 'last_name' => ['required', 'string', 'max:191'],
+                // 'email' => ['required', 'string', 'email', 'max:191'],
                 'password' => ['required', Rules\Password::defaults()],
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['message' => $e->errors()], 422);
         }
 
-        $emailExists = User::where('email', $request->email)->exists();
+        $emailExists = User::where('username', $request->user_name)->exists();
 
         if ($emailExists) {
-            return response()->json(['message' => 'The email has already been taken.'], 422);
+            return response()->json(['message' => 'The username has already been taken.'], 422);
         }
         $arr = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'username' => $request->username,
-            'name' => $request->first_name . ' ' . $request->last_name,
+            'username' => $request->user_name,
+            // 'name' => $request->first_name . ' ' . $request->last_name,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'address' => $request->address,

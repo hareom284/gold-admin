@@ -53,7 +53,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $user = User::with('subscriptionPackage')->where('email', request('email'))->first();
+        $user = User::with('subscriptionPackage')->where('username', request('user_name'))->first();
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
         }
@@ -101,7 +101,7 @@ class AuthController extends Controller
 
         }
 
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+        if (Auth::attempt(['username' => request('user_name'), 'password' => request('password')])) {
             $user = Auth::user();
 
 
@@ -111,6 +111,7 @@ class AuthController extends Controller
 
             // Save the user
             $user->save();
+
             $user['api_token'] = $user->createToken(setting('app_name'))->plainTextToken;
 
             if ($user->is_subscribe == 1) {

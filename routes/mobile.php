@@ -9,9 +9,14 @@ Route::group(['prefix'=>'v1'],function(){
 
     //test firebase
     Route::post('test-message',[ApiController::class, 'sendMessage']);
+
+    //normal login api
+    Route::post('register',[ApiController::class, 'register']);
+    Route::post('login',[ApiController::class, 'login']);
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
+    Route::get('token/{uid}',[ApiController::class, 'generateToken']);
 
 
     // //phone number login api
@@ -64,4 +69,7 @@ Route::group(['prefix'=>'v1'],function(){
      //details page api
      Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
      Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
+
+     //search api
+     Route::get('search',[ApiController::class,'Search']);
 });

@@ -15,6 +15,7 @@ return[
     'already_have_account'=>'Already have an account?',
     'login'=>'Login',
     'logout'=>'Logout',
+    'user_name'=>'User Name',
     'version'=>'Version',
     'apple_login'=>'Apple Login',
     'google_login'=>'Google Login',

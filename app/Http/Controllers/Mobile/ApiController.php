@@ -33,6 +33,69 @@ use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 
 class ApiController extends Controller
 {
+        //normal login api
+        public function login(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'username' => 'required|exists:users,username',
+                'password' => 'required',
+            ]);
+        if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ], 422);
+            }
+        $user = User::where('username', $request->username)->first();
+        if ($user) {
+                if (Hash::check($request->password, $user->password)) {
+                    $token = $user->createToken('authToken')->plainTextToken;
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'User login successfully.',
+                        'token' => $token,
+                        'user' => $user,
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Password mismatch',
+                    ], 422);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User does not exist',
+                ], 422);
+            }
+        }
+
+        public function register(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'username' => 'required|unique:users,username',
+                'password'=>'required|min:8|confirmed',
+            ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $validator->errors()->first(),
+                    ], 422);
+                }
+                $user = User::create([
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                ]);
+                $token = $user->createToken('authToken')->plainTextToken;
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User created successfully.',
+                    'token' => $token,
+                    'user' =>$user
+                ],200);
+        }
+
         //test firebase connection
         public function sendMessage()
         {
@@ -51,6 +114,38 @@ class ApiController extends Controller
         public function redirectToGoogle()
         {
             return Socialite::driver('google')->stateless()->redirect();
+        }
+
+        //get firebase login user
+        public function generateToken(){
+            $auth = app('firebase.auth');
+            $token =  $auth->createCustomToken('NcNS24KcdBRlDFk96jNF6f2ebN53');
+            return response()->json([
+                'success'=>true,
+                'token'=>$token->toString(),
+            ],200);
+            try {
+                $users = $auth->listUsers();
+                $userList = [];
+
+                foreach ($users as $user) {
+                    $userList[] = [
+                        'uid' => $user->uid,
+                        'email' => $user->email,
+                        'name' => $user->displayName,
+                        'phone' => $user->phoneNumber,
+                    ];
+                }
+                return response()->json([
+                    'success' => true,
+                    'users' => $userList
+                ], 200);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 500);
+            }
         }
 
        //google callback
@@ -724,6 +819,26 @@ class ApiController extends Controller
         $userProfile = UserMultiProfileResource::collection($Profile);
 
         return $userProfile;
+    }
+
+    public function Search(Request $request)
+    {
+        $entertainment = Entertainment::where('name', 'like', '%'.$request->key.'%')
+        ->orWhere('description','like','%'.$request->key.'%')
+        ->orWhereHas('entertainmentGenerMappings.genre', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->orWhereHas('entertainmentTalentMappings.talentprofile',function($query) use($request){
+            $query->where('name','like','%'.$request->key.'%');
+        })
+        ->orWhereHas('season', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->orWhereHas('episode', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->get();
+        return  ItemListResource::collection($entertainment);
     }
 
 }

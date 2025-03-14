@@ -5,8 +5,11 @@ use Modules\Frontend\Http\Controllers\Auth\OTPController;
 use Modules\Frontend\Http\Controllers\Auth\AuthController;
 
 Route::group(['middleware'=>'guest'],function(){
+
+
     // Login with OTP
-    Route::get('/login', [OTPController::class, 'otpLogin'])->name('login');
+    // Route::get('/login', [OTPController::class, 'otpLogin'])->name('login');
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/send-otp',[OTPController::class,'sendOTP'])->name('send.otp');
     Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verify.otp');
     Route::post('/resend-otp', [OTPController::class, 'resendOTP'])->name('resend.otp');
