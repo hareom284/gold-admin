@@ -9,12 +9,12 @@
                         <i class="ph-fill ph-arrow-u-up-left fs-4 " style="color: #686868"></i><h6 class="m-0" style="color: #686868">Back to Home</h6>
                     </a>
                     <li class="nav-item">
-                        <a class="nav-link  p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#editProfile">
+                        <a class="nav-link active  p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#editProfile">
                             <i class="ph-fill ph-gear fs-4 "></i><h6 class="m-0">Profile Setting</h6>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#subscription">
+                        <a class="nav-link  p-3 text-center d-flex align-items-center gap-3" data-bs-toggle="pill" href="#subscription">
                             <i class="ph-fill ph-cardholder fs-4 "></i><h6 class="m-0">Subscription</h6>
                         </a>
                     </li>
@@ -27,7 +27,7 @@
             </div>
             <div class="col-lg-9 mt-lg-0 mt-5 min-vh-100" style="background:#F5F5F5" >
                 <div class="tab-content">
-                    <div class="tab-pane  fade " id="editProfile" role="tabpanel">
+                    <div class="tab-pane  active show fade " id="editProfile" role="tabpanel">
                         <div class="card user-login-card p-5 " style="background:#F5F5F5">
                             <div class="edit-profile-content">
                                 <div class="edit-profile-details">
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane active show fade mt-3" id="subscription" role="tabpanel">
+                    <div class="tab-pane  fade mt-3" id="subscription" role="tabpanel">
                         <div class="upgrade-plan d-flex flex-wrap gap-3 align-items-center justify-content-between rounded p-4 bg-warning-subtle border border-warning">
                             <div class="d-flex justify-content-center align-items-center gap-4">
                                 <i class="ph ph-crown text-warning"></i>
@@ -231,19 +231,19 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script> --}}
 
 
 <script>
 
 
-    var input = document.querySelector("#mobileInput");
-    var iti = window.intlTelInput(input, {
-        initialCountry: "mm",  // Automatically detect user's country
-        separateDialCode: true,  // Show the country code separately
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"  // To handle number formatting
-    });
+    // var input = document.querySelector("#mobileInput");
+    // var iti = window.intlTelInput(input, {
+    //     initialCountry: "mm",  // Automatically detect user's country
+    //     separateDialCode: true,  // Show the country code separately
+    //     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"  // To handle number formatting
+    // });
 
     function proceedToDeleteAccount() {
         fetch(`${baseUrl}/api/delete-account`, {
@@ -336,27 +336,27 @@ function previewProfileImage(event) {
                     }
                 });
 
-                const mobileInput = $('#mobileInput');
+                // const mobileInput = $('#mobileInput');
 
-                    const mobileValue = mobileInput.val().trim();
-                    // if (!mobileValue) {
-                    //     $('#mobileInput').addClass('is-invalid');
-                    //     $('#mobile_error').show().text('Mobile number is required');
-                    //     valid = false;
-                    // } else {
-                    //     $('#mobile_error').hide();
-                    // }
+                //     const mobileValue = mobileInput.val().trim();
+                //     if (!mobileValue) {
+                //         $('#mobileInput').addClass('is-invalid');
+                //         $('#mobile_error').show().text('Mobile number is required');
+                //         valid = false;
+                //     } else {
+                //         $('#mobile_error').hide();
+                //     }
 
-                if (!valid) {
-                    return;
-                }
+                // if (!valid) {
+                //     return;
+                // }
 
-                var number = iti.getNumber()
+                // var number = iti.getNumber()
 
 
                 var formData = new FormData($('#editProfileDetail')[0]);
 
-                formData.append('mobile', number);
+                // formData.append('mobile', number);
 
                 var imageFile = $('#profileImageInput')[0].files[0];
                 if (imageFile) {
@@ -665,28 +665,28 @@ function previewProfileImage(event) {
     }
 
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const selectProfileModal = document.getElementById('selectProfileModal');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const selectProfileModal = document.getElementById('selectProfileModal');
 
-        selectProfileModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Button that triggered the modal
-            const dataType = button.getAttribute('data-type');
-            const updateButton = document.getElementById('update-profile');
+    //     selectProfileModal.addEventListener('show.bs.modal', function (event) {
+    //         const button = event.relatedTarget; // Button that triggered the modal
+    //         const dataType = button.getAttribute('data-type');
+    //         const updateButton = document.getElementById('update-profile');
 
-            if (dataType === 'add') {
-                $("#ProfileDetail")[0].reset();
-                $("#profile_id").val('');
-                updateButton.textContent = '{{__('messages.add')}}'; // Change to "Add"
+    //         if (dataType === 'add') {
+    //             $("#ProfileDetail")[0].reset();
+    //             $("#profile_id").val('');
+    //             updateButton.textContent = '{{__('messages.add')}}'; // Change to "Add"
 
-            } else {
+    //         } else {
 
-                updateButton.textContent = '{{__('frontend.update')}}'; // Default "Update"
+    //             updateButton.textContent = '{{__('frontend.update')}}'; // Default "Update"
 
-            }
-        });
+    //         }
+    //     });
 
 
-    });
+    // });
 
 </script>
 @endsection
