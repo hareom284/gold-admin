@@ -57,6 +57,7 @@ Route::group(['prefix'=>'v1'],function(){
         //profile
         Route::get('profile',[ApiController::class,'Profile']);
         Route::post('logout',[ApiController::class,'Logout']);
+        Route::post('update-profile', [ApiController::class, 'updateProfile']);
         Route::post('delete-account',[ApiController::class,'deleteAccount']);
     });
 

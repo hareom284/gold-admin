@@ -448,17 +448,17 @@ class AuthController extends Controller
            $filename = $file->getClientOriginalName();
 
            if ($activeDisk == 'local') {
-            $destinationPath = 'streamit-laravel';
-            $filePath = $file->storeAs($destinationPath, $filename, 'public');
-            $file_url = '/storage/' . $filePath;
+                $destinationPath = 'streamit-laravel';
+                $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                $file_url = '/storage/' . $filePath;
 
-        } else {
+            } else {
 
-            $folderPath = 'streamit-laravel/' .  $filename ;
-            Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
-            $baseUrl = env('DO_SPACES_URL');
-            $file_url = $baseUrl . '/' . $folderPath;
-        }
+                $folderPath = 'streamit-laravel/' .  $filename ;
+                Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
+                $baseUrl = env('DO_SPACES_URL');
+                $file_url = $baseUrl . '/' . $folderPath;
+            }
 
             $data['file_url']=extractFileNameFromUrl($file_url);
 

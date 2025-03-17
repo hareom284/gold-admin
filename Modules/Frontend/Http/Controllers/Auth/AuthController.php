@@ -70,7 +70,7 @@ class AuthController extends Controller
             'login_type' => 'username'
         ]);
         $user->assignRole('user');
-
+        $user->createOrUpdateProfileWithAvatar();
         Auth::login($user);
         return redirect()->route('home')->with('message', 'Registration successful!');
     }

@@ -29,7 +29,9 @@ use Modules\Entertainment\Models\EntertainmentDownload;
 use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
+use App\Http\Resources\Mobile\Genral\ProfileResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
+use Google\Service\Analytics\Profile;
 
 class ApiController extends Controller
 {
@@ -54,7 +56,7 @@ class ApiController extends Controller
                         'success' => true,
                         'message' => 'User login successfully.',
                         'token' => $token,
-                        'user' => $user,
+                        'user' => new ProfileResource($user),
                     ], 200);
                 } else {
                     return response()->json([
@@ -90,12 +92,13 @@ class ApiController extends Controller
                     'login_type' => 'username'
                 ]);
                 $user->assignRole('user');
+                $user->createOrUpdateProfileWithAvatar();
                 $token = $user->createToken('authToken')->plainTextToken;
                 return response()->json([
                     'success' => true,
                     'message' => 'User created successfully.',
                     'token' => $token,
-                    'user' =>$user
+                    'user' => new ProfileResource($user),
                 ],200);
         }
 
@@ -343,6 +346,82 @@ class ApiController extends Controller
                     'success'=>true,
                     'is_user_exists' => $flag,
                 ]);
+       }
+
+       //profile api
+       public function profile()
+       {
+           $user =auth('sanctum')->user();
+
+           if($user){
+               return response()->json([
+                   'success'=>true,
+                   'message'=>'User profile reterived successfully',
+                   'data'=>new ProfileResource($user),
+               ],200);
+           }
+       }
+
+       //profiel update api
+       public function updateProfile(Request $request)
+       {
+            $user = auth('sanctum')->user();
+
+            $request->validate([
+                'username' => 'required_without:email|unique:users,username,' . $user->id,
+                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            ]);
+
+            $validator = Validator::make($request->all(),[
+                'username' => 'required_without:email|unique:users,username,' . $user->id,
+                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>$validator->errors()->first(),
+                ],403);
+            };
+
+            $data = $request->all();
+
+            $user->update($data);
+
+            if ($request->hasFile('image_file')) {
+                $file = $request->file('image_file');
+
+            $activeDisk = env('ACTIVE_STORAGE', 'local');
+
+            $filename = $file->getClientOriginalName();
+
+            if ($activeDisk == 'local') {
+                    $destinationPath = 'streamit-laravel';
+                    $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                    $image_file = '/storage/' . $filePath;
+
+                } else {
+
+                    $folderPath = 'streamit-laravel/' .  $filename ;
+                    Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
+                    $baseUrl = env('DO_SPACES_URL');
+                    $image_file = $baseUrl . '/' . $folderPath;
+                }
+
+                $data['image_file']=extractFileNameFromUrl($image_file);
+
+            } else {
+                $data['image_file'] = $user->image_file;
+            }
+            $user->update(['image_file' => $data['image_file']]);
+            $user_data = User::find($user->id);
+            $user_data->save();
+
+            return response()->json([
+                'success'=>true,
+                'message'=>'User profile updated successfully',
+                'data'=>new ProfileResource($user),
+            ],200);
        }
 
        //logout api
@@ -811,17 +890,6 @@ class ApiController extends Controller
             'status' => 'active',
         ]);
         auth('sanctum')->user()->update(['is_subscribe' => true]);
-    }
-
-    public function profile()
-    {
-        $user =auth('sanctum')->user();
-
-        $Profile=UserMultiProfile::where('user_id', $user->id)->get();
-
-        $userProfile = UserMultiProfileResource::collection($Profile);
-
-        return $userProfile;
     }
 
     public function Search(Request $request)
