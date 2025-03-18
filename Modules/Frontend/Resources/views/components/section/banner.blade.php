@@ -3,9 +3,9 @@
     @foreach($data as $slider)
 
       @php
-          $data = $slider['data']->toArray(request());
+          $data = $slider['data']?->toArray(request()) ?? [];
       @endphp
-
+     {{-- @dd($data); --}}
       @if(isenablemodule($slider['type'])==1)
 
       <div class="slick-item" style="background-image: url({{ setBaseUrlWithFileName($slider['poster_url']) }});">
