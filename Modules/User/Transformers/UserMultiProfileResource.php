@@ -16,7 +16,8 @@ class UserMultiProfileResource extends JsonResource
             'user_id' => $this->user_id,
             'name' => $this->name,
             'avatar' =>$this->avatar,
-            'is_active' => $this->activeprofile !== null ? 1 : 0,
+            // 'is_active' => $this->activeprofile !== null ? 1 : 0,
+            'is_subscribed' => $this->is_subscribed,
         ];
     }
 }

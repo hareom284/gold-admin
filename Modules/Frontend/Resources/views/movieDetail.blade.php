@@ -9,14 +9,14 @@
         text-decoration: none;
         transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out;
     }
-    
+
     .movie-related-links:hover {
         color: #FFF;
         font-weight: bold;
         transform: scale(1.05);
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     }
-    
+
 </style>
 @endpush
 
@@ -46,14 +46,16 @@
     </div>
 </div>
 
-<div class="container-fluid mt-4">
-    <a href="#" class="btn btn-custom-button-one">
-        <span class="d-flex align-items-center justify-content-center gap-2">
-            <span><i class="ph-fill ph-crown"></i></span>
-            <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
-        </span>
-    </a>
-</div>
+@if (!auth()->user()?->is_subscribe && $data['movie_access'] == 'paid')
+    <div class="container-fluid mt-4">
+        <a href="{{route('accountSetting')}}" class="btn btn-custom-button-one">
+            <span class="d-flex align-items-center justify-content-center gap-2">
+                <span><i class="ph-fill ph-crown"></i></span>
+                <span class="text-nowrap">{{__('frontend.enjoy_subscription')}}</span>
+            </span>
+        </a>
+    </div>
+@endif
 
 <div class="container-fluid mt-4">
     <div class="tab-content " id="tab-content">

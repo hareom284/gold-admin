@@ -18,12 +18,12 @@ class CastCrewListResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'bio' => $this->bio,
-            'type' => 'castcrew',
-            'place_of_birth' => $this->place_of_birth,
-            'dob' => $this->dob,
-            'designation' => $this->designation,
             'profile_image' => setBaseUrlWithFileName($this->file_url),
+
+            // 'bio' => $this->bio,
+            // 'place_of_birth' => $this->place_of_birth,
+            // 'dob' => $this->dob,
+            // 'designation' => $this->designation,
 
         ];
     }

@@ -297,6 +297,19 @@
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
                     </div>
                     <div class="col-md-6 col-lg-4">
+                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class="text-danger"></span>', 'TMDb_rating')->class('form-label') }}
+                        {{ html()->text('TMDb_rating')
+                                ->attribute('value', old('TMDb_rating'))
+                                ->placeholder(__('movie.lbl_tmdb_rating'))
+                                ->class('form-control')
+                                }}
+
+                        @error('TMDb_rating')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="invalid-feedback" id="tmdb-error">TMDB Rating field is required</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
 
                         {{ html()->text('content_rating')->attribute('value', old('content_rating'))->placeholder(__('placeholder.lbl_content_rating'))->class('form-control')->attribute('required','required') }}

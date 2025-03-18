@@ -16875,7 +16875,7 @@ img {
 }
 
 .upgrade-plan {
-  margin-bottom: 80px;
+  margin-bottom: 0px;
 }
 .upgrade-plan i {
   font-size: 48px;
@@ -16955,12 +16955,12 @@ img {
 
 @media (max-width: 991.98px) {
   .upgrade-plan {
-    margin-bottom: 50px;
+    margin-bottom: 0px;
   }
 }
 @media (max-width: 575.98px) {
   .upgrade-plan {
-    margin-bottom: 30px;
+    margin-bottom: 0px;
   }
 }
 .livetv-card .livetv-img {
@@ -17737,6 +17737,23 @@ body {
   --bs-btn-disabled-border-color: #f8f9fa;
 }
 
+.btn-custom-button-two {
+  --bs-btn-color: white;
+  --bs-btn-bg: #564A19;
+  --bs-btn-border-color: #f8f9fa;
+  --bs-btn-hover-color: white;
+  --bs-btn-hover-bg:#665C2E;
+  --bs-btn-hover-border-color: #c6c7c8;
+  --bs-btn-focus-shadow-rgb: 211, 212, 213;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #c6c7c8;
+  --bs-btn-active-border-color: #babbbc;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #000;
+  --bs-btn-disabled-bg: #f8f9fa;
+  --bs-btn-disabled-border-color: #f8f9fa;
+}
+
 .product-premium {
   background: rgba(20, 20, 20, 0.6) !important;
   border-radius: 5px 0px 5px 0px !important;
@@ -17762,6 +17779,27 @@ body {
   background-color: rgba(20, 20, 20, 0.6);
   padding: 0.125rem 1rem;
   border-radius: 5px 0px 0px 0px;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-link.active > h6, .nav-tabs .nav-link.active > .h6 {
+  cursor: pointer;
+  color: black !important;
+  background-color: white !important;
+}
+
+.nav-tabs .nav-link, .nav-tabs .nav-link > h6, .nav-tabs .nav-link > .h6 {
+  cursor: pointer;
+  color: #686868 !important;
+  background-color: white !important;
+}
+
+.form-check-input:checked {
+  background-color: transparent;
+  border-color: black !important;
+}
+
+.form-check-input:checked[type=radio] {
+  --bs-form-check-bg-image: url(data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 8 8"><circle r="2" fill="black"/></svg>) !important;
 }
 
 #detail-tab li a.active {

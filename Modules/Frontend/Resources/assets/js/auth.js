@@ -53,8 +53,6 @@ if (registerForm) {
       }
 
       if (data.status==true) {
-
-
         try {
           const formData = new FormData(this);
           const response = await fetch(`${baseUrl}/api/login?is_ajax=1`, {
@@ -66,7 +64,7 @@ if (registerForm) {
           });
 
           const data = await response.json();
-
+          console.log('data',data);
           if (data.status == true) {
             window.location.href = `${baseUrl}`;
           }
@@ -95,38 +93,38 @@ function toggleRegisterButton(isSubmitting, button) {
 function validateRegisterForm() {
   let isValid = true;
 
-  const firstName = registerForm.querySelector('input[name="first_name"]');
-  const lastName = registerForm.querySelector('input[name="last_name"]');
-  const email = registerForm.querySelector('input[name="email"]');
+  const userName = registerForm.querySelector('input[name="user_name"]');
+  // const lastName = registerForm.querySelector('input[name="last_name"]');
+  // const email = registerForm.querySelector('input[name="email"]');
   const password = registerForm.querySelector('input[name="password"]');
   const confirmPassword = registerForm.querySelector('input[name="confirm_password"]');
 
-
-  if (!firstName.value.trim()) {
+  console.log("username ",userName);
+  if (!userName.value.trim()) {
     showValidationError(firstName, 'First Name field is required.');
     isValid = false;
   } else {
-    clearValidationError(firstName);
+    clearValidationError(userName);
   }
 
-  if (!lastName.value.trim()) {
-    showValidationError(lastName, 'Last Name field is required.');
-    isValid = false;
-  } else {
-    clearValidationError(lastName);
-  }
+  // if (!lastName.value.trim()) {
+  //   showValidationError(lastName, 'Last Name field is required.');
+  //   isValid = false;
+  // } else {
+  //   clearValidationError(lastName);
+  // }
 
-  if (email && email.required) {
-    if (email.value.trim() === '') {
-      showValidationError(email, 'Email field is required.');
-      isValid = false;
-    } else if (!validateEmail(email.value)) {
-      showValidationError(email, 'Enter a valid Email Address.');
-      isValid = false;
-    } else {
-      clearValidationError(email);
-    }
-  }
+  // if (email && email.required) {
+  //   if (email.value.trim() === '') {
+  //     showValidationError(email, 'Email field is required.');
+  //     isValid = false;
+  //   } else if (!validateEmail(email.value)) {
+  //     showValidationError(email, 'Enter a valid Email Address.');
+  //     isValid = false;
+  //   } else {
+  //     clearValidationError(email);
+  //   }
+  // }
 
   if (!password.value.trim()) {
 
@@ -168,6 +166,7 @@ if (loginForm) {
 
     try {
       const formData = new FormData(this);
+
       const response = await fetch(`${baseUrl}/api/login?is_ajax=1`, {
         method: 'POST',
         headers: {
@@ -176,11 +175,14 @@ if (loginForm) {
         body: formData
       });
 
+
+
       const data = await response.json();
 
       if (!response.ok) {
         handleValidationErrors(data.errors);
       }
+
       if (data.status == true) {
         window.location.href = `${baseUrl}`;
       } else {
@@ -199,18 +201,20 @@ if (loginForm) {
 
   function validateloginForm() {
     let isValid = true;
-    const emailField = loginForm.querySelector('input[name="email"]');
+    const userNameField = loginForm.querySelector('input[name="user_name"]');
     const passwordField = loginForm.querySelector('input[name="password"]');
 
-    if (emailField && emailField.required) {
-      if (emailField.value.trim() === '') {
-        showValidationError(emailField, 'Email field is required.');
+    if (userNameField && userNameField.required) {
+      if (userNameField.value.trim() === '') {
+        showValidationError(userNameField, 'Username field is required.');
         isValid = false;
-      } else if (!validateEmail(emailField.value)) {
-        showValidationError(emailField, 'Enter a valid Email Address.');
-        isValid = false;
-      } else {
-        clearValidationError(emailField);
+      }
+      // else if (!validateEmail(emailField.value)) {
+      //   showValidationError(emailField, 'Enter a valid Email Address.');
+      //   isValid = false;
+      // }
+      else {
+        clearValidationError(userNameField);
       }
     }
 

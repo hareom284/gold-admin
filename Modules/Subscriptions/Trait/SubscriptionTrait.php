@@ -43,8 +43,10 @@ trait SubscriptionTrait
         $start_at = new \Carbon\Carbon($plan_start_date);
         $end_date = '';
 
+        if ($plan_type === 'Days') {
+            $end_date = $start_at->addDays($plan_duration);
+        }
         if ($plan_type === 'month') {
-
             $end_date = $start_at->addMonths($plan_duration);
         }
         if ($plan_type == 'year') {

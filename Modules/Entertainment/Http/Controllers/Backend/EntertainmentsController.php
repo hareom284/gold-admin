@@ -181,7 +181,6 @@ class EntertainmentsController extends Controller
         $data['countries'] = $data->entertainmentCountryMappings->pluck('country_id')->toArray();
         $data['actors'] = $data->entertainmentTalentMappings->pluck('talent_id')->toArray();
         $data['directors'] = $data->entertainmentTalentMappings->pluck('talent_id')->toArray();
-
         return view('entertainment::backend.entertainment.edit', compact(
             'data',
             'tmdb_id',

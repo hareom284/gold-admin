@@ -208,7 +208,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         }
 
         // Update or set profile fields
-        $profile->name = $this->first_name ?? $data['name'] ?? $profile->name;
+        $profile->name = $this->username ?? $data['name'] ?? $profile->name;
         $profile->avatar = $this->generateAvatar($profile->name); // Generate a new avatar
 
         // Additional data can be added if passed (e.g., other profile fields)

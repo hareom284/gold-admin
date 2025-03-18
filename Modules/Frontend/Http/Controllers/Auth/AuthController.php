@@ -22,9 +22,23 @@ class AuthController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function login()
+    public function loginForm()
     {
         return view('frontend::auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|exists:users,username',
+            'password' => 'required',
+        ]);
+
+        if(Auth::attempt($request->only('username', 'password'))) {
+            return redirect()->route('home')->with('message', 'Login successful');
+        }else{
+            return redirect()->back()->with('error', 'Invalid credentials');
+        };
     }
 
     /**
@@ -45,42 +59,20 @@ class AuthController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+        $request->validate([
+            'username'=> 'required|unique:users,username',
+            'password' => 'required|min:6|confirmed',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => true,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $data['password'] = Hash::make($data['password']);
-        $data['user_type'] = 'user';
-
-        $user = User::create($data);
-
+        $user = User::create([
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'user_type' => 'user',
+            'login_type' => 'username'
+        ]);
+        $user->assignRole('user');
+        $user->createOrUpdateProfileWithAvatar();
         Auth::login($user);
-
-        $request->session()->regenerate();
-
-        $user->assignRole($data['user_type']);
-
-        $user->save();
-
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        Artisan::call('config:cache');
-        Artisan::call('route:clear');
-
-        return response()->json(['status' => true, 'message' => __('messages.successfully_register')],200);
+        return redirect()->route('home')->with('message', 'Registration successful!');
     }
 
     public function Logout(Request $request){
