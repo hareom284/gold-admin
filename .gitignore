@@ -13,7 +13,7 @@ yarn-error.log
 /.vscode
 *.cache
 .DS_Store
-
+public/firebase/firebase.json
 
 # Below Comments For Design Style & Scripts
 # /public/css/*

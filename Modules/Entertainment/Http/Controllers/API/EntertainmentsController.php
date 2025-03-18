@@ -220,6 +220,7 @@ class EntertainmentsController extends Controller
                 'html' => $html,
                 'message' => __('movie.tvshow_list'),
                 'hasMore' => $hasMore,
+                'totalItems' => $tvshows->total(), // Total number of items for pagination
             ], 200);
         }
 
