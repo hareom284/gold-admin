@@ -34,7 +34,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="{{__('messages.enter_password')}}" aria-describedby="basic-addon1" >
-                                <span class="input-group-text px-0" id="togglePassword"> <i class="ph ph-eye"></i></span>
+                                <span class="input-group-text px-0" > <i class="ph ph-eye" id="togglePassword"></i></span>
                                 @error('password')
                                     <span class=" text-danger w-100 text-sm ms-3">{{$message}}</span>
                                 @enderror
@@ -73,7 +73,28 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('js/auth.min.js') }}" defer></script>
+{{-- <script src="{{ asset('js/auth.min.js') }}" defer></script> --}}
+<script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('ph-eye-slash');
+        });
+
+        const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
+        const confirm_password = document.querySelector('#confirm_password');
+        if (toggleConfirmPassword) {
+
+        toggleConfirmPassword.addEventListener('click', function () {
+            const type_confirm = confirm_password.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirm_password.setAttribute('type', type_confirm);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        }
+</script>
 @endsection
 
 
