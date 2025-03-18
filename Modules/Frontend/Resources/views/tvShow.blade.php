@@ -80,7 +80,7 @@
     const csrf_token = '{{ csrf_token() }}';
     const language = "{{ $language ?? '' }}";
     const genreId = "{{ $genre_id ?? '' }}"; // Get genre_id from the Blade template
-    const threshold = 31; // Threshold for switching to pagination
+    const threshold = 25; // Threshold for switching to pagination
 
     // Initialize the API URL
     let apiUrl = `${envURL}/api/tvshow-list?page=${currentPage}&is_ajax=1&per_page=${per_page}`;
@@ -115,11 +115,9 @@
             if (data?.html) {
                 EntertainmentList.insertAdjacentHTML(currentPage === 1 ? 'afterbegin' : 'beforeend', data.html);
                 hasMore = !!data.hasMore;
-                if (hasMore) currentPage++;
                 shimmerContainer.style.display = 'none';  // Hide shimmer container
                 initializeWatchlistButtons();
 
-                console.log(data.totalItems);
                 // Switch to pagination if below threshold
                 if (data.totalItems > threshold) {
                     hasMore = false;

@@ -119,7 +119,6 @@
             if (data?.html) {
                 EntertainmentList.insertAdjacentHTML(currentPage === 1 ? 'afterbegin' : 'beforeend', data.html);
                 hasMore = !!data.hasMore;
-                if (hasMore) currentPage++;
                 shimmerContainer.style.display = 'none';  // Hide shimmer container
                 initializeWatchlistButtons();
 
@@ -142,52 +141,6 @@
             isLoading = false;
         }
     };
-
-    // const renderPagination = (totalItems) => {
-    //     const totalPages = Math.ceil(totalItems / per_page);
-    //     paginationContainer.innerHTML = '';
-
-    //     if (totalPages > 1) {
-    //         let paginationHTML = `
-    //             <nav aria-label="Page navigation">
-    //                 <ul class="pagination justify-content-center">
-    //                     <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-    //                         <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
-    //                             <span aria-hidden="true">&laquo; Previous</span>
-    //                         </a>
-    //                     </li>`;
-
-    //         for (let i = 1; i <= totalPages; i++) {
-    //             paginationHTML += `
-    //                 <li class="page-item ${i === currentPage ? 'active' : ''}">
-    //                     <a class="page-link" href="#" data-page="${i}">${i}</a>
-    //                 </li>`;
-    //         }
-
-    //         paginationHTML += `
-    //                     <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-    //                         <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
-    //                             <span aria-hidden="true">Next &raquo;</span>
-    //                         </a>
-    //                     </li>
-    //                 </ul>
-    //             </nav>`;
-    //         paginationContainer.innerHTML = paginationHTML;
-    //         paginationContainer.classList.remove('d-none');
-
-    //         // Add pagination event listeners
-    //         paginationContainer.querySelectorAll('.page-link').forEach(link => {
-    //             link.addEventListener('click', (e) => {
-    //                 e.preventDefault();
-    //                 const page = parseInt(e.target.dataset.page);
-    //                 if (page !== currentPage && page >= 1 && page <= totalPages) {
-    //                     currentPage = page;
-    //                     loadData();
-    //                 }
-    //             });
-    //         });
-    //     }
-    // };
 
     const renderPagination = (totalItems) => {
         const totalPages = Math.ceil(totalItems / per_page);
