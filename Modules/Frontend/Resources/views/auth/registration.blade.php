@@ -54,5 +54,26 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('js/auth.min.js') }}" defer></script>
+{{-- <script src="{{ asset('js/auth.min.js') }}" defer></script> --}}
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    togglePassword.addEventListener('click', function () {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.classList.toggle('ph-eye-slash');
+    });
+
+    const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
+    const confirm_password = document.querySelector('#confirm_password');
+    if (toggleConfirmPassword) {
+
+    toggleConfirmPassword.addEventListener('click', function () {
+        const type_confirm = confirm_password.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirm_password.setAttribute('type', type_confirm);
+        this.classList.toggle('ph-eye-slash');
+    });
+
+    }
+</script>
 @endsection
