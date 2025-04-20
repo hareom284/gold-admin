@@ -22,8 +22,8 @@ class ItemListResource extends JsonResource
             'movie_access'=> $this->movie_access,
             'IMDb_rating' => $this->IMDb_rating,
             'realease_year'=>Carbon::parse($this->release_date)->year,
-            'poster_image' =>  setBaseUrlWithFileName($entertainment->poster_url ?? null ),
-            'thumbnail_image' =>setBaseUrlWithFileName($entertainment->thumbnail_url ?? null),
+            'poster_image' =>  setBaseUrlWithFileName($this->poster_url ?? null ),
+            'thumbnail_image' =>setBaseUrlWithFileName($this->thumbnail_url ?? null),
         ];
     }
 }
