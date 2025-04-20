@@ -62,6 +62,16 @@ class SubscriptionController extends Controller
         return redirect()->back()->with('message', 'Subscription created successfully.');
     }
 
+    public function paymentSuccess(Request $request)
+    {
+        return $request->all();
+    }
+
+    public function paymentFail(Request $request)
+    {
+        return $request->all();
+    }
+
     private function handleExistingSubscription($subscription, $plan)
     {
         if ($subscription->end_date > Carbon::now()) {
