@@ -99,8 +99,8 @@ class SubscriptionController extends Controller
                 'ecCode' => env('qr_ecCode'),
                 'Content-Type' => 'application/json',
                 ])->post('https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/create',[
-                    "requestNo" => $transaction->id,
-                    "orderId" => $transaction->transaction_id,
+                    "requestNo" => $transaction->transaction_id,
+                    "orderId" => $transaction->id,
                     "merchantId" => env('qr_merchantId'),
                     "currency" => "MMK",
                     "rewardPoint" => 0,
