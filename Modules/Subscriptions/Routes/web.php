@@ -85,6 +85,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
 
 //user subscription routes
 Route::group(['middleware' => 'auth'], function () {
+    Route::post('qr-generate', [SubscriptionController::class, 'generateQr'])->name('subscription.qrgenerate');
     Route::post('subscription', [SubscriptionController::class, 'storeWebSubscription'])->name('subscription.store');
     //fallback for mqr
     Route::get('payment/success', [SubscriptionController::class, 'paymentSuccess'])->name('payment.success');
