@@ -88,7 +88,7 @@ class SubscriptionController extends Controller
         $transaction = SubscriptionTransactions::create([
             'user_id' => auth()->id(),
             'payment_type' => 'qr',
-            'payment_status' => 'qr_generated',
+            'payment_status' => 'pending',
             'transaction_id' => 'ORD'. random_int(100000, 999999),
         ]);
 
@@ -113,7 +113,9 @@ class SubscriptionController extends Controller
             if($response->successful()){
                 $qrString = $response->object()->data->qr;
                 $qrCode = QrCode::size(300)->generate($qrString);
-                return view('frontend::qrView',compact('qrCode'));
+                $orderId = $transaction->id;
+
+                return view('frontend::qrView',compact('qrCode','orderId'));
             }else{
                 dd($response->json());
                 return redirect()->back()->with('error', 'Error generating QR code: ' . $response->json('errorMessage'));
@@ -123,11 +125,37 @@ class SubscriptionController extends Controller
             return  $e->getMessage();
         }
 
-
-
-
     }
 
+    public function checkPaymentStatus(SubscriptionTransactions $subscriptionTransaction)
+    {
+        if($subscriptionTransaction->payment_status !='pending'){
+            return response()->json(['status'=>$subscriptionTransaction->payment_status]);
+        }
+
+        $response = Http::withHeaders([
+            'secretKey' => env('qr_secretKey'),
+            'ecCode' => env('qr_ecCode'),
+            'Content-Type' => 'application/json',
+            ])->get('https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/posEnquiry/'.$subscriptionTransaction->id);
+       
+        return response()->json($response->json());
+    }
+
+    //for frontend  redirect
+    public function subscriptionSuccess(Request $request)
+    {
+        $orderId = $request->orderId;
+        return view('frontend::paymentSuccess',compact('orderId'));
+    }
+
+    public function subscriptionFail(Request $request)
+    {
+        $orderId = $request->orderId;
+        return view('frontend::paymentFail',compact('orderId'));
+    }
+
+    //form bank system callback
     public function paymentSuccess(Request $request)
     {
         return $request->all();
@@ -312,3 +340,5 @@ class SubscriptionController extends Controller
     }
 
 }
+
+
