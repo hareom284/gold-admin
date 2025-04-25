@@ -35,6 +35,7 @@
         "predis/predis": "^2.2",
         "propaganistas/laravel-phone": "^5.3",
         "razorpay/razorpay": "^2.9",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-backup": "^8.4",
         "spatie/laravel-html": "^3.3",

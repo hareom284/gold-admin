@@ -139,7 +139,8 @@
                                     @php
                                         $plans = Modules\Subscriptions\Models\Plan::all();
                                     @endphp
-                                    <form action="{{route('subscription.store')}}" method="POST">
+                                    <form action="{{route('subscription.qrgenerate')}}" method="POST">
+                                    {{-- <form action="{{route('subscription.store')}}" method="POST"> --}}
                                         @csrf
                                             @foreach ($plans as $plan)
                                                 <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
@@ -160,8 +161,8 @@
                                                     </label>
                                                 </div>
                                             @endforeach
-
                                         <div class="d-grid gap-2 w-50 mt-3">
+
                                             <button class="btn btn-custom-button-two" type="submit">Subscribe</button>
                                         </div>
                                     </form>
@@ -230,6 +231,8 @@
         </div>
     </div>
 </div>
+
+
 
 {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script> --}}

@@ -5,12 +5,16 @@ namespace Modules\Subscriptions\Http\Controllers\Backend;
 use Currency;
 use Carbon\Carbon;
 // use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Modules\Subscriptions\Models\Plan;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Subscriptions\Models\Subscription;
+use Modules\Subscriptions\Models\SubscriptionTransactions;
 
 
 class SubscriptionController extends Controller
@@ -60,6 +64,68 @@ class SubscriptionController extends Controller
         $this->createNewSubscription($user->id, $plan);
 
         return redirect()->back()->with('message', 'Subscription created successfully.');
+    }
+
+    public function generateQr(Request $request)
+    {
+
+        $user = auth()->user();
+        $plan = Plan::find($request->plan_id);
+
+        // Validate plan existence
+        if (!$plan) {
+            return redirect()->back()->with('error', 'Invalid plan.');
+        }
+
+
+        // Check existing subscription
+        $subscription = Subscription::where('user_id', $user->id)->first();
+
+        if ($subscription) {
+            return $this->handleExistingSubscription($subscription, $plan);
+        }
+
+        $transaction = SubscriptionTransactions::create([
+            'user_id' => auth()->id(),
+            'payment_type' => 'qr',
+            'payment_status' => 'qr_generated',
+            'transaction_id' => 'ORD'. random_int(100000, 999999),
+        ]);
+
+        try{
+
+            $response  = Http::withHeaders([
+                'secretKey' => env('qr_secretKey'),
+                'ecCode' => env('qr_ecCode'),
+                'Content-Type' => 'application/json',
+                ])->post('https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/create',[
+                    "requestNo" => $transaction->transaction_id,
+                    "orderId" => $transaction->id,
+                    "merchantId" => env('qr_merchantId'),
+                    "currency" => "MMK",
+                    "rewardPoint" => 0,
+                    "createdDate" => now()->format('Y-m-d H:i:s'),
+                    "amount" => $plan->total_price,
+                    "description" => "MMQR payment",
+            ]);
+
+
+            if($response->successful()){
+                $qrString = $response->object()->data->qr;
+                $qrCode = QrCode::size(300)->generate($qrString);
+                return view('frontend::qrView',compact('qrCode'));
+            }else{
+                dd($response->json());
+                return redirect()->back()->with('error', 'Error generating QR code: ' . $response->json('errorMessage'));
+            }
+
+        }catch (\Exception $e) {
+            return  $e->getMessage();
+        }
+
+
+
+
     }
 
     public function paymentSuccess(Request $request)
