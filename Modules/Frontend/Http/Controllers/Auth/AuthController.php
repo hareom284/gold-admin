@@ -169,7 +169,8 @@ class AuthController extends Controller
              if($user->login_type == 'google'){
 
                 $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-                $response=$this->CheckDeviceLimit($user, $current_device);
+                //clode device limit
+                // $response=$this->CheckDeviceLimit($user, $current_device);
 
                 if(isset($response['error'])) {
                     return Redirect::to('/login')->with('error', $response['error']);
