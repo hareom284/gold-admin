@@ -178,30 +178,25 @@
                                     <h5 class="text-black">Payment Logs</h5>
                                     <small style="color:#686868">Logs Details</small>
                                 </div>
-                                <div class="list-group">
-                                    <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
-                                        <div>
-                                            <span  style="color:#686868">ID: 002461</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="text-black fw-bold">Monthly Plan</span>
-                                            <span class="text-black">01/02/2024</span>
-                                            <span class="text-black">3,000 MMKs</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="list-group">
-                                    <div class="list-group-item  w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
-                                        <div>
-                                            <span  style="color:#686868">ID: 002461</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="text-black fw-bold">Monthly Plan</span>
-                                            <span class="text-black">01/02/2024</span>
-                                            <span class="text-black">3,000 MMKs</span>
+                                @php
+                                    $subscripionData = auth()->user()->subscriptiondata;
+                                @endphp
+
+                                @foreach ($subscripionData as $subscription)
+                                    <div class="list-group">
+                                        <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
+                                            <div>
+                                                <span  style="color:#686868">ID: {{$subscription->id}}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-black fw-bold">{{$subscription?->plan?->name}}</span>
+                                                <span class="text-black">{{$subscription->created_at}}</span>
+                                                <span class="text-black">{{Number::format($subscription->amount)}} MMKs</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
+
                             </div>
                         </div>
                     </div>
@@ -277,22 +272,22 @@
         });
     }
 
-function triggerProfileFileInput() {
-    document.getElementById('profileFileImageInput').click();
-}
+    function triggerProfileFileInput() {
+        document.getElementById('profileFileImageInput').click();
+    }
 
-// Function to preview the selected image
-function previewProfileImage(event) {
-    const reader = new FileReader();
-    const fileInput = event.target;
+    // Function to preview the selected image
+    function previewProfileImage(event) {
+        const reader = new FileReader();
+        const fileInput = event.target;
 
-    reader.onload = function() {
-        const previewImage = document.getElementById('profile_image');
-        previewImage.src = reader.result; // Update the image preview
-    };
+        reader.onload = function() {
+            const previewImage = document.getElementById('profile_image');
+            previewImage.src = reader.result; // Update the image preview
+        };
 
-    reader.readAsDataURL(fileInput.files[0]);
-}
+        reader.readAsDataURL(fileInput.files[0]);
+    }
 
 
       function triggerFileInput() {

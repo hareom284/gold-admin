@@ -1,4 +1,4 @@
-<header class="header-center-home header-default header-sticky header-one {{ Route::currentRouteName() == 'home' ? 'header-absolute' : '' }}">
+<header class="header-center-home header-default z-1 header-sticky header-one {{ Route::currentRouteName() == 'home' ? 'header-absolute' : '' }}">
     <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar header-hover-menu py-xl-0">
         <div class="container-fluid navbar-inner">
             <div class="d-flex align-items-center justify-content-between w-100 landing-header">

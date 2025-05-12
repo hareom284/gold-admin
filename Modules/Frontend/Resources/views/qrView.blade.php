@@ -9,12 +9,24 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                if(data.data.paymentTxnStatus == 200){
+               if ([200, 500].includes(data.data.paymentTxnStatus)) {
                     clearInterval(interval);
-                    window.location.href = `{{route('subscription.success')}}?orderId=${data.data.orderId}&amount=${data.data.amount}&transactionId=${data.data.posTransactionId}&billNo=${data.data.billNo}&customerName=${data.data.customerName}&customerPhone=${data.data.customerPhone}&paymentTxnID=${data.data.paymentTxnID}`;
-                }else if(data.data.paymentTxnStatus == 500){
-                    clearInterval(interval);
-                    window.location.href = `{{route('subscription.fail')}}?orderId=${data.data.orderId}&amount=${data.data.amount}&transactionId=${data.data.posTransactionId}&billNo=${data.data.billNo}&customerName=${data.data.customerName}&customerPhone=${data.data.customerPhone}&paymentTxnID=${data.data.paymentTxnID}`;
+
+                    const baseUrl = data.data.paymentTxnStatus === 200
+                        ? `{{ route('subscription.success') }}`
+                        : `{{ route('subscription.fail') }}`;
+
+                    const queryParams = new URLSearchParams({
+                        orderId: data.data.orderId,
+                        amount: data.data.amount,
+                        transactionId: data.data.posTransactionId,
+                        billNo: data.data.billNo,
+                        customerName: data.data.customerName,
+                        customerPhone: data.data.customerPhone,
+                        paymentTxnID: data.data.paymentTxnID,
+                    });
+
+                    window.location.href = `${baseUrl}?${queryParams.toString()}`;
                 }
             })
             .catch(error => console.error('Error:', error));

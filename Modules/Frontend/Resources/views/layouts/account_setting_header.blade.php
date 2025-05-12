@@ -1,4 +1,4 @@
-<header class="header-center-home header-default header-sticky header-one bg-white border-bottom border-light">
+<header class="header-center-home header-default header-sticky  z-0 header-one bg-white border-bottom border-light">
     <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar header-hover-menu py-xl-0">
         <div class="container-fluid navbar-inner">
             <div class="d-flex align-items-center justify-content-between w-100 landing-header">

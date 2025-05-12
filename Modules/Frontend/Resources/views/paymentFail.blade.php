@@ -13,25 +13,25 @@
                 <div class="col-md-6">
                     <ul class="list-group mb-4">
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Order ID:</strong> <span>{{ $orderId }}</span>
+                            <strong>Order ID</strong> <span>{{ $orderId }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Amount:</strong> <span>${{ number_format($amount, 2) }}</span>
+                            <strong>Amount</strong> <span>{{ number_format($amount, 2) }} Ks</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Transaction ID:</strong> <span>{{ $transactionId }}</span>
+                            <strong>Transaction ID</strong> <span>{{ $transactionId }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>PaymentTxnID:</strong> <span>{{ $paymentTxnID }}</span>
+                            <strong>PaymentTxnID</strong> <span>{{ $paymentTxnID }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Bill No:</strong> <span>{{ $billNo }}</span>
+                            <strong>Bill No</strong> <span>{{ $billNo }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Customer Name:</strong> <span>{{ $customerName }}</span>
+                            <strong>Customer Name</strong> <span>{{ $customerName }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <strong>Customer Phone:</strong> <span>{{ $customerPhone }}</span>
+                            <strong>Customer Phone</strong> <span>{{ $customerPhone }}</span>
                         </li>
                     </ul>
 

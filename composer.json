@@ -49,7 +49,8 @@
         "tinymce/tinymce": "^7.2",
         "twilio/sdk": "^8.3",
         "web-token/jwt-library": "^3.4",
-        "yajra/laravel-datatables-oracle": "^11.0"
+        "yajra/laravel-datatables-oracle": "^11.0",
+        "yoeunes/toastr": "^3.1"
     },
     "require-dev": {
       "barryvdh/laravel-ide-helper": "^3.0",

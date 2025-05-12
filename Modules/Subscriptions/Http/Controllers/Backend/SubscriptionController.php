@@ -56,18 +56,19 @@ class SubscriptionController extends Controller
 
 
         // Check existing subscription
-        $subscription = Subscription::where('user_id', auth()->id())->first();
+        $subscription = auth()->user()->subscriptionPackage;
 
         if ($subscription && $subscription->end_date > Carbon::now()) {
             return redirect()->back()->with('error', 'You already have an active subscription.');
         }
 
-        $oldTransaction = SubscriptionTransactions::where('user_id', auth()->id())->where('payment_status', 'qr_generate')->where('amount',$plan->total_price)->first();
+        $alreadyGetQrString = SubscriptionTransactions::where('user_id', auth()->id())->where('payment_status', 'qr_generate')->where('amount',$plan->total_price)->first();
 
-        if ($oldTransaction) {
-            $qrCode = QrCode::size(300)->generate($oldTransaction->other_transactions_details);
-            $transactionId = $oldTransaction->id;
+        if ($alreadyGetQrString) {
+            $qrCode = QrCode::size(300)->generate($alreadyGetQrString->other_transactions_details);
+            $transactionId = $alreadyGetQrString->id;
             $planId = $request->plan_id;
+            flash()->success('Qr generated successfully.');
             return view('frontend::qrView',compact('qrCode','transactionId','planId'));
         }
 
@@ -76,7 +77,7 @@ class SubscriptionController extends Controller
             'amount' => $plan->total_price,
             'payment_type' => 'qr',
             'payment_status' => 'pending',
-            'transaction_id' => 'ORD'. random_int(1000000, 9999999),
+            'transaction_id' => 'ORD'. strtoupper(uniqid()),
         ]);
 
         try{
@@ -95,6 +96,7 @@ class SubscriptionController extends Controller
                     "description" => "MMQR payment",
             ]);
 
+
             if($response->successful()){
                 $qrString = $response->object()->data->qr;
                 //update transaction table
@@ -107,14 +109,14 @@ class SubscriptionController extends Controller
                 $transactionId = $transaction->id;
                 $planId = $request->plan_id;
 
+                // Display a success toast with no title
+                flash()->success('Qr generated successfully.');
                 return view('frontend::qrView',compact('qrCode','transactionId','planId'));
             }else{
-                dd($response->json());
                 return redirect()->back()->with('error', 'Error generating QR code: ' . $response->json('errorMessage'));
             }
-
         }catch (\Exception $e) {
-            return  $e->getMessage();
+            return redirect()->back()->with('error', 'Error generating QR code: ' . $e->getMessage());
         }
 
     }
@@ -137,13 +139,21 @@ class SubscriptionController extends Controller
                 'start_date' => Carbon::now(),
                 'end_date' => Carbon::now()->addDays($plan->duration_value),
                 'amount' => $plan->price,
-                'total_amount' => $plan->price,
+                'total_amount' => $plan->total_price,
                 'duration' => $plan->duration_value,
                 'status' => 'active',
             ];
-            $subscription = Subscription::updateOrCreate(
-                ['user_id' => auth()->id()],
-                $subscriptionData
+            $subscription = Subscription::Create(
+                [
+                    'user_id' => auth()->id(),
+                    'plan_id' => $plan->id,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays($plan->duration_value),
+                    'amount' => $plan->price,
+                    'total_amount' => $plan->total_price,
+                    'duration' => $plan->duration_value,
+                    'status' => 'active',
+                ],
             );
 
             $subscriptionTransaction->update([
@@ -181,15 +191,45 @@ class SubscriptionController extends Controller
         return view('frontend::paymentFail',compact('orderId','amount','transactionId','billNo','customerName','customerPhone','paymentTxnID'));
     }
 
-    //form bank system callback
+    //callback form bank system
     public function paymentSuccess(Request $request)
     {
-        return $request->all();
+        $subscriptionTransaction = SubscriptionTransactions::find($request->orderId);
+        $planTotalPrice = $subscriptionTransaction->amount;
+        $plan = Plan::where('total_price',$planTotalPrice)->first();
+        if (!$plan) {
+            return true;
+        }
+        $subscriptionData = [
+                'plan_id' => $plan->id,
+                'start_date' => Carbon::now(),
+                'end_date' => Carbon::now()->addDays($plan->duration_value),
+                'amount' => $plan->price,
+                'total_amount' => $plan->total_price,
+                'duration' => $plan->duration_value,
+                'status' => 'active',
+            ];
+            $subscription = Subscription::updateOrCreate(
+                ['user_id' => auth()->id()],
+                $subscriptionData
+            );
+
+            $subscriptionTransaction->update([
+                'payment_status' => 'success',
+                'subscriptions_id' => $subscription->id,
+            ]);
+
+            auth()->user()->update(['is_subscribe' => true]);
+            return true;
     }
 
     public function paymentFail(Request $request)
     {
-        return $request->all();
+            $subscriptionTransaction = SubscriptionTransactions::find($request->orderId);
+            $subscriptionTransaction->update([
+                'payment_status' => 'failed',
+            ]);
+            return true;
     }
 
     public function index(Request $request)
