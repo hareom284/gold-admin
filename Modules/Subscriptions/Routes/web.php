@@ -80,7 +80,17 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
     Route::group(['prefix' => 'subscription', 'as' => 'subscription.'], function () {
         Route::group(['prefix' => '/account', 'as' => 'account.'], function () {
         });
-
-
     });
+});
+
+//user subscription routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('qr-generate', [SubscriptionController::class, 'generateQr'])->name('subscription.qrgenerate');
+    Route::get('check-payment-stauts/{subscriptionTransaction}/{plan}', [SubscriptionController::class, 'checkPaymentStatus'])->name('check.payment.status');
+    // Route::post('subscription', [SubscriptionController::class, 'storeWebSubscription'])->name('subscription.store');
+    Route::get('subscription/success', [SubscriptionController::class, 'subscriptionSuccess'])->name('subscription.success');
+    Route::get('subscription/fail', [SubscriptionController::class, 'subscriptionFail'])->name('subscription.fail');
+    //fallback for banking system
+    Route::get('payment/success', [SubscriptionController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('payment/fail', [SubscriptionController::class, 'paymentFail'])->name('payment.fail');
 });

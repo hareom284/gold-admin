@@ -7,9 +7,21 @@ use App\Http\Controllers\Mobile\OTPController;
 
 Route::group(['prefix'=>'v1'],function(){
 
+    //test firebase
+    Route::post('test-message',[ApiController::class, 'sendMessage']);
+
+    //normal login api
+    Route::post('register',[ApiController::class, 'register']);
+    Route::post('login',[ApiController::class, 'login']);
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
+    Route::get('token/{uid}',[ApiController::class, 'generateToken']);
+
+
+    // //phone number login api
+    // Route::post('/auth/otp-login-store', [ApiController::class, 'otpLoginStore']);
+    // Route::get('/auth/check-user-exists', [ApiController::class, 'checkUserExists']);
 
     //otpp login api
     Route::post('send-otp',[OTPController::class,'sendOTP']);
@@ -37,6 +49,16 @@ Route::group(['prefix'=>'v1'],function(){
         Route::get('watch-list',[ApiController::class,'WatchList']);
         Route::post('save-watchlist', [ApiController::class, 'saveWatchList']);
         Route::delete('delete-watchlist/{id}', [ApiController::class, 'deleteWatchList']);
+
+        //subsciption
+        Route::get('plans',[ApiController::class,'PlansList']);
+        Route::post('subscription',[ApiController::class,'Subscription']);
+
+        //profile
+        Route::get('profile',[ApiController::class,'Profile']);
+        Route::post('logout',[ApiController::class,'Logout']);
+        Route::post('update-profile', [ApiController::class, 'updateProfile']);
+        Route::post('delete-account',[ApiController::class,'deleteAccount']);
     });
 
      //home page api
@@ -47,4 +69,8 @@ Route::group(['prefix'=>'v1'],function(){
 
      //details page api
      Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
+     Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
+
+     //search api
+     Route::get('search',[ApiController::class,'Search']);
 });

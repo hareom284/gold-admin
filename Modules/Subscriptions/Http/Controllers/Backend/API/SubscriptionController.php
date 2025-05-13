@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 class SubscriptionController extends Controller
 {
     use SubscriptionTrait;
-
+     //edit
     /**
      * Display a listing of the resource.
      *

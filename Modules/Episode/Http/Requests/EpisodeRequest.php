@@ -15,7 +15,7 @@ class EpisodeRequest extends FormRequest
             'description' => 'required|string',
             'access' => 'required',
             'IMDb_rating' => 'required|numeric|min:1|max:10',
-            'TMDb_rating' => 'numeric|min:1|max:10',
+            'TMDb_rating' => 'nullable|numeric|min:1|max:10',
             'plan_id' => 'required_if:access,paid',
             'season_id'=> ['required'],
             'duration'=> ['required'],

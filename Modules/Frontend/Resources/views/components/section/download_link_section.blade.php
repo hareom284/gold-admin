@@ -46,5 +46,3 @@
     <hr class="my-5 border border-light">
     </div>
 @endif
-    {{-- <hr class="my-5 border border-light"> --}}
-</div>

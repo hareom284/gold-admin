@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\IsUserSubscribe::class,
            // \App\Http\Middleware\SetActiveStorage::class,
 
         ],
@@ -47,6 +48,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             'localization',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\IsUserSubscribe::class,
         ],
     ];
 

@@ -22,4 +22,5 @@ class SubscriptionTransactions extends BaseModel
     {
         return $this->belongsTo(Subscription::class, 'subscriptions_id', 'id');
     }
+
 }

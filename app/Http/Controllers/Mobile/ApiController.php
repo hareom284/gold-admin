@@ -2,31 +2,156 @@
 
 namespace App\Http\Controllers\Mobile;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Device;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Modules\Entertainment\Models\Like;
+use Modules\Subscriptions\Models\Plan;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
 use Modules\Entertainment\Models\Watchlist;
+use Modules\Entertainment\Models\UserReminder;
+use Modules\Subscriptions\Models\Subscription;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
+use App\Http\Resources\Mobile\Genral\PlanResource;
 use App\Http\Resources\Mobile\Home\BannerResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
 use App\Http\Resources\Mobile\Genral\WatchListResource;
+use Modules\Entertainment\Models\EntertainmentDownload;
+use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
+use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
+use App\Http\Resources\Mobile\Genral\ProfileResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
-use Modules\Entertainment\Models\Like;
+use Google\Service\Analytics\Profile;
 
 class ApiController extends Controller
 {
+        //normal login api
+        public function login(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'username' => 'required|exists:users,username',
+                'password' => 'required',
+            ]);
+        if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ], 422);
+            }
+        $user = User::where('username', $request->username)->first();
+        if ($user) {
+                if (Hash::check($request->password, $user->password)) {
+                    $token = $user->createToken('authToken')->plainTextToken;
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'User login successfully.',
+                        'token' => $token,
+                        'user' => new ProfileResource($user),
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Password mismatch',
+                    ], 422);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User does not exist',
+                ], 422);
+            }
+        }
+
+        public function register(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'username' => 'required|unique:users,username',
+                'password'=>'required|min:8|confirmed',
+            ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $validator->errors()->first(),
+                    ], 422);
+                }
+                $user = User::create([
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'user_type' => 'user',
+                    'login_type' => 'username'
+                ]);
+                $user->assignRole('user');
+                $user->createOrUpdateProfileWithAvatar();
+                $token = $user->createToken('authToken')->plainTextToken;
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User created successfully.',
+                    'token' => $token,
+                    'user' => new ProfileResource($user),
+                ],200);
+        }
+
+        //test firebase connection
+        public function sendMessage()
+        {
+            $database = app('firebase.database');
+            $database->getReference('users/user2')->push([
+                'name' => 'user2',
+                'email' => 'john.doe@example.com',
+            ]);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Message sent successfully',
+            ],200);
+        }
+
         // Redirect to Google
         public function redirectToGoogle()
         {
             return Socialite::driver('google')->stateless()->redirect();
+        }
+
+        //get firebase login user
+        public function generateToken(){
+            $auth = app('firebase.auth');
+            $token =  $auth->createCustomToken('NcNS24KcdBRlDFk96jNF6f2ebN53');
+            return response()->json([
+                'success'=>true,
+                'token'=>$token->toString(),
+            ],200);
+            try {
+                $users = $auth->listUsers();
+                $userList = [];
+
+                foreach ($users as $user) {
+                    $userList[] = [
+                        'uid' => $user->uid,
+                        'email' => $user->email,
+                        'name' => $user->displayName,
+                        'phone' => $user->phoneNumber,
+                    ];
+                }
+                return response()->json([
+                    'success' => true,
+                    'users' => $userList
+                ], 200);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 500);
+            }
         }
 
        //google callback
@@ -223,15 +348,111 @@ class ApiController extends Controller
                 ]);
        }
 
+       //profile api
+       public function profile()
+       {
+           $user =auth('sanctum')->user();
+
+           if($user){
+               return response()->json([
+                   'success'=>true,
+                   'message'=>'User profile reterived successfully',
+                   'data'=>new ProfileResource($user),
+               ],200);
+           }
+       }
+
+       //profiel update api
+       public function updateProfile(Request $request)
+       {
+            $user = auth('sanctum')->user();
+
+            $request->validate([
+                'username' => 'required_without:email|unique:users,username,' . $user->id,
+                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            ]);
+
+            $validator = Validator::make($request->all(),[
+                'username' => 'required_without:email|unique:users,username,' . $user->id,
+                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>$validator->errors()->first(),
+                ],403);
+            };
+
+            $data = $request->all();
+
+            $user->update($data);
+
+            if ($request->hasFile('image_file')) {
+                $file = $request->file('image_file');
+
+            $activeDisk = env('ACTIVE_STORAGE', 'local');
+
+            $filename = $file->getClientOriginalName();
+
+            if ($activeDisk == 'local') {
+                    $destinationPath = 'streamit-laravel';
+                    $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                    $image_file = '/storage/' . $filePath;
+
+                } else {
+
+                    $folderPath = 'streamit-laravel/' .  $filename ;
+                    Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
+                    $baseUrl = env('DO_SPACES_URL');
+                    $image_file = $baseUrl . '/' . $folderPath;
+                }
+
+                $data['image_file']=extractFileNameFromUrl($image_file);
+
+            } else {
+                $data['image_file'] = $user->image_file;
+            }
+            $user->update(['image_file' => $data['image_file']]);
+            $user_data = User::find($user->id);
+            $user_data->save();
+
+            return response()->json([
+                'success'=>true,
+                'message'=>'User profile updated successfully',
+                'data'=>new ProfileResource($user),
+            ],200);
+       }
+
        //logout api
        public function logout()
        {
-           $user = User::where('id',auth('sanctum')->id)->first();
-           $user->tokens()->delete();
+           auth('sanctum')->user()->tokens()->delete();
            return response()->json([
-                'success' => true,
-                'message' => "Logout successfully"
+               'success'=>true,
+               'message'=>'Logout successfully',
            ],200);
+       }
+
+       //accoutn delete api
+       public function deleteAccount()
+       {
+            $user = auth('sanctum')->user();
+            Device::where('user_id', $user->id)->forceDelete();
+            UserMultiProfile::where('user_id', $user->id)->forceDelete();
+            Subscription::where('user_id', $user->id)->update(['status' => 'deactivated']);
+            User::where('id', $user->id)->forceDelete();
+            ContinueWatch::where('user_id', $user->id)->delete();
+            Watchlist::where('user_id',$user->id)->delete();
+            EntertainmentDownload::where('user_id',$user->id)->delete();
+            UserReminder::where('user_id', $user->id)->delete();
+
+            $user->forceDelete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Account deleted successfully',
+            ], 200);
        }
 
        //HomeBanner
@@ -402,6 +623,12 @@ class ApiController extends Controller
                     'entertainmentDownloadMappings'
                 ])
                 ->first();
+            if(!$movie){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'Movie not found',
+                ],404);
+            }
 
             $data = new MovieDetailResource($movie);
             return response()->json([
@@ -409,6 +636,27 @@ class ApiController extends Controller
                 'message'=>'Movie details reterived successfully',
                 'data'=>$data,
             ],200);
+    }
+
+    public function TvShowDetails($id)
+    {
+        $tvshow = Entertainment::where('id', $id)
+            ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
+            ->first();
+
+        if(!$tvshow){
+            return response()->json([
+                'success'=>false,
+                'message'=>'Tvshow not found',
+            ],404);
+        }
+
+         $data = new TvShowDetailResource($tvshow);
+         return response()->json([
+            'success'=>true,
+            'message'=>'Tvshow details reterived successfully',
+            'data'=>$data,
+        ],200);
     }
 
     public function  Rating(Request $request)
@@ -554,6 +802,114 @@ class ApiController extends Controller
             ],200);
         }
 
+    }
+
+    public function PlansList()
+    {
+        $plans = Plan::all();
+        $data = PlanResource::collection($plans);
+        return response()->json([
+            'success'=>true,
+            'message'=>'Plans reterived successfully',
+            'data'=>$data,
+        ],200);
+    }
+
+    public function Subscription(Request $request)
+    {
+        $user_id = auth('sanctum')->id();
+        $validator = Validator::make($request->all(),[
+            'plan_id' => 'required',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors(),
+            ],422);
+        }
+        $plan = Plan::find($request->plan_id);
+
+        // Validate plan existence
+        if (!$plan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Plan not found',
+            ], 404);
+        }
+
+        // Check existing subscription
+        $subscription = Subscription::where('user_id', $user_id)->first();
+
+        if ($subscription) {
+            return $this->handleExistingSubscription($subscription, $plan);
+        }
+
+        // Create a new subscription if none exists
+        return $this->createNewSubscription($user_id, $plan);
+
+    }
+
+    private function handleExistingSubscription($subscription, $plan)
+    {
+        if ($subscription->end_date > Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You already have an active subscription.',
+            ], 400);
+        }
+
+        // Update expired subscription
+        $subscription->update([
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth('sanctum')->user()->update(['is_subscribe' => true]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Subscription renewed successfully.',
+        ], 200);
+    }
+
+
+    private function createNewSubscription($userId, $plan)
+    {
+        Subscription::create([
+            'user_id' => $userId,
+            'plan_id' => $plan->id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration_value),
+            'amount' => $plan->price,
+            'total_amount' => $plan->price,
+            'duration' => $plan->duration_value,
+            'status' => 'active',
+        ]);
+        auth('sanctum')->user()->update(['is_subscribe' => true]);
+    }
+
+    public function Search(Request $request)
+    {
+        $entertainment = Entertainment::where('name', 'like', '%'.$request->key.'%')
+        ->orWhere('description','like','%'.$request->key.'%')
+        ->orWhereHas('entertainmentGenerMappings.genre', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->orWhereHas('entertainmentTalentMappings.talentprofile',function($query) use($request){
+            $query->where('name','like','%'.$request->key.'%');
+        })
+        ->orWhereHas('season', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->orWhereHas('episode', function ($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->key.'%');
+        })
+        ->get();
+        return  ItemListResource::collection($entertainment);
     }
 
 }

@@ -257,7 +257,7 @@
 
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger"></span>', 'IMDb_rating')->class('form-label') }}
+                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger">*</span>', 'IMDb_rating')->class('form-label') }}
                         {{ html()->text('IMDb_rating')
                                 ->attribute('value', old('IMDb_rating'))
                                 ->placeholder(__('movie.lbl_imdb_rating'))
@@ -270,7 +270,7 @@
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
                     </div>
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class="text-danger">*</span>', 'TMDb_rating')->class('form-label') }}
+                        {{ html()->label(__('movie.lbl_tmdb_rating') . ' <span class=""></span>', 'TMDb_rating')->class('form-label') }}
                         {{ html()->text('TMDb_rating')
                                 ->attribute('value', old('TMDb_rating'))
                                 ->placeholder(__('movie.lbl_tmdb_rating'))

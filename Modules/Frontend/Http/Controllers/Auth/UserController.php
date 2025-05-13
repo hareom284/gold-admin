@@ -2,13 +2,14 @@
 
 namespace Modules\Frontend\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\UserMultiProfile;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Modules\Subscriptions\Models\Subscription;
 use Modules\User\Transformers\UserMultiProfileResource;
-use Auth;
 
 class UserController extends Controller
 {
@@ -30,11 +31,18 @@ class UserController extends Controller
     {
          $user =Auth::user();
 
+         $activeSubscriptions = Subscription::where('user_id', auth()->id())->where('status', 'active')->where('end_date', '>', now())->orderBy('id','desc')->first();
+        $currentPlanId = $activeSubscriptions ? $activeSubscriptions->plan_id : null;
+        $subscriptions = Subscription::where('user_id', auth()->id())
+        ->with('subscription_transaction')
+        ->where('end_date', '<', now())
+        ->get();
+
          $Profile=UserMultiProfile::where('user_id', $user->id)->get();
 
          $userProfile = UserMultiProfileResource::collection($Profile);
 
-        return view('frontend::customProfile',compact('user','userProfile'));
+        return view('frontend::customProfile',compact('user','userProfile','activeSubscriptions'));
     }
 
     /**

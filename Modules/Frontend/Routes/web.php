@@ -38,10 +38,6 @@ Route::middleware(['checkInstallation'])->group(function () {
 
 
 Route::get('language/{language}', [LanguageController::class, 'switch'])->name('frontend.language.switch');
-Route::get('/login-page', [AuthController::class, 'login'])->name('login-page');
-Route::post('/store-user', [AuthController::class, 'store'])->name('store-user');
-// Route::get('/register', [AuthController::class, 'registration'])->name('register-page');
-Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name('forget-password');
 
 //download section
 Route::post('gold-predownload',[DownloadController::class, 'predownload'])->name('predownload');
@@ -90,7 +86,7 @@ Route::get('/all-review/{id}', [FrontendController::class, 'allReview'])->name('
 Route::get('/video-details', [FrontendController::class, 'VideoDetails'])->name('video-details');
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process-payment');
 Route::post('/select-plan', [PaymentController::class, 'selectPlan'])->name('select.plan');
-Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+// Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 Route::post('/cancel-subscription', [FrontendController::class, 'cancelSubscription'])->name('cancelSubscription');
 Route::post('/decrypt-url', [FrontendController::class, 'decryptUrl'])->name('decrypt.url');
 Route::post('/get-payment-details', [FrontendController::class, 'getPaymentDetails']);

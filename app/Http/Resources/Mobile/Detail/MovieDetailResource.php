@@ -82,8 +82,8 @@ class MovieDetailResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'description'=>$this->description,
-            'thumbnail_url'=>$this->thumbnail_url,
-            'poster_url'=>$this->poster_url,
+            'thumbnail_url'=>setBaseUrlWithFileName($this->thumbnail_url),
+            'poster_url'=>setBaseUrlWithFileName($this->poster_url),
             'movie_access'=>$this->movie_access,
             'plan_id'=>$this->plan_id,
             'language'=>$this->language,
@@ -94,11 +94,12 @@ class MovieDetailResource extends JsonResource
             'genres'=>GenresResource::collection($genres_data),
             'casts_crews' => CastCrewListResource::collection($castCrew_data),
             'more_items' =>ItemListResource::collection($more_items),
-            'download_links' => DownloadLinkResource::collection($download_links),
             'like' => $like,
             'watchlist' => $is_watchlist,
             'review_count'  => $review_count,
             'review_data' => $review_data,
+            'video_url' => $this->video_upload_type=='Local' ? setBaseUrlWithFileName($this->video_url_input) : $this->video_url_input,
+            'download_links' => DownloadLinkResource::collection($download_links),
         ];
     }
 }

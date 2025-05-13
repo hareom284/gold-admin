@@ -53,7 +53,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $user = User::with('subscriptionPackage')->where('email', request('email'))->first();
+        $user = User::with('subscriptionPackage')->where('username', request('user_name'))->first();
         if ($user == null) {
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
         }
@@ -101,7 +101,7 @@ class AuthController extends Controller
 
         }
 
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+        if (Auth::attempt(['username' => request('user_name'), 'password' => request('password')])) {
             $user = Auth::user();
 
 
@@ -111,6 +111,7 @@ class AuthController extends Controller
 
             // Save the user
             $user->save();
+
             $user['api_token'] = $user->createToken(setting('app_name'))->plainTextToken;
 
             if ($user->is_subscribe == 1) {
@@ -148,7 +149,6 @@ class AuthController extends Controller
                     'active_profile'=> $profile->id ?? null,
                 ]
             );
-
             $loginResource = new LoginResource($user);
             $message = __('messages.user_login');
 
@@ -431,9 +431,9 @@ class AuthController extends Controller
         }
 
         $request->validate([
-            'email' => 'required_without:mobile|nullable|email|unique:users,email,' . $user->id,
-            'mobile' => 'required_without:email|nullable|unique:users,mobile,' . $user->id,
-
+            'username' => 'required_without:email|unique:users,username,' . $user->id,
+            'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            // 'mobile' => 'required_without:email|nullable|unique:users,mobile,' . $user->id,
         ]);
 
 
@@ -448,17 +448,17 @@ class AuthController extends Controller
            $filename = $file->getClientOriginalName();
 
            if ($activeDisk == 'local') {
-            $destinationPath = 'streamit-laravel';
-            $filePath = $file->storeAs($destinationPath, $filename, 'public');
-            $file_url = '/storage/' . $filePath;
+                $destinationPath = 'streamit-laravel';
+                $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                $file_url = '/storage/' . $filePath;
 
-        } else {
+            } else {
 
-            $folderPath = 'streamit-laravel/' .  $filename ;
-            Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
-            $baseUrl = env('DO_SPACES_URL');
-            $file_url = $baseUrl . '/' . $folderPath;
-        }
+                $folderPath = 'streamit-laravel/' .  $filename ;
+                Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
+                $baseUrl = env('DO_SPACES_URL');
+                $file_url = $baseUrl . '/' . $folderPath;
+            }
 
             $data['file_url']=extractFileNameFromUrl($file_url);
 
