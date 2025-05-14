@@ -2,6 +2,7 @@
 
 namespace Modules\Subscriptions\Models;
 
+use App\Models\User;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,6 +27,11 @@ class SubscriptionTransactions extends BaseModel
     public function plan()
     {
         return $this->belongsTo(Plan::class,'plan_id','id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
 }

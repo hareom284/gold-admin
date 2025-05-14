@@ -90,7 +90,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::post('subscription', [SubscriptionController::class, 'storeWebSubscription'])->name('subscription.store');
     Route::get('subscription/success', [SubscriptionController::class, 'subscriptionSuccess'])->name('subscription.success');
     Route::get('subscription/fail', [SubscriptionController::class, 'subscriptionFail'])->name('subscription.fail');
+});
+
     //fallback for banking system
     Route::get('payment/success', [SubscriptionController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('payment/fail', [SubscriptionController::class, 'paymentFail'])->name('payment.fail');
-});

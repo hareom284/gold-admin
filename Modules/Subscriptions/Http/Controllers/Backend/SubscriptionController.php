@@ -193,7 +193,8 @@ class SubscriptionController extends Controller
     //callback form bank system
     public function paymentSuccess(Request $request)
     {
-        $subscriptionTransaction = SubscriptionTransactions::find($request->orderId);
+        $subscriptionTransaction = SubscriptionTransactions::where('order_id',$request->orderId)->first();
+
         $plan = $subscriptionTransaction->plan;
 
         $subscriptionData = [
@@ -220,7 +221,8 @@ class SubscriptionController extends Controller
                  'transaction_id'=>$request->posTransactionId,
             ]);
 
-            auth()->user()->update(['is_subscribe' => true]);
+
+            $subscriptionTransaction->user->update(['is_subscribe' => true]);
 
             return true;
     }
