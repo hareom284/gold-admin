@@ -5,7 +5,7 @@
 </div>
 <script>
     let interval = setInterval(() => {
-        fetch("{{route('check.payment.status',['subscriptionTransaction'=>$transactionId,'plan'=>$planId])}}")
+        fetch("{{route('check.payment.status',['subscriptionTransaction'=>$transactionId])}}")
             .then(response => response.json())
             .then(data => {
                 console.log(data);

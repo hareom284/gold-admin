@@ -14,6 +14,7 @@ class Subscription extends BaseModel
     use HasFactory;
 
     protected $fillable = ['plan_id',
+        'order_id',
         'user_id',
         'device_id',
         'start_date',
@@ -58,7 +59,7 @@ class Subscription extends BaseModel
         ->orderBY('id','desc')
         ->first();
         $agent = new Agent();
-    
+
         // Determine device type
         if ($agent->isMobile()) {
             $deviceType = 'mobile';
@@ -69,7 +70,7 @@ class Subscription extends BaseModel
         } else {
             $deviceType = 'unknown'; // For any unsupported device types
         }
-    
+
         // If there's no active subscription, only allow mobile
         if (!$currentSubscription) {
 

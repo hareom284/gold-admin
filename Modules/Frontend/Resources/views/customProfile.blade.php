@@ -182,20 +182,22 @@
                                     $subscripionData = auth()->user()->subscriptiondata;
                                 @endphp
 
-                                @foreach ($subscripionData as $subscription)
+                                @forelse ($subscripionData as $subscription)
                                     <div class="list-group">
                                         <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
                                             <div>
                                                 <span  style="color:#686868">ID: {{$subscription->id}}</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <span class="text-black fw-bold">{{$subscription?->plan?->name}}</span>
+                                                <span class="text-black fw-bold">{{$subscription->name}}</span>
                                                 <span class="text-black">{{$subscription->created_at}}</span>
                                                 <span class="text-black">{{Number::format($subscription->amount)}} MMKs</span>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                   <p class="text-muted">No history found!</p>
+                                @endforelse
 
                             </div>
                         </div>

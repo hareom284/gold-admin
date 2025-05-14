@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id')->nullable();
             $table->Integer('plan_id')->nullable();
             $table->Integer('user_id')->nullable();
             $table->dateTime('start_date')->nullable();
