@@ -62,15 +62,15 @@ class SubscriptionController extends Controller
             return redirect()->back()->with('error', 'You already have an active subscription.');
         }
 
-        $alreadyGetQrString = SubscriptionTransactions::where('user_id', auth()->id())->where('payment_status', 'qr_generate')->where('amount',$plan->total_price)->first();
+        // $alreadyGetQrString = SubscriptionTransactions::where('user_id', auth()->id())->where('payment_status', 'qr_generate')->where('amount',$plan->total_price)->first();
 
-        if ($alreadyGetQrString) {
-            $qrCode = QrCode::size(300)->generate($alreadyGetQrString->other_transactions_details);
-            $transactionId = $alreadyGetQrString->id;
-            $planId = $request->plan_id;
-            flash()->success('Qr generated successfully.');
-            return view('frontend::qrView',compact('qrCode','transactionId','planId'));
-        }
+        // if ($alreadyGetQrString) {
+        //     $qrCode = QrCode::size(300)->generate($alreadyGetQrString->other_transactions_details);
+        //     $transactionId = $alreadyGetQrString->id;
+        //     $planId = $request->plan_id;
+        //     flash()->success('Qr generated successfully.');
+        //     return view('frontend::qrView',compact('qrCode','transactionId','planId'));
+        // }
 
         $transaction = SubscriptionTransactions::create([
             'user_id' => auth()->id(),
@@ -85,7 +85,7 @@ class SubscriptionController extends Controller
                 'secretKey' => env('qr_secretKey'),
                 'ecCode' => env('qr_ecCode'),
                 'Content-Type' => 'application/json',
-                ])->post('https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/create',[
+                ])->post(env('qr_orderApi'),[
                     "requestNo" => $transaction->transaction_id,
                     "orderId" => $transaction->id,
                     "merchantId" => env('qr_merchantId'),
@@ -105,7 +105,7 @@ class SubscriptionController extends Controller
                     'other_transactions_details' => $qrString,
                 ]);
 
-                $qrCode = QrCode::size(300)->generate($qrString);
+                $qrCode = QrCode::size(300)->encoding('UTF-8')->generate($qrString);
                 $transactionId = $transaction->id;
                 $planId = $request->plan_id;
 
@@ -131,18 +131,9 @@ class SubscriptionController extends Controller
             'secretKey' => env('qr_secretKey'),
             'ecCode' => env('qr_ecCode'),
             'Content-Type' => 'application/json',
-            ])->get('https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/posEnquiry/'.$subscriptionTransaction->id);
+            ])->get(env('qr_checkPaymentApi').$subscriptionTransaction->id);
 
         if($response->object()->data->paymentTxnStatus == 200){
-            $subscriptionData = [
-                'plan_id' => $plan->id,
-                'start_date' => Carbon::now(),
-                'end_date' => Carbon::now()->addDays($plan->duration_value),
-                'amount' => $plan->price,
-                'total_amount' => $plan->total_price,
-                'duration' => $plan->duration_value,
-                'status' => 'active',
-            ];
             $subscription = Subscription::Create(
                 [
                     'user_id' => auth()->id(),
