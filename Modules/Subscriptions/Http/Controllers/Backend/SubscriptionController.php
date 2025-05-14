@@ -136,32 +136,32 @@ class SubscriptionController extends Controller
             'Content-Type' => 'application/json',
             ])->get(env('qr_checkPaymentApi').$subscriptionTransaction->order_id);
 
-        // if($response->object()->data->paymentTxnStatus == 200){
-        //     $subscription = Subscription::Create(
-        //         [
-        //             'order_id'=>$subscriptionTransaction->order_id,
-        //             'user_id' => auth()->id(),
-        //             'plan_id' => $plan->id,
-        //             'start_date' => Carbon::now(),
-        //             'end_date' => Carbon::now()->addDays($plan->duration_value),
-        //             'name'=>$plan->name,
-        //             'type'=>$plan->identifier,
-        //             'level'=>$plan->level,
-        //             'amount' => $plan->price,
-        //             'total_amount' => $plan->total_price,
-        //             'duration' => $plan->duration_value,
-        //             'status' => 'active',
-        //         ],
-        //     );
+        if($response->object()->data->paymentTxnStatus == 200){
+            $subscription = Subscription::Create(
+                [
+                    'order_id'=>$subscriptionTransaction->order_id,
+                    'user_id' => auth()->id(),
+                    'plan_id' => $plan->id,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays($plan->duration_value),
+                    'name'=>$plan->name,
+                    'type'=>$plan->identifier,
+                    'level'=>$plan->level,
+                    'amount' => $plan->price,
+                    'total_amount' => $plan->total_price,
+                    'duration' => $plan->duration_value,
+                    'status' => 'active',
+                ],
+            );
 
-        //     $subscriptionTransaction->update([
-        //         'payment_status' => 'paid',
-        //         'subscriptions_id' => $subscription->id,
-        //         'transaction_id'=>$response->object()->data->posTransactionId,
-        //     ]);
+            $subscriptionTransaction->update([
+                'payment_status' => 'paid',
+                'subscriptions_id' => $subscription->id,
+                'transaction_id'=>$response->object()->data->posTransactionId,
+            ]);
 
-        //     auth()->user()->update(['is_subscribe' => true]);
-        // }
+            auth()->user()->update(['is_subscribe' => true]);
+        }
         return response()->json($response->json());
     }
 
