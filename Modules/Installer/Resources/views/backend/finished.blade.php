@@ -19,7 +19,7 @@
  <div class="setup-actions">
 
     <div class="buttons">
-        <a href="{{ route('user.login') }}" class="button intsaller-btn" id="exit-button" onclick="disableButton()">
+        <a href="{{ route('login-form') }}" class="button intsaller-btn" id="exit-button" onclick="disableButton()">
             {{ trans('installer_messages.final.user_website') }}
         </a>
     </div>

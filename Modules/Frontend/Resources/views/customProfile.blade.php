@@ -108,7 +108,7 @@
                                     @endif
                                 </div> --}}
                         </div>
-                        <div class="card p-5 " style="background:#F5F5F5">
+                        {{-- <div class="card p-5 " style="background:#F5F5F5">
                             <div class="card-body ">
                                 <div class="edit-profile-content mb-5">
                                     <h5 class="text-black">Subscription</h5>
@@ -140,7 +140,6 @@
                                         $plans = Modules\Subscriptions\Models\Plan::all();
                                     @endphp
                                     <form action="{{route('subscription.qrgenerate')}}" method="POST">
-                                    {{-- <form action="{{route('subscription.store')}}" method="POST"> --}}
                                         @csrf
                                             @foreach ($plans as $plan)
                                                 <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
@@ -169,7 +168,7 @@
                                 @endif
 
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="tab-pane fade mt-3" id="paymentLog" role="tabpanel">
                         <div class="card p-5 " style="background:#F5F5F5">
