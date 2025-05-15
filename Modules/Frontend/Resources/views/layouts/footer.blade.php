@@ -23,26 +23,29 @@ $footerData = getFooterData();
               </p>
 
               <div class="mt-3 mb-1 d-flex justify-content-center gap-3 ">
-                  <button class="btn btn-outline-light">
-                      <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <g clip-path="url(#clip0_221_429)">
-                          <path d="M12.98 12.0198L1.37001 23.6298C0.815015 23.1048 0.515015 22.3848 0.515015 21.6048V3.39484C0.515015 2.59984 0.830015 1.87984 1.40001 1.33984L12.98 12.0198Z" fill="#2196F3"/>
-                          <path d="M23.015 12.5001C23.015 13.5501 22.445 14.4801 21.5 15.0051L18.2 16.8351L14.105 13.0551L12.98 12.0201L17.315 7.68506L21.5 9.99506C22.445 10.5201 23.015 11.4501 23.015 12.5001Z" fill="#FFC107"/>
-                          <path d="M12.98 12.0201L1.40002 1.34015C1.55002 1.19015 1.74502 1.05515 1.94002 0.935148C2.88502 0.365148 4.02502 0.350148 5.00002 0.890148L17.315 7.68515L12.98 12.0201Z" fill="#4CAF50"/>
-                          <path d="M18.2 16.835L5 24.11C4.535 24.38 4.01 24.5 3.5 24.5C2.96 24.5 2.42 24.365 1.94 24.065C1.7317 23.9457 1.54004 23.7994 1.37 23.63L12.98 12.02L14.105 13.055L18.2 16.835Z" fill="#F44336"/>
-                          </g>
-                          <defs>
-                          <clipPath id="clip0_221_429">
-                          <rect width="24" height="24" fill="white" transform="translate(0.5 0.5)"/>
-                          </clipPath>
-                          </defs>
-                      </svg>
-                      Get on Google Play</button>
-                  <button class="btn  btn-outline-light d-flex align-items-center gap-1">
-                      <i class="ph-fill ph-apple-logo text-white fs-5"></i>
-                      Get on App Store</button>
+                  <button class="btn btn-outline-light btn-store">
+                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <g clip-path="url(#clip0_221_429)">
+                                          <path d="M12.98 12.0198L1.37001 23.6298C0.815015 23.1048 0.515015 22.3848 0.515015 21.6048V3.39484C0.515015 2.59984 0.830015 1.87984 1.40001 1.33984L12.98 12.0198Z" fill="#2196F3"/>
+                                          <path d="M23.015 12.5001C23.015 13.5501 22.445 14.4801 21.5 15.0051L18.2 16.8351L14.105 13.0551L12.98 12.0201L17.315 7.68506L21.5 9.99506C22.445 10.5201 23.015 11.4501 23.015 12.5001Z" fill="#FFC107"/>
+                                          <path d="M12.98 12.0201L1.40002 1.34015C1.55002 1.19015 1.74502 1.05515 1.94002 0.935148C2.88502 0.365148 4.02502 0.350148 5.00002 0.890148L17.315 7.68515L12.98 12.0201Z" fill="#4CAF50"/>
+                                          <path d="M18.2 16.835L5 24.11C4.535 24.38 4.01 24.5 3.5 24.5C2.96 24.5 2.42 24.365 1.94 24.065C1.7317 23.9457 1.54004 23.7994 1.37 23.63L12.98 12.02L14.105 13.055L18.2 16.835Z" fill="#F44336"/>
+                                          </g>
+                                          <defs>
+                                          <clipPath id="clip0_221_429">
+                                          <rect width="24" height="24" fill="white" transform="translate(0.5 0.5)"/>
+                                          </clipPath>
+                                          </defs>
+                                      </svg>
+                    <span class="btn-store-text ms-2">Get on Google Play</span>
+                  </button>
+                  
+                  <button class="btn btn-outline-light btn-store d-flex align-items-center">
+                    <i class="ph-fill ph-apple-logo fs-5"></i>
+                    <span class="btn-store-text ms-2">Get on App Store</span>
+                  </button>
               </div>
-        </div>
+          </div>
   </div>
   <div class="footer-bottom mt-5 border-top  mx-5">
     <div class="container-fluid">
@@ -53,7 +56,6 @@ $footerData = getFooterData();
   </div>
 </footer>
 
-@push('styles')
 <style>
   .footer {
     background: #1a1a1a;
@@ -74,7 +76,7 @@ $footerData = getFooterData();
     border-color: white;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 473px) {
     .logo {
       max-height: 40px !important;
     }
@@ -87,9 +89,27 @@ $footerData = getFooterData();
       width: 100%;
       justify-content: center;
     }
+ 
+    .btn-store-text {
+      display: none !important;
+    }
+    
+    .btn-store {
+      padding: 8px 12px !important;
+    }
+    
+    .btn-store svg,
+    .btn-store i {
+      width: 24px;
+      height: 24px;
+      margin: 0 !important;
+    }
+ 
+    .btn-store {
+      padding: 10px 24px;
+    }
   }
 </style>
-@endpush
 
 <!-- Sticky Footer -->
 @include('frontend::components.partials.footer-sticky-menu')

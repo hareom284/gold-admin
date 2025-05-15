@@ -100,15 +100,15 @@
                                     @endif
                                 </div>
                             </div>
-                                {{-- <div class="d-flex gap-3">
-                                    @if(!empty($activeSubscriptions))
-                                        <button class="btn btn-light subscription-btn">{{ __('frontend.upgrade') }}</button>
-                                    @else
-                                        <button class="btn btn-light subscription-btn">{{ __('frontend.subscribe') }}</button>
-                                    @endif
-                                </div> --}}
+                            <div class="d-flex gap-3">
+                                @if(!empty($activeSubscriptions))
+                                    <button class="btn btn-light subscription-btn">{{ __('frontend.upgrade') }}</button>
+                                @else
+                                    <button class="btn btn-light subscription-btn">{{ __('frontend.subscribe') }}</button>
+                                @endif
+                            </div>
                         </div>
-                        {{-- <div class="card p-5 " style="background:#F5F5F5">
+                        <div class="card p-5 " style="background:#F5F5F5">
                             <div class="card-body ">
                                 <div class="edit-profile-content mb-5">
                                     <h5 class="text-black">Subscription</h5>
@@ -168,7 +168,7 @@
                                 @endif
 
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="tab-pane fade mt-3" id="paymentLog" role="tabpanel">
                         <div class="card p-5 " style="background:#F5F5F5">
