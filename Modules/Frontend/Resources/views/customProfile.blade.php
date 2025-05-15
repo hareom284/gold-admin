@@ -129,7 +129,7 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                                         <span class="text-bold text-black">{{$user->subscriptionPackage->plan->duration_value}} {{$user->subscriptionPackage->plan->duration}}</span>
-                                                        <span class="text-bold text-black">{{$user->subscriptionPackage->plan->total_price}} MMK</span>
+                                                        <span class="text-bold text-black">{{Currency::format($user->subscriptionPackage->plan->total_price)}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -154,7 +154,7 @@
                                                                 </div>
                                                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                                                     <span class="fw-bold text-black">{{$plan->duration_value}} {{$plan->duration}}</span>
-                                                                    <span class="fw-bold text-black">{{$plan->total_price}} MMK</span>
+                                                                    <span class="fw-bold text-black">{{Currency::format($plan->total_price)}}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -182,20 +182,22 @@
                                     $subscripionData = auth()->user()->subscriptiondata;
                                 @endphp
 
-                                @foreach ($subscripionData as $subscription)
+                                @forelse ($subscripionData as $subscription)
                                     <div class="list-group">
                                         <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
                                             <div>
                                                 <span  style="color:#686868">ID: {{$subscription->id}}</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <span class="text-black fw-bold">{{$subscription?->plan?->name}}</span>
+                                                <span class="text-black fw-bold">{{$subscription->name}}</span>
                                                 <span class="text-black">{{$subscription->created_at}}</span>
-                                                <span class="text-black">{{Number::format($subscription->amount)}} MMKs</span>
+                                                <span class="text-black">{{Currency::format($subscription->amount)}}</span>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                   <p class="text-muted">No history found!</p>
+                                @endforelse
 
                             </div>
                         </div>

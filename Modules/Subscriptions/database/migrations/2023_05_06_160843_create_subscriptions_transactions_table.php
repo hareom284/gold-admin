@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('subscriptions_transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('request_no')->nullable();
+            $table->string('order_id')->nullable();
+            $table->text('qr_string')->nullable();
+            $table->integer('plan_id')->nullable();
             $table->Integer('subscriptions_id')->nullable();
             $table->Integer('user_id')->nullable();
             $table->Double('amount')->nullable();
