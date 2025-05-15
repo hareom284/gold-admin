@@ -38,15 +38,17 @@
     @php
         $route_name = Route::currentRouteName()
     @endphp
-   @if ($route_name != 'accountSetting')
-      @include('frontend::layouts.header')
-   @else
-      @include('frontend::layouts.account_setting_header')
-   @endif
+    @if ($route_name == 'accountSetting')
+         @include('frontend::layouts.account_setting_header')
+    @elseif($route_name == 'subscription.qrgenerate')
+    @else
+        @include('frontend::layouts.header')
+    @endif
+
 
     @yield('content')
 
-    @if ($route_name != 'accountSetting')
+    @if ($route_name != 'accountSetting' && $route_name != 'subscription.qrgenerate')
        @include('frontend::layouts.footer')
     @endif
 

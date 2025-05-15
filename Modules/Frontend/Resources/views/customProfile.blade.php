@@ -143,9 +143,9 @@
                                         @csrf
                                             @foreach ($plans as $plan)
                                                 <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
-                                                    <input class="form-check-input me-5" type="radio" name="plan_id" id="flexRadioDefault1" value="{{$plan->id}}">
+                                                    <input class="form-check-input me-5" type="radio" name="plan_id" id="{{$plan->id}}" value="{{$plan->id}}">
 
-                                                    <label class="form-check-label w-100 " for="flexRadioDefault1">
+                                                    <label class="form-check-label w-100 " for="{{$plan->id}}">
                                                         <div class="list-group " >
                                                             <div class="list-group-item  p-4 " style="background:#F5F5F5">
                                                                 <div>
