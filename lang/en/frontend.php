@@ -221,5 +221,15 @@ return[
     'continue_watching_for'=>'Continue Watching for',
     'status' => 'Status',
     'favorite_personality'=> 'Favorite Personality',
-    'price'=>"Amount"
+    'price'=>"Amount",
+    'scan_mmqr' => 'Scan QR Code to Complete Subscription',
+    'mobile_qr_code' => 'Mobile Payment QR Code',
+    'pay_step_1' => 'Open your mobile banking/payment app',
+    'pay_step_2' => 'Tap "Scan QR Code" in the app',
+    'pay_step_3' => 'Align QR code within scanner frame',
+    'pay_step_4' => 'Confirm payment details and authenticate',
+    'sub_plan' => 'Subscription Plan',
+    'amount' => 'Amount',
+    'ref_id' => 'Reference Id',
+    'valid' => 'Valid Until'
 ];

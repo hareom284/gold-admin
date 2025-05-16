@@ -218,5 +218,15 @@ return[
     'continue_watching_for'=>'Continue Watching for',
     'status' => 'Status',
     'favorite_personality'=> 'Favorite Personality',
-    'price'=>"Amount"
+    'price'=>"Amount",
+    'scan_mmqr' => 'စာရင်းသွင်းမှုကို အပြီးသတ်ရန် QR ကုဒ်ကို စကင်န်ဖတ်ပါ',
+    'mobile_qr_code' => 'မိုဘိုင်းငွေပေးချေမှု QR ကုဒ်',
+    'pay_step_1' => 'သင့်မိုဘိုင်းဘဏ်လုပ်ငန်း/ငွေပေးချေမှုအက်ပ်ကို ဖွင့်ပါ',
+    'pay_step_2' => 'အက်ပ်ရှိ "စကင်န် QR ကုဒ်" ကိုနှိပ်ပါ',
+    'pay_step_3' => 'စကင်နာဘောင်အတွင်း QR ကုဒ်ကို ချိန်ညှိပါ',
+    'pay_step_4' => 'ငွေပေးချေမှုအသေးစိတ်များကို အတည်ပြုပြီး စစ်မှန်ကြောင်းသက်သေပြပါ',
+    'sub_plan' => 'စာရင်းသွင်းမှု အစီအစဉ်',
+    'amount' => 'ပမာဏ',
+    'ref_id' => 'အကိုးအကား ID',
+    'valid' => 'အကျုံးဝင်သည်'
 ];

@@ -112,7 +112,10 @@ class SubscriptionController extends Controller
 
                 // Display a success toast with no title
                 flash()->success('Qr generated successfully.');
-                return view('frontend::qrView',compact('qrCode','transactionId'));
+
+                $sub_transaction = SubscriptionTransactions::where('id',$transaction->id)->with('plan')->first();
+
+                return view('frontend::qrView',compact('qrCode','transaction','sub_transaction'));
             }else{
                 return redirect()->back()->with('error', 'Error generating QR code: ' . $response->json('errorMessage'));
             }
