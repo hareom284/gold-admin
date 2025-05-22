@@ -216,14 +216,23 @@
         EntertainmentList.innerHTML = ''; // Clear old results
 
         try {
-            const response = await fetch(`${envURL}/api/movie-list?page=${page}&is_ajax=1&per_page=${per_page}`);
+            // Build URL with current filters
+            let url = `${envURL}/api/movie-list?page=${page}&is_ajax=1&per_page=${per_page}`;
+            if (language) {
+                url += `&language=${language}`;
+            }
+            if (genreId) {
+                url += `&genre_id=${genreId}`;
+            }
+
+            const response = await fetch(url);
             const data = await response.json();
 
             if (data?.html) {
                 EntertainmentList.innerHTML = data.html;
                 shimmerContainer.style.display = 'none';
                 hasMore = !!data.hasMore;
-                renderPagination(data.totalItems); // Re-render pagination with updated active page
+                renderPagination(data.totalItems);
                 initializeWatchlistButtons();
             } else {
                 showNoDataImage();
