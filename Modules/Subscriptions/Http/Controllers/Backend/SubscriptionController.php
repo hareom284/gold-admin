@@ -107,7 +107,7 @@ class SubscriptionController extends Controller
                     'qr_string' => $qrString,
                 ]);
 
-                $qrCode = QrCode::size(300)->encoding('UTF-8')->generate($qrString);
+                $qrCode = QrCode::size(200)->encoding('UTF-8')->generate($qrString);
                 $transactionId = $transaction->id;
 
                 // Display a success toast with no title

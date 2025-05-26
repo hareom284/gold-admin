@@ -95,20 +95,20 @@
                                         <h6 class="super-plan">{{ $activeSubscriptions->name }}</h6>
                                         <p class="mb-0 text-body">{{__('frontend.expiring_on')}} {{ \Carbon\Carbon::parse($activeSubscriptions->end_date)->format('d F, Y') }}</p>
                                     @else
-                                        <h6 class="super-plan">{{__('frontend.no_active_plan')}}</h6>
+                                        <h6 class="super-plan fs-6">{{__('frontend.no_active_plan')}}</h6>
                                         <p class="mb-0 text-body">{{__('frontend.not_active_subscription')}}</p>
                                     @endif
                                 </div>
                             </div>
-                            <div class="d-flex gap-3">
+                            {{-- <div class="d-flex gap-3">
                                 @if(!empty($activeSubscriptions))
                                     <button class="btn btn-light subscription-btn">{{ __('frontend.upgrade') }}</button>
                                 @else
                                     <button class="btn btn-light subscription-btn">{{ __('frontend.subscribe') }}</button>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
-                        <div class="card p-5 " style="background:#F5F5F5">
+                        <div class="card p-md-5 p-0" style="background:#F5F5F5">
                             <div class="card-body ">
                                 <div class="edit-profile-content mb-5">
                                     <h5 class="text-black">Subscription</h5>
@@ -143,11 +143,11 @@
                                         @csrf
                                             @foreach ($plans as $plan)
                                                 <div class="form-check align-items-center col-12 col-md-6 mb-2" style="display: flex !important">
-                                                    <input class="form-check-input me-5" type="radio" name="plan_id" id="{{$plan->id}}" value="{{$plan->id}}">
+                                                    <input class="form-check-input me-1 me-md-5" type="radio" name="plan_id" id="{{$plan->id}}" value="{{$plan->id}}">
 
                                                     <label class="form-check-label w-100 " for="{{$plan->id}}">
                                                         <div class="list-group " >
-                                                            <div class="list-group-item  p-4 " style="background:#F5F5F5">
+                                                            <div class="list-group-item  p-md-4 p-2" style="background:#F5F5F5">
                                                                 <div>
                                                                     <span class="text-black">{{$plan->name}}</span>
                                                                 </div>
@@ -161,7 +161,6 @@
                                                 </div>
                                             @endforeach
                                         <div class="d-grid gap-2 w-50 mt-3">
-
                                             <button class="btn btn-custom-button-two" type="submit">Subscribe</button>
                                         </div>
                                     </form>

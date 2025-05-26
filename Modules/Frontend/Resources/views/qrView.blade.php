@@ -21,8 +21,9 @@ use Carbon\Carbon;
                 <div class="qr-card bg-white p-4 rounded-4 shadow-lg mb-4">
                     <div class="text-center mb-3">
                         <h4 class="fw-bold mb-3 text-black">{{ __('frontend.mobile_qr_code') }}</h4>
-                        <div class="qr-wrapper bg-white p-3 rounded-3 border">
-                            {!! $qrCode !!}
+                        <div class="qr-wrapper  bg-white p-3 rounded-3 border">
+                            {{-- {!! $qrCode !!} --}}
+                            {!! str_replace('<img ', '<img class="w-full h-auto" ', $qrCode) !!}
                         </div>
                     </div>
 
@@ -59,15 +60,15 @@ use Carbon\Carbon;
                     <dl class="row mb-0 text-black">
                         <dt class="col-6">Plan</dt>
                         <dd class="col-6 text-end">GoldChannel {{$sub_transaction->plan->name}}</dd>
-                        
+
                         <dt class="col-6">{{ __('frontend.amount') }}</dt>
                         <dd class="col-6 text-end">MMK {{ number_format($sub_transaction->amount, 0) }}</dd>
-                        
+
                         <dt class="col-6">{{ __('frontend.ref_id') }}</dt>
-                        <dd class="col-6 text-end">GC{{ $sub_transaction->order_id }}</dd>
-                        
+                        <dd class="col-6 text-end display-1">GC{{ $sub_transaction->order_id }}</dd>
+
                         <dt class="col-6">{{ __('frontend.valid') }}</dt>
-                        <dd class="col-6 text-end">{{ Carbon::now()->addDays($sub_transaction->plan->duration_value) }}</dd>
+                        <dd class="col-6 fs-6">{{ Carbon::now()->addDays($sub_transaction->plan->duration_value) }}</dd>
 
                     </dl>
                 </div>
@@ -116,36 +117,36 @@ use Carbon\Carbon;
     .payment-qr-container {
         padding: 2rem 0;
     }
-    
+
     .qr-card {
         border: 1px solid #e0e0e0;
     }
-    
+
     .payment-logo {
         filter: grayscale(100%);
         opacity: 0.7;
         transition: all 0.3s ease;
     }
-    
+
     .payment-logo:hover {
         filter: grayscale(0);
         opacity: 1;
     }
-    
+
     .qr-wrapper {
         margin: 0 auto;
     }
-    
+
     @media (max-width: 768px) {
-        .payment-details-card dt, 
+        .payment-details-card dt,
         .payment-details-card dd {
             font-size: 0.9rem;
         }
-        
+
         .qr-wrapper {
             max-width: 220px;
         }
-        
+
         .payment-logo {
             height: 35px !important;
         }

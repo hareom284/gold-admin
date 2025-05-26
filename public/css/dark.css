@@ -65,7 +65,7 @@ body {
 
 .dark {
   /*
-   * Background color 
+   * Background color
    */
 }
 .dark .bg-soft-primary {
@@ -1017,7 +1017,7 @@ body {
   border-color: #313131;
 }
 .dark .dropdown-menu {
-  background-color: var(--bs- #181818);
+  background-color: var(--bs- #000000);
   color: var(--bs- #d7dbdf);
 }
 .dark .dropdown-menu .dropdown-item {

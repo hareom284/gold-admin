@@ -16,7 +16,6 @@ Route::group(['prefix'=>'v1'],function(){
     //google login api
     Route::get('auth/google',[ApiController::class, 'redirectToGoogle']);
     Route::post('auth/google/callback',[ApiController::class, 'handleGoogleCallback']);
-    Route::get('token/{uid}',[ApiController::class, 'generateToken']);
 
 
     // //phone number login api

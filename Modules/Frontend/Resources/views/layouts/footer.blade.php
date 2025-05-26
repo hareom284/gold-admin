@@ -10,19 +10,19 @@ $footerData = getFooterData();
         <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center mb-lg-5 mb-4">
           <div class="d-flex align-items-center mb-3 mb-lg-0">
             <a class="navbar-brand" href="{{route('home')}}">
-              <img class="img-fluid logo" src="{{ asset(setting('dark_logo')) }}" 
+              <img class="img-fluid logo" src="{{ asset(setting('dark_logo')) }}"
                    alt="Gold Channel" style="max-height: 50px;">
             </a>
           </div>
         </div>
 
             <div class="col-12 col-lg-8 text-center mb-lg-5 mb-4">
-              <h2 class="fw-bold fs-5 fs-lg-3 mb-3">Download Our App</h2>
-              <p class="text-gray-300 fs-5 fs-lg-6 lh-lg mb-4">
+              <h2 class="fw-bold fs-6 fs-md-5 fs-lg-4 mb-3">Download Our App</h2>
+              <p class="text-gray-300 fs-6 fs-lg-5 lh-lg mb-4">
                 Enjoy instant access to the best movies and TV shows right on your mobile screen.
               </p>
 
-              <div class="mt-3 mb-1 d-flex justify-content-center gap-3 ">
+              <div class="mt-3 mb-1 d-flex justify-content-center gap-md-3 gap-1">
                   <button class="btn btn-outline-light btn-store">
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <g clip-path="url(#clip0_221_429)">
@@ -39,7 +39,7 @@ $footerData = getFooterData();
                                       </svg>
                     <span class="btn-store-text ms-2">Get on Google Play</span>
                   </button>
-                  
+
                   <button class="btn btn-outline-light btn-store d-flex align-items-center">
                     <i class="ph-fill ph-apple-logo fs-5"></i>
                     <span class="btn-store-text ms-2">Get on App Store</span>
@@ -49,7 +49,7 @@ $footerData = getFooterData();
   </div>
   <div class="footer-bottom mt-5 border-top  mx-5">
     <div class="container-fluid">
-      <div class="text-center" style="font-weight: 400;font-size:18px;line-height:29px;">
+      <div class="text-center fs-6" style="font-weight: 400;line-height:29px;">
         © {{ now()->year }} <span >Gold Channel</span>. {{__('frontend.all_rights_reserved')}}.
       </div>
     </div>
@@ -61,7 +61,7 @@ $footerData = getFooterData();
     background: #1a1a1a;
     color: #ffffff;
   }
-  
+
   .text-gray-300 {
     color: #BEBEBE;
   }
@@ -80,31 +80,31 @@ $footerData = getFooterData();
     .logo {
       max-height: 40px !important;
     }
-    
+
     .fs-lg-2 {
       font-size: 1.4rem !important;
     }
-    
+
     .btn {
       width: 100%;
       justify-content: center;
     }
- 
+
     .btn-store-text {
       display: none !important;
     }
-    
+
     .btn-store {
       padding: 8px 12px !important;
     }
-    
+
     .btn-store svg,
     .btn-store i {
       width: 24px;
       height: 24px;
       margin: 0 !important;
     }
- 
+
     .btn-store {
       padding: 10px 24px;
     }

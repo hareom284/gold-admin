@@ -122,38 +122,6 @@ class ApiController extends Controller
             return Socialite::driver('google')->stateless()->redirect();
         }
 
-        //get firebase login user
-        public function generateToken(){
-            $auth = app('firebase.auth');
-            $token =  $auth->createCustomToken('NcNS24KcdBRlDFk96jNF6f2ebN53');
-            return response()->json([
-                'success'=>true,
-                'token'=>$token->toString(),
-            ],200);
-            try {
-                $users = $auth->listUsers();
-                $userList = [];
-
-                foreach ($users as $user) {
-                    $userList[] = [
-                        'uid' => $user->uid,
-                        'email' => $user->email,
-                        'name' => $user->displayName,
-                        'phone' => $user->phoneNumber,
-                    ];
-                }
-                return response()->json([
-                    'success' => true,
-                    'users' => $userList
-                ], 200);
-
-            } catch (\Exception $e) {
-                return response()->json([
-                    'error' => $e->getMessage()
-                ], 500);
-            }
-        }
-
        //google callback
        public function handleGoogleCallback(Request $request)
        {
