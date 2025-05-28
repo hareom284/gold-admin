@@ -46,7 +46,6 @@ class SubscriptionController extends Controller
 
     public function generateQr(Request $request)
     {
-
         $plan = Plan::find($request->plan_id);
 
         // Validate plan existence
@@ -61,16 +60,6 @@ class SubscriptionController extends Controller
         if ($subscription && $subscription->end_date > Carbon::now()) {
             return redirect()->back()->with('error', 'You already have an active subscription.');
         }
-
-        // $alreadyGetQrString = SubscriptionTransactions::where('user_id', auth()->id())->where('payment_status', 'qr_generate')->where('amount',$plan->total_price)->first();
-
-        // if ($alreadyGetQrString) {
-        //     $qrCode = QrCode::size(300)->generate($alreadyGetQrString->other_transactions_details);
-        //     $transactionId = $alreadyGetQrString->id;
-        //     $planId = $request->plan_id;
-        //     flash()->success('Qr generated successfully.');
-        //     return view('frontend::qrView',compact('qrCode','transactionId','planId'));
-        // }
 
         $transaction = SubscriptionTransactions::create([
             'request_no'=>'REQ'.strtoupper(uniqid()),

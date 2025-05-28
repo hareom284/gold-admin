@@ -178,4 +178,5 @@ class Entertainment extends BaseModel
         return $this->hasMany(Episode::class,'entertainment_id')->with('plan','EpisodeStreamContentMapping');
     }
 
+
 }

@@ -105,7 +105,6 @@ use Carbon\Carbon;
                         customerPhone: data.data.customerPhone,
                         paymentTxnID: data.data.paymentTxnID,
                     });
-
                     window.location.href = `${baseUrl}?${queryParams.toString()}`;
                 }
             })

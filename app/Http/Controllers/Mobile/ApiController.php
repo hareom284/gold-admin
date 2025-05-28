@@ -11,6 +11,8 @@ use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Google\Service\Analytics\Profile;
 use Modules\Entertainment\Models\Like;
 use Modules\Subscriptions\Models\Plan;
 use Laravel\Socialite\Facades\Socialite;
@@ -24,14 +26,16 @@ use Modules\Entertainment\Models\Entertainment;
 use App\Http\Resources\Mobile\Genral\PlanResource;
 use App\Http\Resources\Mobile\Home\BannerResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
+use App\Http\Resources\Mobile\Genral\ProfileResource;
 use App\Http\Resources\Mobile\Genral\WatchListResource;
 use Modules\Entertainment\Models\EntertainmentDownload;
 use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
-use App\Http\Resources\Mobile\Genral\ProfileResource;
+use Modules\Subscriptions\Models\SubscriptionTransactions;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
-use Google\Service\Analytics\Profile;
+use App\Http\Resources\Mobile\Subscription\SubscriptionDetailResource;
+use Modules\Genres\Models\Genres;
 
 class ApiController extends Controller
 {
@@ -168,6 +172,7 @@ class ApiController extends Controller
                        'success'=>true,
                        'message' => 'Login successfully.',
                        'token' => $token,
+                       'user'=> new ProfileResource($newUser),
                    ], 201);
                }
 
@@ -180,13 +185,13 @@ class ApiController extends Controller
                }
 
                // Check device limit if applicable
-               if ($request->has('device_id')) {
-                   $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
+            //    if ($request->has('device_id')) {
+            //        $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
 
-                   if (isset($response['error'])) {
-                       return response()->json(['error' => $response['error']], 500);
-                   }
-               }
+            //        if (isset($response['error'])) {
+            //            return response()->json(['error' => $response['error']], 500);
+            //        }
+            //    }
 
                // Generate auth token
                $token = $existingUser->createToken('auth_token')->plainTextToken;
@@ -195,6 +200,7 @@ class ApiController extends Controller
                    'success'=>true,
                    'message' => 'Login successfully.',
                    'token' => $token,
+                   'user'=>new ProfileResource($existingUser),
                ], 200);
            } catch (\Exception $e) {
                return response()->json(["error" => $e->getMessage()], 500);
@@ -426,7 +432,7 @@ class ApiController extends Controller
        //HomeBanner
        public function HomeBanner()
        {
-           $bannerList = Banner::where('status',1)->get();
+          $bannerList = Banner::where('status',1)->get();
           $banners = BannerResource::collection($bannerList);
 
             return response()->json([
@@ -750,12 +756,15 @@ class ApiController extends Controller
         }
 
         $like = Like::where('entertainment_id', $entertainment_id)->where('user_id', $user_id)->first();
+
         if($like){
             $like->is_like = !$like->is_like;
             $like->save();
+            $total_like = Like::where('entertainment_id', $entertainment_id)->where('is_like', 1)->count();
             return response()->json([
                 'success'=>true,
                 'message'=>'Like status updated successfully',
+                'total_like'=>$total_like,
             ],200);
         }else{
             Like::create([
@@ -764,9 +773,11 @@ class ApiController extends Controller
                 'type' => $entertainment->type,
                 'is_like' => 1,
             ]);
+            $total_like = Like::where('entertainment_id', $entertainment_id)->where('is_like', 1)->count();
             return response()->json([
                 'success'=>true,
                 'message'=>'Like added successfully',
+                'total_like'=>$total_like,
             ],200);
         }
 
@@ -862,6 +873,7 @@ class ApiController extends Controller
 
     public function Search(Request $request)
     {
+
         $entertainment = Entertainment::where('name', 'like', '%'.$request->key.'%')
         ->orWhere('description','like','%'.$request->key.'%')
         ->orWhereHas('entertainmentGenerMappings.genre', function ($query) use ($request) {
@@ -877,7 +889,158 @@ class ApiController extends Controller
             $query->where('name', 'like', '%'.$request->key.'%');
         })
         ->get();
+
+        if($request->genres_id){
+            $entertainment = $entertainment->filter(function($item) use ($request) {
+                return $item->entertainmentGenerMappings->contains('genre_id', $request->genres_id);
+            });
+        }
+
         return  ItemListResource::collection($entertainment);
+    }
+
+    public function GenresList()
+    {
+        $genres = Genres::where('status', 1)->select('id','name')->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Genres list retrieved successfully',
+            'data' => $genres,
+        ], 200);
+    }
+
+    public function GetQR(Request $request)
+    {
+        $plan = Plan::find($request->plan_id);
+
+        // Validate plan existence
+        if (!$plan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Plan not found',
+            ], 404);
+        }
+
+        // Check existing subscription
+        $subscription = auth('sanctum')->user()->subscriptionPackage;
+
+        if ($subscription && $subscription->end_date > Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You already have an active subscription.',
+            ], 400);
+        }
+
+        $transaction = SubscriptionTransactions::create([
+            'request_no'=>'REQ'.strtoupper(uniqid()),
+            'order_id'=>'ORD'. strtoupper(uniqid()),
+            'plan_id'=>$plan->id,
+            'user_id' => auth('sanctum')->id(),
+            'amount' => $plan->total_price,
+            'payment_type' => 'mqr',
+            'payment_status' => 'pending',
+        ]);
+
+        try{
+            $response  = Http::withHeaders([
+                'secretKey' => env('qr_secretKey'),
+                'ecCode' => env('qr_ecCode'),
+                'Content-Type' => 'application/json',
+                ])->post(env('qr_orderApi'),[
+                    "requestNo" => $transaction->request_no,
+                    "orderId" => $transaction->order_id,
+                    "merchantId" => env('qr_merchantId'),
+                    "currency" => "MMK",
+                    "rewardPoint" => 0,
+                    "createdDate" => now()->format('Y-m-d H:i:s'),
+                    "amount" => $plan->total_price,
+                    "description" => "MMQR payment",
+            ]);
+
+            if($response->successful()){
+                $qrString = $response->object()->data->qr;
+                //update transaction table
+                $transaction->update([
+                    'payment_status' => 'generated',
+                    'qr_string' => $qrString,
+                ]);
+
+                // $qrCode = QrCode::size(200)->encoding('UTF-8')->generate($qrString);
+
+                $sub_transaction = SubscriptionTransactions::where('id',$transaction->id)->with('plan')->first();
+                $subscription = new SubscriptionDetailResource($sub_transaction);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'QR code generated successfully',
+                    'qr_code' => $qrString,
+                    'subscription_deatail'=> $subscription,
+                ], 200);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error generating QR code: ' . $response->json('errorMessage'),
+                ], 500);
+            }
+        }catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error generating QR code: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function checkPaymentStatus(Request $request)
+    {
+        $subscriptionTransaction = SubscriptionTransactions::where('id', $request->subscription_ransaction_id)
+            ->where('user_id', auth('sanctum')->id())
+            ->first();
+
+        if (!$subscriptionTransaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Subscription transaction not found',
+            ], 404);
+        }
+
+        if($subscriptionTransaction->payment_status !='generated'){
+            return response()->json(['status'=>$subscriptionTransaction->payment_status]);
+        }
+
+        $plan = $subscriptionTransaction->plan;
+
+        $response = Http::withHeaders([
+            'secretKey' => env('qr_secretKey'),
+            'ecCode' => env('qr_ecCode'),
+            'Content-Type' => 'application/json',
+            ])->get(env('qr_checkPaymentApi').$subscriptionTransaction->order_id);
+
+        if($response->object()->data->paymentTxnStatus == 200){
+            $subscription = Subscription::Create(
+                [
+                    'order_id'=>$subscriptionTransaction->order_id,
+                    'user_id' => auth()->id(),
+                    'plan_id' => $plan->id,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays($plan->duration_value),
+                    'name'=>$plan->name,
+                    'type'=>$plan->identifier,
+                    'level'=>$plan->level,
+                    'amount' => $plan->price,
+                    'total_amount' => $plan->total_price,
+                    'duration' => $plan->duration_value,
+                    'status' => 'active',
+                ],
+            );
+
+            $subscriptionTransaction->update([
+                'payment_status' => 'paid',
+                'subscriptions_id' => $subscription->id,
+                'transaction_id'=>$response->object()->data->posTransactionId,
+            ]);
+
+            auth('sanctum')->user()->update(['is_subscribe' => true]);
+        }
+        return response()->json($response->json());
     }
 
 }

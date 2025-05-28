@@ -58,6 +58,10 @@ Route::group(['prefix'=>'v1'],function(){
         Route::post('logout',[ApiController::class,'Logout']);
         Route::post('update-profile', [ApiController::class, 'updateProfile']);
         Route::post('delete-account',[ApiController::class,'deleteAccount']);
+
+        //payment and subscription
+        Route::post('get-qr',[ApiController::class,'GetQR']);
+        Route::post('check-payment-stauts', [ApiController::class, 'checkPaymentStatus']);
     });
 
      //home page api
@@ -72,4 +76,5 @@ Route::group(['prefix'=>'v1'],function(){
 
      //search api
      Route::get('search',[ApiController::class,'Search']);
+     Route::get('genres-list',[ApiController::class,'GenresList']);
 });
