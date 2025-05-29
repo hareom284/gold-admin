@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use App\Events\Payment\PaymentStatus;
 use Modules\Subscriptions\Models\Plan;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Support\Renderable;
@@ -216,6 +217,7 @@ class SubscriptionController extends Controller
 
             $subscriptionTransaction->user->update(['is_subscribe' => true]);
 
+            PaymentStatus::dispatch($request->orderId,'paid');
             return true;
     }
 
@@ -226,6 +228,7 @@ class SubscriptionController extends Controller
                  'payment_status' => 'failed',
                  'transaction_id'=>$request->posTransactionId,
             ]);
+            PaymentStatus::dispatch($request->orderId,'failed');
             return true;
     }
 

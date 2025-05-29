@@ -27,6 +27,8 @@
     })
   }
 
+
+
   window.confirmSwal = confirmSwal
 
   $('#quick-action-form').on('submit', function(e) {

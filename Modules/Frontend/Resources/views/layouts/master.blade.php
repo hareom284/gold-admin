@@ -77,6 +77,5 @@ const currencyFormat = (amount) => {
 
       window.currencyFormat = currencyFormat
       window.defaultCurrencySymbol = @json(Currency::defaultSymbol())
-
     </script>
 </body>

@@ -1,21 +1,22 @@
 <?php
 
-use App\Http\Controllers\Backend\BackendController;
-use App\Http\Controllers\Backend\BackupController;
-use App\Http\Controllers\Backend\NotificationsController;
-use App\Http\Controllers\Backend\SettingController;
-use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\PermissionController;
+use App\Events\Payment\PaymentStatus;
+use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\SearchController;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\BackupController;
+use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\MobileSettingController;
-use Modules\Setting\Http\Controllers\Backend\SettingsController;
+use App\Http\Controllers\Backend\NotificationsController;
 use Modules\Frontend\Http\Controllers\FrontendController;
+use Modules\Setting\Http\Controllers\Backend\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::get('storage-link', function () {
 });
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
+
 
 Route::group(['middleware' => ['auth','admin']], function () {
     Route::get('notification-list', [NotificationsController::class, 'notificationList'])->name('notification.list');

@@ -31,7 +31,7 @@ class EpisodeResource extends JsonResource
         $download_links = $this->EpisodeStreamContentMapping ?? null;
 
         return [
-
+            'id' => $this->id,
             'name' => $this->name,
             'poster_url' =>  setBaseUrlWithFileName($this->poster_url),
             'access' => $this->access,

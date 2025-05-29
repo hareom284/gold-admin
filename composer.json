@@ -34,6 +34,7 @@
         "php-ai/php-ml": "^0.10.0",
         "predis/predis": "^2.2",
         "propaganistas/laravel-phone": "^5.3",
+        "pusher/pusher-php-server": "^7.2",
         "razorpay/razorpay": "^2.9",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-activitylog": "^4.7",
