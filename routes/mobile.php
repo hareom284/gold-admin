@@ -62,6 +62,10 @@ Route::group(['prefix'=>'v1'],function(){
         //payment and subscription
         Route::post('get-qr',[ApiController::class,'GetQR']);
         Route::post('check-payment-stauts', [ApiController::class, 'checkPaymentStatus']);
+
+        //details page api
+        Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
+        Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
     });
 
      //home page api
@@ -69,10 +73,6 @@ Route::group(['prefix'=>'v1'],function(){
      Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
      Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
      Route::get('fetch-actor',[ApiController::class,'FetchActor']);
-
-     //details page api
-     Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
-     Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
 
      //search api
      Route::get('search',[ApiController::class,'Search']);
