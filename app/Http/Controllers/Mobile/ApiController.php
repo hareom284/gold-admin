@@ -341,11 +341,6 @@ class ApiController extends Controller
        {
             $user = auth('sanctum')->user();
 
-            $request->validate([
-                'username' => 'required_without:email|unique:users,username,' . $user->id,
-                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
-            ]);
-
             $validator = Validator::make($request->all(),[
                 'username' => 'required_without:email|unique:users,username,' . $user->id,
                 'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
@@ -365,11 +360,12 @@ class ApiController extends Controller
             if ($request->hasFile('image_file')) {
                 $file = $request->file('image_file');
 
-            $activeDisk = env('ACTIVE_STORAGE', 'local');
+                $activeDisk = env('ACTIVE_STORAGE', 'local');
 
-            $filename = $file->getClientOriginalName();
+                $filename = $file->getClientOriginalName();
 
-            if ($activeDisk == 'local') {
+
+               if ($activeDisk == 'local') {
                     $destinationPath = 'streamit-laravel';
                     $filePath = $file->storeAs($destinationPath, $filename, 'public');
                     $image_file = '/storage/' . $filePath;
@@ -385,12 +381,13 @@ class ApiController extends Controller
                 $data['image_file']=extractFileNameFromUrl($image_file);
 
             } else {
-                $data['image_file'] = $user->image_file;
+                $data['image_file'] = $user->file_url;
             }
-            $user->update(['image_file' => $data['image_file']]);
+            $user->update(['file_url' => $data['image_file']]);
             $user_data = User::find($user->id);
             $user_data->save();
 
+            //  dd(setBaseUrlWithFileName('sound_wave.png'));
             return response()->json([
                 'success'=>true,
                 'message'=>'User profile updated successfully',

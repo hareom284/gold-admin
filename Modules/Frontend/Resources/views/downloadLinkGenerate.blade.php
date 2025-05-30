@@ -45,6 +45,6 @@
                 downloadUrl.text("Download").removeClass('disabled');
                 clearInterval(countDown);
             }
-        },100)
+        },1000)
     })
 </script>

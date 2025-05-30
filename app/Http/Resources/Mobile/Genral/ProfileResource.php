@@ -25,7 +25,7 @@ class ProfileResource extends JsonResource
             'is_subscribe'=>$this->is_subscribe,
             'status'=>$this->status,
             'user_type'=>$this->user_type,
-            'profile_image'=>$this->profile_image,
+            'profile_image'=>setBaseUrlWithFileName($this->file_url),
             'subscription_package'=>new PackageResoruce($this->subscriptionPackage)
         ];
     }
