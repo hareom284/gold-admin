@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
+use Modules\Genres\Models\Genres;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -23,6 +24,7 @@ use Modules\Entertainment\Models\UserReminder;
 use Modules\Subscriptions\Models\Subscription;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
+use App\Http\Resources\Api\PaymentHistoryResource;
 use App\Http\Resources\Mobile\Genral\PlanResource;
 use App\Http\Resources\Mobile\Home\BannerResource;
 use App\Http\Resources\Mobile\Home\ItemListResource;
@@ -35,7 +37,6 @@ use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
 use Modules\Subscriptions\Models\SubscriptionTransactions;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 use App\Http\Resources\Mobile\Subscription\SubscriptionDetailResource;
-use Modules\Genres\Models\Genres;
 
 class ApiController extends Controller
 {
@@ -46,7 +47,7 @@ class ApiController extends Controller
                 'username' => 'required|exists:users,username',
                 'password' => 'required',
             ]);
-        if ($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
                     'message' => $validator->errors()->first(),
@@ -156,7 +157,7 @@ class ApiController extends Controller
                    $data = [
                        'username' => $name,
                        'email' => $email,
-                       'password' => Hash::make(Str::random(8)), // Generate a random password
+                       'password' => Hash::make(Str::random(10)), // Generate a random password
                        'user_type' => 'user',
                        'login_type' => 'google',
                    ];
@@ -1039,6 +1040,28 @@ class ApiController extends Controller
             auth('sanctum')->user()->update(['is_subscribe' => true]);
         }
         return response()->json($response->json());
+    }
+
+    public function PaymentHistory()
+    {
+        $user= auth('sanctum')->user();
+        $paymentHistory = $user->subscriptiondata;
+
+        if ($paymentHistory->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No payment history found',
+                'data' => [],
+            ], 200);
+        }
+
+        $data = PaymentHistoryResource::collection($paymentHistory);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment history retrieved successfully',
+            'data' => $data,
+        ], 200);
     }
 
 }

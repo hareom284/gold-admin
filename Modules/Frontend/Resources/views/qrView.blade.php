@@ -65,10 +65,10 @@ use Carbon\Carbon;
                         <dd class="col-6 text-end">MMK {{ number_format($sub_transaction->amount, 0) }}</dd>
 
                         <dt class="col-6">{{ __('frontend.ref_id') }}</dt>
-                        <dd class="col-6 text-end">GC{{ $sub_transaction->order_id }}</dd>
+                        <dd class="col-6 text-end" style="font-size: 14px">GC{{ $sub_transaction->order_id }}</dd>
 
                         <dt class="col-6">{{ __('frontend.valid') }}</dt>
-                        <dd class="col-6 fs-6">{{ Carbon::now()->addDays($sub_transaction->plan->duration_value) }}</dd>
+                        <dd class="col-6 text-end">{{ Carbon::now()->addDays($sub_transaction->plan->duration_value) }}</dd>
 
                     </dl>
                 </div>

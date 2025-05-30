@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade mt-3" id="paymentLog" role="tabpanel">
-                        <div class="card p-5 " style="background:#F5F5F5">
+                        <div class="card p-md-5 " style="background:#F5F5F5">
                             <div class="card-body">
                                 <div class="edit-profile-content mb-5">
                                     <h5 class="text-black">Payment Logs</h5>
@@ -182,13 +182,13 @@
 
                                 @forelse ($subscripionData as $subscription)
                                     <div class="list-group">
-                                        <div class="list-group-item w-50 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
+                                        <div class="list-group-item  col-md-6 border-top-0 border-end-0 border-start-0 p-0 pb-3 mb-3 rounded-0" style="background:#F5F5F5">
                                             <div>
-                                                <span  style="color:#686868">ID: {{$subscription->id}}</span>
+                                                <span  style="color:#686868">ID: {{substr($subscription->order_id,4,5)}}</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span class="text-black fw-bold">{{$subscription->name}}</span>
-                                                <span class="text-black">{{$subscription->created_at}}</span>
+                                                <span class="text-black">{{$subscription->created_at->format('d-m-Y h:i A')}}</span>
                                                 <span class="text-black">{{Currency::format($subscription->amount)}}</span>
                                             </div>
                                         </div>

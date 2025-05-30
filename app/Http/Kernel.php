@@ -40,7 +40,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\IsUserSubscribe::class,
            // \App\Http\Middleware\SetActiveStorage::class,
-
         ],
 
         'api' => [

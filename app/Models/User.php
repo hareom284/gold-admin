@@ -106,8 +106,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
 
     return $this->hasOne(Subscription::class, 'user_id', 'id')
-    ->where('status', config('constant.SUBSCRIPTION_STATUS.ACTIVE'))
-    ->latest();
+        ->where('status', config('constant.SUBSCRIPTION_STATUS.ACTIVE'))
+        ->latest();
     }
 
     public function subscriptionPackageList()

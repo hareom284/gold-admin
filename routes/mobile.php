@@ -28,6 +28,17 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('resend-otp', [OTPController::class, 'resendOTP']);
     Route::post('opt-user-store', [OTPController::class, 'otpUserStore']);
 
+    //home page api
+     Route::get('home-banner',[ApiController::class,'HomeBanner']);
+     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
+     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
+     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
+
+     //search api
+     Route::get('search',[ApiController::class,'Search']);
+     Route::get('genres-list',[ApiController::class,'GenresList']);
+
+
     Route::group(['middleware' => 'auth:sanctum'], function () {
         //logout api
         Route::post('logout', [ApiController::class, 'logout']);
@@ -62,19 +73,11 @@ Route::group(['prefix'=>'v1'],function(){
         //payment and subscription
         Route::post('get-qr',[ApiController::class,'GetQR']);
         Route::post('check-payment-stauts', [ApiController::class, 'checkPaymentStatus']);
+        Route::get('payment-history', [ApiController::class, 'PaymentHistory']);
 
         //details page api
         Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
         Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
     });
 
-     //home page api
-     Route::get('home-banner',[ApiController::class,'HomeBanner']);
-     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
-     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
-     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
-
-     //search api
-     Route::get('search',[ApiController::class,'Search']);
-     Route::get('genres-list',[ApiController::class,'GenresList']);
 });

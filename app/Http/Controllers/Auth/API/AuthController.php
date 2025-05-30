@@ -433,6 +433,7 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required_without:email|unique:users,username,' . $user->id,
             'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            'image_file'=> 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             // 'mobile' => 'required_without:email|nullable|unique:users,mobile,' . $user->id,
         ]);
 
