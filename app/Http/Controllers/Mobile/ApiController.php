@@ -344,6 +344,7 @@ class ApiController extends Controller
             $validator = Validator::make($request->all(),[
                 'username' => 'required_without:email|unique:users,username,' . $user->id,
                 'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+                'image_file'=> 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             if($validator->fails()){
