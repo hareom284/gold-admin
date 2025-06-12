@@ -1,6 +1,6 @@
 /*!
-  * shared v9.14.1
-  * (c) 2024 kazuya kawaguchi
+  * shared v9.14.4
+  * (c) 2025 kazuya kawaguchi
   * Released under the MIT License.
   */
 
