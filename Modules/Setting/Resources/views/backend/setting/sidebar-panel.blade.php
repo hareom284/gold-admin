@@ -6,9 +6,9 @@
                 <div class="list-group list-group-flush" id="setting-list">
                     @hasPermission('setting_bussiness')
                         <div class="mb-3 active-menu">
-                            <a id="link-general" href="{{ route('backend.settings.general') }}" class="btn btn-border {{ request()->routeIs('backend.settings.general') ? 'active' : '' }}">
+                            {{-- <a id="link-general" href="{{ route('backend.settings.general') }}" class="btn btn-border {{ request()->routeIs('backend.settings.general') ? 'active' : '' }}">
                                 <i class="fas fa-cube"></i>{{ __('setting_sidebar.lbl_General') }}
-                            </a>
+                            </a> --}}
                         </div>
                     @endhasPermission
                     @hasPermission('setting_custom_code')
@@ -25,13 +25,13 @@
                         </a>
                     </div>
                     @endhasPermission
-                    @hasPermission('setting_misc')
+                    {{-- @hasPermission('setting_misc')
                         <div class="mb-3 active-menu">
                             <a id="link-misc" href="{{ route('backend.settings.misc') }}" class="btn btn-border {{ request()->routeIs('backend.settings.misc') ? 'active' : '' }}">
                                 <i class="fa-solid fa-screwdriver-wrench"></i>{{ __('setting_sidebar.lbl_misc_setting') }}
                             </a>
                         </div>
-                    @endhasPermission
+                    @endhasPermission --}}
                     {{-- @hasPermission('setting_invoice')
                         <div class="mb-3 active-menu">
                             <a id="link-invoice-setting" href="{{ route('backend.settings.invoice-setting') }}" class="btn btn-border {{ request()->routeIs('backend.settings.invoice-setting') ? 'active' : '' }}">
