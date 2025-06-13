@@ -410,14 +410,14 @@ class GenerateMenus
         //         'order' => 0,
         //     ]);
 
-            $this->mainRoute($menu, [
-                'icon' => 'ph ph-question',
-                'title' => __('faq.title'),
-                'route' => 'backend.faqs.index',
-                'active' => ['app/faqs'],
-                // 'permission' => ['view_faqs'],
-                'order' => 0,
-            ]);
+            // $this->mainRoute($menu, [
+            //     'icon' => 'ph ph-question',
+            //     'title' => __('faq.title'),
+            //     'route' => 'backend.faqs.index',
+            //     'active' => ['app/faqs'],
+            //     // 'permission' => ['view_faqs'],
+            //     'order' => 0,
+            // ]);
 
 
 
