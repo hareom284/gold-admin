@@ -91,7 +91,7 @@ const columns = [
             {
                 name: 'check',
                 data: 'check',
-                title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" data-type="genres"  onclick="selectAllTable(this)">',
+                title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" data-type="tags"  onclick="selectAllTable(this)">',
                 width: '0%',
                 exportable: false,
                 orderable: false,

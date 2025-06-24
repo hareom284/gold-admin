@@ -1,11 +1,11 @@
 @extends('backend.layouts.app', ['isBanner' => false])
 
 @section('title')
-    {{ 'Genres' }}
+    {{ 'Tags' }}
 @endsection
 
 @section('content')
-    <h3 class="mb-3">Genre List</h3>
+    <h3 class="mb-3">Tag List</h3>
     <div class="container mb-5">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto d-flex">
@@ -21,7 +21,7 @@
                 <input type="text" class="form-control form-control-sm mr-2" placeholder="Search">
 
                 <a href="{{ route('backend.'. $module_name . '.create') }}" class="btn btn-primary"
-                    id="add-post-button"> Add Genres</a>
+                    id="add-post-button"> Add Tags</a>
 
             </div>
         </div>

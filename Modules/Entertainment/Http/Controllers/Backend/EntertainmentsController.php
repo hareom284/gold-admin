@@ -15,6 +15,7 @@ use Modules\Entertainment\Services\EntertainmentService;
 use Modules\Tag\Models\Tag;
 use Modules\World\Models\Country;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class EntertainmentsController extends Controller
 {

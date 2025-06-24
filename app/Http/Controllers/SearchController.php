@@ -24,6 +24,7 @@ use Modules\Entertainment\Models\Review;
 use Modules\Banner\Models\Banner;
 use Modules\FAQ\Models\FAQ;
 use Modules\Page\Models\Page;
+use Modules\Tag\Models\Tag;
 
 class SearchController extends Controller
 {
@@ -236,6 +237,9 @@ class SearchController extends Controller
                 break;
             case 'genres':
                 $InTrash = Genres::withTrashed()->whereIn('id', $ids)->whereNotNull('deleted_at')->get();
+                break;
+            case 'tags':
+                $InTrash = Tag::withTrashed()->whereIn('id', $ids)->whereNotNull('deleted_at')->get();
                 break;
             case 'entertainment':
                 $InTrash = Entertainment::withTrashed()->whereIn('id', $ids)->whereNotNull('deleted_at')->get();

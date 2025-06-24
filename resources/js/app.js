@@ -162,6 +162,7 @@
       return $(this).val();
     }).get();
 
+
     if(dataType !== null){
 
       if(dataType === 'cast-crew' || dataType === 'review'){
@@ -220,7 +221,6 @@
 
   const selectAllTable = (source) => {
     var dataType = source.getAttribute('data-type');
-    alert(dataType);
     const checkboxes = document.getElementsByName("datatable_ids[]");
     const actionDropdown = document.getElementById('quick-action-type');
     const selectedIds = [];
