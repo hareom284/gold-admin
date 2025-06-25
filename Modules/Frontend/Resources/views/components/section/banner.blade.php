@@ -6,7 +6,7 @@
           $data = $slider['data']?->toArray(request()) ?? [];
       @endphp
      {{-- @dd($data); --}}
-      @if(isenablemodule($slider['type'])==1)
+      @if(isenablemodule($slider['type'])==1 && $data)
 
       <div class="slick-item" style="background-image: url({{ setBaseUrlWithFileName($slider['poster_url']) }});">
         <div class="movie-content h-100">

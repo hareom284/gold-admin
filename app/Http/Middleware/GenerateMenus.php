@@ -278,14 +278,14 @@ class GenerateMenus
         //         $this->staticMenu($menu, ['title' => __('sidebar.system_setting'), 'order' => 0]);
         //     }
 
-        //     $this->mainRoute($menu, [
-        //         'icon' => 'ph ph-layout',
-        //         'title' => __('sidebar.app_banner'),
-        //         'route' => 'backend.banners.index',
-        //         'active' => ['app/banners'],
-        //         'permission' =>['view_banners'],
-        //         'order' => 0,
-        //     ]);
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-layout',
+                'title' => __('sidebar.app_banner'),
+                'route' => 'backend.banners.index',
+                'active' => ['app/banners'],
+                'permission' =>['view_banners'],
+                'order' => 0,
+            ]);
 
             $this->mainRoute($menu, [
                 'icon' => 'ph ph-target',
