@@ -19,11 +19,14 @@ use Modules\Subscriptions\Models\Plan;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use Modules\Entertainment\Models\Watchlist;
 use Modules\Entertainment\Models\UserReminder;
 use Modules\Subscriptions\Models\Subscription;
 use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Entertainment;
+use Kreait\Firebase\Exception\MessagingException;
 use App\Http\Resources\Api\PaymentHistoryResource;
 use App\Http\Resources\Mobile\Genral\PlanResource;
 use App\Http\Resources\Mobile\Home\BannerResource;
@@ -119,6 +122,24 @@ class ApiController extends Controller
                 'success'=>true,
                 'message'=>'Message sent successfully',
             ],200);
+        }
+
+        //notification api
+        public function sendNotification(Request $request)
+        {
+            $deviceToken = $request->device_token;
+            $messaging = app('firebase.messaging');
+            $message = CloudMessage::new()
+            ->withNotification(Notification::create('Title', 'Body'))
+            ->withData(['key' => 'value'])
+            ->toToken($deviceToken);
+
+            try{
+                $messaging->send($message);
+            }catch(MessagingException $e){
+
+            }
+
         }
 
         // Redirect to Google

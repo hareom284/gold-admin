@@ -1,0 +1,4 @@
+Original code provider => streamit laravel
+All api routes for mobile app => routes/mobile.php
+Web public user auth routes => Modules/Frontend/Routes/auth.php
+Firebase json file path => storage/app/data/firebase.json

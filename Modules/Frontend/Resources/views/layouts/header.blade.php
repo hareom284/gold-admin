@@ -104,7 +104,7 @@
                                                 <div class="content">
                                                     <h6 class="mb-1"> {{ auth()->user()->username ?? default_user_name() }}</h6>
 
-                                                    <span class="font-size-14 dropdown-user-menu-contnet"> {{ auth()->user()->mobile ?? auth()->user()->email}}</span>
+                                                    <span class="font-size-14 dropdown-user-menu-contnet"> {{ auth()->user()->email}}</span>
                                                 </div>
                                             </div>
                                             {{-- <div class="link">

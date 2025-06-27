@@ -9,6 +9,8 @@ Route::group(['prefix'=>'v1'],function(){
 
     //test firebase
     Route::post('test-message',[ApiController::class, 'sendMessage']);
+    //notification api
+    Route::post('send-notification',[ApiController::class, 'sendNotification']);
 
     //normal login api
     Route::post('register',[ApiController::class, 'register']);
