@@ -602,7 +602,7 @@ header {
         width: 100%;
         flex-grow: unset;
         background: var(--bs-body-bg);
-        z-index: 1081;
+        z-index: 5;
         box-shadow: $box-shadow-sm;
         transition: all 400ms ease;
 
@@ -654,7 +654,7 @@ header {
 
 @include media-breakpoint-down(xl) {
   .iq-navbar {
-    z-index: 889;
+    z-index: 5;
   }
 }
 
