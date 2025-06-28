@@ -63,8 +63,9 @@ Route::group(['prefix'=>'v1'],function(){
         Route::post('toggle-watchlist/{id}', [ApiController::class, 'toggleWatchList']);
 
         //downlaoded
-        route::post('save-download',[ApiController::class,'SaveDownload']);
+        Route::post('save-download',[ApiController::class,'SaveDownload']);
         Route::get('download-list',[ApiController::class,'DownloadList']);
+        Route::delete('delete-download/{id}',[ApiController::class,'DeleteDownload']);
 
         //subsciption
         Route::get('plans',[ApiController::class,'PlansList']);

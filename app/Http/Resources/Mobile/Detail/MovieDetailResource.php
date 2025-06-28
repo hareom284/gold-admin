@@ -84,6 +84,7 @@ class MovieDetailResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'description'=>$this->description,
+            'test_image_url'=>$this->thumbnail_url,
             'thumbnail_url'=>setBaseUrlWithFileName($this->thumbnail_url),
             'poster_url'=>setBaseUrlWithFileName($this->poster_url),
             'movie_access'=>$this->movie_access,

@@ -40,9 +40,10 @@ use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
 use Modules\Subscriptions\Models\SubscriptionTransactions;
-use App\Http\Resources\Mobile\General\DownloadListResource;
+use App\Http\Resources\Mobile\Genral\DownloadListResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 use App\Http\Resources\Mobile\Subscription\SubscriptionDetailResource;
+use Modules\Episode\Models\Episode;
 
 class ApiController extends Controller
 {
@@ -645,7 +646,7 @@ class ApiController extends Controller
        //download
        public function saveDownload(Request $request)
        {
-           $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(),[
             'entertainment_id' => 'required',
             'type' => 'required|in:movie,episode',
            ]);
@@ -657,12 +658,31 @@ class ApiController extends Controller
             ],422);
            }
 
+           if($request->type == 'movie'){
+                $movie = Entertainment::where('id', $request->entertainment_id)->where('type', 'movie')->first();
+                if (!$movie) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Movie not found',
+                    ], 404);
+                }
+           }else{
+                $episode = Episode::where('id', $request->entertainment_id)->first();
+                if (!$episode) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Episode not found',
+                    ], 404);
+                }
+           }
+
            $user_id = auth('sanctum')->id();
            $download_data = $request->all();
            $download_data['user_id'] = $user_id;
 
            $download = EntertainmentDownload::where('entertainment_id', $request->entertainment_id)->where('user_id', $user_id)->where('type', $request->type)->first();
 
+           //save both movie and episode download data in entertainment_download table
            if (!$download) {
                 EntertainmentDownload::create($download_data);
                return response()->json(['success' => true, 'message' => "Download added successfully"]);
@@ -681,6 +701,23 @@ class ApiController extends Controller
             'data'=>$data,
         ],200);
        }
+
+        public function DeleteDownload($id)
+        {
+            $user_id = auth('sanctum')->id();
+            $download = EntertainmentDownload::where('id', $id)->where('user_id', $user_id)->first();
+            if ($download) {
+                $download->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Download deleted successfully',
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Download not found',
+            ], 404);
+        }
 
 
     public function MovieDetails($id)
