@@ -30,7 +30,6 @@ return [
         'https://127.0.0.1:8100',
         'http://localhost:8100',
         'https://localhost:8100',
-
     ],
 
     'allowed_origins_patterns' => [],
