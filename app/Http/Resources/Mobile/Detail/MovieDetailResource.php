@@ -78,6 +78,8 @@ class MovieDetailResource extends JsonResource
             ];
         }
 
+        $like_count = Like::where('entertainment_id', $this->id)->where('is_like', 1)->count();
+
         return [
             'id'=>$this->id,
             'name'=>$this->name,
@@ -95,6 +97,7 @@ class MovieDetailResource extends JsonResource
             'casts_crews' => CastCrewListResource::collection($castCrew_data),
             'more_items' =>ItemListResource::collection($more_items),
             'like' => $like,
+            'like_count'=>$like_count,
             'watchlist' => $is_watchlist,
             'review_count'  => $review_count,
             'review_data' => $review_data,

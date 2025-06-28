@@ -11,11 +11,13 @@ use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
 use Modules\Genres\Models\Genres;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Google\Service\Analytics\Profile;
 use Modules\Entertainment\Models\Like;
 use Modules\Subscriptions\Models\Plan;
+use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
@@ -38,6 +40,7 @@ use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
 use Modules\Subscriptions\Models\SubscriptionTransactions;
+use App\Http\Resources\Mobile\General\DownloadListResource;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 use App\Http\Resources\Mobile\Subscription\SubscriptionDetailResource;
 
@@ -148,86 +151,155 @@ class ApiController extends Controller
             return Socialite::driver('google')->stateless()->redirect();
         }
 
-       //google callback
-       public function handleGoogleCallback(Request $request)
-       {
-       try {
-           // Validate request
-           $validator = Validator::make($request->all(), [
-               'callback_token' => 'required'
-           ]);
+       //google callback for firebase auth
+    //    public function handleGoogleCallback(Request $request)
+    //    {
+    //      try {
+    //        // Validate request
+    //        $validator = Validator::make($request->all(), [
+    //            'callback_token' => 'required'
+    //        ]);
 
-           if ($validator->fails()) {
-               return response()->json([
-                   "success"=>false,
-                   "message" => $validator->errors()
-               ], 422);
-           }
+    //        if ($validator->fails()) {
+    //            return response()->json([
+    //                "success"=>false,
+    //                "message" => $validator->errors()
+    //            ], 422);
+    //        }
 
-            $auth = app('firebase.auth');
-            $verifiedIdToken =  $auth->verifyIdToken($request->callback_token);
-            $email = $verifiedIdToken->claims()->get('email');
-            $name = $verifiedIdToken->claims()->get('name');
+    //         $auth = app('firebase.auth');
+    //         $verifiedIdToken =  $auth->verifyIdToken($request->callback_token);
+    //         $email = $verifiedIdToken->claims()->get('email');
+    //         $name = $verifiedIdToken->claims()->get('name');
 
 
-           // Check if a user with the email exists
-           $existingUser = User::where('email', $email)->first();
+    //        // Check if a user with the email exists
+    //        $existingUser = User::where('email', $email)->first();
 
-               if (!$existingUser) {
-                   // Register new user
+    //            if (!$existingUser) {
+    //                // Register new user
+    //                $data = [
+    //                    'username' => $name,
+    //                    'email' => $email,
+    //                    'password' => Hash::make(Str::random(10)), // Generate a random password
+    //                    'user_type' => 'user',
+    //                    'login_type' => 'google',
+    //                ];
+
+    //                $newUser = User::create($data);
+    //                $newUser->assignRole($data['user_type']); // Optional: assign role if using Spatie
+    //                $newUser->save();
+
+    //                // Generate auth token
+    //                $token = $newUser->createToken('auth_token')->plainTextToken;
+
+    //                return response()->json([
+    //                    'success'=>true,
+    //                    'message' => 'Login successfully.',
+    //                    'token' => $token,
+    //                    'user'=> new ProfileResource($newUser),
+    //                ], 201);
+    //            }
+
+    //            // Prevent login if the user is login with a different method
+    //            if ($existingUser->login_type !== 'google') {
+    //                return response()->json([
+    //                    'success'=>false,
+    //                    'message' => 'This email is already registered. Please use the original login method.',
+    //                ], 403);
+    //            }
+
+    //            // Check device limit if applicable
+    //         //    if ($request->has('device_id')) {
+    //         //        $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
+
+    //         //        if (isset($response['error'])) {
+    //         //            return response()->json(['error' => $response['error']], 500);
+    //         //        }
+    //         //    }
+
+    //            // Generate auth token
+    //            $token = $existingUser->createToken('auth_token')->plainTextToken;
+
+    //            return response()->json([
+    //                'success'=>true,
+    //                'message' => 'Login successfully.',
+    //                'token' => $token,
+    //                'user'=>new ProfileResource($existingUser),
+    //            ], 200);
+    //        } catch (\Exception $e) {
+    //            return response()->json(["error" => $e->getMessage()], 500);
+    //        }
+    //    }
+
+    //google callback for ionic auth
+        public function handleGoogleCallback(Request $request){
+            try {
+                $googleUser = Socialite::driver('google')->stateless()->user();
+
+                $token = $googleUser->token;
+
+                $user = User::where('email', $googleUser->getEmail())->first();
+
+                if (!$user) {
+
+                   $fullName = $googleUser->getName();
+
+                   $nameParts = explode(' ', $fullName);
+
+                   $firstName = isset($nameParts[0]) ? $nameParts[0] : ''; // First part of the name
+                   $lastName = isset($nameParts[1]) ? $nameParts[1] : $firstName;  // Second part as last name
+
+
                    $data = [
-                       'username' => $name,
-                       'email' => $email,
-                       'password' => Hash::make(Str::random(10)), // Generate a random password
+                       // 'first_name' => $firstName,
+                       // 'last_name' => $lastName,
+                       'username'=>$fullName,
+                       'email' =>  $googleUser->getEmail(),
+                       'password' => Hash::make(Str::random(10)),
                        'user_type' => 'user',
-                       'login_type' => 'google',
+                       'login_type' => 'google'
                    ];
 
-                   $newUser = User::create($data);
-                   $newUser->assignRole($data['user_type']); // Optional: assign role if using Spatie
-                   $newUser->save();
+                   $user = User::create($data);
 
-                   // Generate auth token
-                   $token = $newUser->createToken('auth_token')->plainTextToken;
+                   $request->session()->regenerate();
 
-                   return response()->json([
-                       'success'=>true,
-                       'message' => 'Login successfully.',
-                       'token' => $token,
-                       'user'=> new ProfileResource($newUser),
-                   ], 201);
-               }
+                   $user->createOrUpdateProfileWithAvatar();
 
-               // Prevent login if the user is login with a different method
-               if ($existingUser->login_type !== 'google') {
-                   return response()->json([
-                       'success'=>false,
-                       'message' => 'This email is already registered. Please use the original login method.',
-                   ], 403);
-               }
+                   $user->assignRole($data['user_type']);
 
-               // Check device limit if applicable
-            //    if ($request->has('device_id')) {
-            //        $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
+                   $user->save();
+                }
 
-            //        if (isset($response['error'])) {
-            //            return response()->json(['error' => $response['error']], 500);
-            //        }
-            //    }
+                if($user->login_type == 'google'){
 
-               // Generate auth token
-               $token = $existingUser->createToken('auth_token')->plainTextToken;
+                   $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
+                   //clode device limit
+                   // $response=$this->CheckDeviceLimit($user, $current_device);
 
-               return response()->json([
-                   'success'=>true,
-                   'message' => 'Login successfully.',
-                   'token' => $token,
-                   'user'=>new ProfileResource($existingUser),
-               ], 200);
-           } catch (\Exception $e) {
-               return response()->json(["error" => $e->getMessage()], 500);
-           }
-       }
+                   if(isset($response['error'])) {
+                      return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
+                   }
+
+                    $this->setDevice($user,$request);
+                    $user = Auth::login($user);
+                }
+                else
+                {
+                   $user=Auth::user();
+                   Auth::logout();
+                   $this->removeDevice($user, $request);
+                   return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user))."&error=Something went wrong! During login");
+
+                }
+
+                return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user)));
+
+            } catch (\Exception $e) {
+                return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
+            }
+        }
 
        //otp store
        public function otpLoginStore(Request $request)
@@ -570,40 +642,46 @@ class ApiController extends Controller
            ],200);
        }
 
-       //hit movies
-    //    public function HitMovies($ref)
-    //    {
-    //         switch($ref){
-    //                 case 'korea';
-    //                     $tag_id = 1;
-    //                     break;
-    //                 case 'india';
-    //                     $tag_id =2;
-    //                     break;
-    //                 case 'china';
-    //                     $tag_id = 3;
-    //                     break;
-    //                 default:
-    //                 return response()->json([
-    //                     "success"=>false,
-    //                     "message"=>"Invalid request",
-    //                     "data"=>[],
-    //                 ],400);
-    //             }
+       //download
+       public function saveDownload(Request $request)
+       {
+           $validator = Validator::make($request->all(),[
+            'entertainment_id' => 'required',
+            'type' => 'required|in:movie,episode',
+           ]);
 
-    //             $hit_movie = Entertainment::whereHas('entertainmentTagMappings',function($query)use($tag_id){
-    //                 $query->where('tag_id', $tag_id);
-    //             })->take(10)->get();
+           if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors(),
+            ],422);
+           }
 
-    //             $hit_movie = MoviesResource::collection($hit_movie);
+           $user_id = auth('sanctum')->id();
+           $download_data = $request->all();
+           $download_data['user_id'] = $user_id;
 
-    //             return response()->json([
-    //                 "success"=>true,
-    //                 "message"=>"Hit movies reterived successfully",
-    //                 "data"=>$hit_movie,
-    //             ],200);
+           $download = EntertainmentDownload::where('entertainment_id', $request->entertainment_id)->where('user_id', $user_id)->where('type', $request->type)->first();
 
-    //     }
+           if (!$download) {
+                EntertainmentDownload::create($download_data);
+               return response()->json(['success' => true, 'message' => "Download added successfully"]);
+           } else {
+               return response()->json(['status' => false, 'message' => "Download already exists"]);
+           }
+       }
+
+       public function DownloadList(){
+        $user_id = auth('sanctum')->id();
+        $downloadList = EntertainmentDownload::where('user_id', $user_id)->get();
+        $data = DownloadListResource::collection($downloadList);
+        return response()->json([
+            'success'=>true,
+            'message'=>'Download list reterived successfully',
+            'data'=>$data,
+        ],200);
+       }
+
 
     public function MovieDetails($id)
     {
@@ -716,52 +794,26 @@ class ApiController extends Controller
 
     }
 
-    public function saveWatchList(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'entertainment_id' => 'required',
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'success'=>false,
-                'message'=>$validator->errors(),
-            ],422);
-        }
-        $entertainment = Entertainment::find($request->entertainment_id);
-        if(!$entertainment){
-            return response()->json([
-                'success'=>false,
-                'message'=>'Entertainment not found',
-            ],404);
-        }
-
-        $user_id = auth('sanctum')->id();
-        Watchlist::create([
-            'entertainment_id' => $request->entertainment_id,
-            'user_id' => $user_id,
-        ]);
-
-        return response()->json([
-            'success'=>true,
-            'message'=>'Watchlist added successfully',
-        ],200);
-    }
-
-    public function deleteWatchList($id)
+    public function toggleWatchList($id)
     {
         $user_id = auth('sanctum')->id();
-        $watchlist = Watchlist::where('id',$id)->where('user_id',$user_id)->first();
+        $watchlist = Watchlist::where('entertainment_id',$id)->where('user_id',$user_id)->first();
         if($watchlist){
             $watchlist->forceDelete();
             return response()->json([
                 'success'=>true,
                 'message'=>'Watchlist deleted successfully',
             ],200);
+        }else{
+            Watchlist::create([
+                'entertainment_id' => $id,
+                'user_id' => $user_id,
+            ]);
+            return response()->json([
+                'success'=>true,
+                'message'=>'Watchlist added successfully',
+            ],200);
         }
-        return response()->json([
-            'success'=>false,
-            'message'=>'Watchlist not found',
-        ],404);
     }
 
     public function  LikeDislike($entertainment_id)
