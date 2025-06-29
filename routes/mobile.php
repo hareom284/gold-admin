@@ -30,20 +30,20 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('resend-otp', [OTPController::class, 'resendOTP']);
     Route::post('opt-user-store', [OTPController::class, 'otpUserStore']);
 
-    //home page api
-     Route::get('home-banner',[ApiController::class,'HomeBanner']);
-     Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
-     Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
-     Route::get('fetch-actor',[ApiController::class,'FetchActor']);
-
-     //search api
-     Route::get('search',[ApiController::class,'Search']);
-     Route::get('genres-list',[ApiController::class,'GenresList']);
-
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         //logout api
         Route::post('logout', [ApiController::class, 'logout']);
+
+        //home page api
+        Route::get('home-banner',[ApiController::class,'HomeBanner']);
+        Route::get('recently-added',[ApiController::class,'RecentlyAdded']);
+        Route::get('top-rated/{type}',[ApiController::class,'TopRatedItems']);
+        Route::get('fetch-actor',[ApiController::class,'FetchActor']);
+
+        //search api
+        Route::get('search',[ApiController::class,'Search']);
+        Route::get('genres-list',[ApiController::class,'GenresList']);
 
         //continue watch api
         Route::get('continue-watching',[ApiController::class,'ContinueWatching']);
