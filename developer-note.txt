@@ -3,34 +3,6 @@
 3.Web public user auth routes => Modules/Frontend/Routes/auth.php
 4.Firebase json file path => storage/app/data/firebase.json
 
-5.///////A+ mmqr keys////
-
-# uat
-qr_merchantId=IA0000337
-qr_secretKey=skpwd
-qr_ecCode=m66OsJsce6s52sUxnglfxXcch85xiKidS8bUrW3SiYc=
-qr_orderApi=https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/create
-qr_checkPaymentApi=https://apisgw-uat.abdev.net/acquiring-qr-service/v1/order/posEnquiry/
-
-
-# # production site
-# FIREBASE_CREDENTIALS=storage/app/data/firebase.json
-# FIREBASE_DATABASE_URL=https://goldchannel-f6907-default-rtdb.asia-southeast1.firebasedatabase.app/
-
-# # production site
-# GOOGLE_ACTIVE=true
-# GOOGLE_CLIENT_ID=868365946266-q4nl9f3c8euv8gon8rktlacq36e6fns9.apps.googleusercontent.com
-# GOOGLE_CLIENT_SECRET=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
-# GOOGLE_REDIRECT=http://127.0.0.1:8000/auth/google/callback
-
-
-# # live
-# qr_merchantId=MA0004622
-# qr_secretKey=skpwd
-# qr_ecCode=btue+wJhRcv6j61laX0POw==
-# qr_orderApi=https://acquiring-api.apluswallet.com.mm/acquiring-qr-service/v1/order/create
-# qr_checkPaymentApi=https://acquiring-api.apluswallet.com.mm/acquiring-qr-service/v1/order/posEnquiry/
-
 
 6.removed csft verifiaction for api routes(because ionic login has csrf issue)  =>  app/Http/Middleware/VerifyCsrfToken.php
 
