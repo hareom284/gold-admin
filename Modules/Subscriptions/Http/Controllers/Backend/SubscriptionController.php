@@ -16,6 +16,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Subscriptions\Models\Subscription;
 use Modules\Subscriptions\Models\SubscriptionTransactions;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 
 class SubscriptionController extends Controller
@@ -183,7 +185,7 @@ class SubscriptionController extends Controller
         return view('frontend::paymentFail',compact('orderId','amount','transactionId','billNo','customerName','customerPhone','paymentTxnID'));
     }
 
-    //callback form bank system
+    //callback form A bank system
     public function paymentSuccess(Request $request)
     {
         $subscriptionTransaction = SubscriptionTransactions::where('order_id',$request->orderId)->first();
@@ -203,6 +205,7 @@ class SubscriptionController extends Controller
                     'duration' => $plan->duration_value,
                     'status' => 'active',
             ];
+
             $subscription = Subscription::updateOrCreate(
                 ['order_id' => $request->orderId],
                 $subscriptionData
@@ -217,9 +220,17 @@ class SubscriptionController extends Controller
 
             $subscriptionTransaction->user->update(['is_subscribe' => true]);
 
-            PaymentStatus::dispatch($request->orderId,'paid');
+            if($subscriptionTransaction->user->device_token) {
+                $deviceToken = $subscriptionTransaction->user->device_token;
+                $messaging = app('firebase.messaging');
+                $message = CloudMessage::new()
+                    ->withNotification(Notification::create('Payment Success', 'Your payment was successful.'))
+                    ->withData(['key' => 'value'])
+                    ->toToken($deviceToken);
+                $messaging->send($message);
+            }
             return true;
-    }
+}
 
     public function paymentFail(Request $request)
     {
@@ -228,7 +239,17 @@ class SubscriptionController extends Controller
                  'payment_status' => 'failed',
                  'transaction_id'=>$request->posTransactionId,
             ]);
-            PaymentStatus::dispatch($request->orderId,'failed');
+
+            if($subscriptionTransaction->user->device_token) {
+                $deviceToken = $subscriptionTransaction->user->device_token;
+                $messaging = app('firebase.messaging');
+                $message = CloudMessage::new()
+                    ->withNotification(Notification::create('Payment Failed', 'Your payment has failed.'))
+                    ->withData(['key' => 'value'])
+                    ->toToken($deviceToken);
+                $messaging->send($message);
+            }
+
             return true;
     }
 

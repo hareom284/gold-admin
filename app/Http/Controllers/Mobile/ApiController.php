@@ -47,585 +47,585 @@ use Modules\Episode\Models\Episode;
 
 class ApiController extends Controller
 {
-        //normal login api
-        public function login(Request $request)
-        {
-            $validator = Validator::make($request->all(), [
-                'username' => 'required|exists:users,username',
-                'password' => 'required',
-            ]);
+    //normal login api
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|exists:users,username',
+            'password' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+        $user = User::where('username', $request->username)->first();
+        if ($user) {
+                if (Hash::check($request->password, $user->password)) {
+                    $user->update([
+                        'device_id' => $request->device_id ?? null,
+                        'type' => $request->type ?? null,
+                    ]);
+                    $token = $user->createToken('authToken')->plainTextToken;
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'User login successfully.',
+                        'token' => $token,
+                        'user' => new ProfileResource($user),
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Password mismatch',
+                    ], 422);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User does not exist',
+                ], 422);
+            }
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|unique:users,username',
+            'password'=>'required|min:8|confirmed',
+        ]);
+
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
                     'message' => $validator->errors()->first(),
                 ], 422);
             }
-            $user = User::where('username', $request->username)->first();
-            if ($user) {
-                    if (Hash::check($request->password, $user->password)) {
-                        $user->update([
-                            'device_id' => $request->device_id ?? null,
-                            'type' => $request->type ?? null,
-                        ]);
-                        $token = $user->createToken('authToken')->plainTextToken;
-                        return response()->json([
-                            'success' => true,
-                            'message' => 'User login successfully.',
-                            'token' => $token,
-                            'user' => new ProfileResource($user),
-                        ], 200);
-                    } else {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Password mismatch',
-                        ], 422);
-                    }
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'User does not exist',
-                    ], 422);
-                }
-        }
-
-        public function register(Request $request)
-        {
-            $validator = Validator::make($request->all(), [
-                'username' => 'required|unique:users,username',
-                'password'=>'required|min:8|confirmed',
+            $user = User::create([
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'user_type' => 'user',
+                'login_type' => 'username',
+                'device_id'=>$request->device_id ?? null,
+                'type'=>$request->type ?? null,
             ]);
-
-                if ($validator->fails()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $validator->errors()->first(),
-                    ], 422);
-                }
-                $user = User::create([
-                    'username' => $request->username,
-                    'password' => Hash::make($request->password),
-                    'user_type' => 'user',
-                    'login_type' => 'username',
-                    'device_id'=>$request->device_id ?? null,
-                    'type'=>$request->type ?? null,
-                ]);
-                $user->assignRole('user');
-                $user->createOrUpdateProfileWithAvatar();
-                $token = $user->createToken('authToken')->plainTextToken;
-                return response()->json([
-                    'success' => true,
-                    'message' => 'User created successfully.',
-                    'token' => $token,
-                    'user' => new ProfileResource($user),
-                ],200);
-        }
-
-        //test firebase connection
-        public function sendMessage()
-        {
-            $database = app('firebase.database');
-            $database->getReference('users/user2')->push([
-                'name' => 'user2',
-                'email' => 'john.doe@example.com',
-            ]);
-            return response()->json([
-                'success'=>true,
-                'message'=>'Message sent successfully',
-            ],200);
-        }
-
-        //notification api
-        public function sendNotification(Request $request)
-        {
-            $deviceToken = $request->device_token;
-            $messaging = app('firebase.messaging');
-            $message = CloudMessage::new()
-            ->withNotification(Notification::create('Title', 'Body'))
-            ->withData(['key' => 'value'])
-            ->toToken($deviceToken);
-
-            try{
-                $messaging->send($message);
-            }catch(MessagingException $e){
-
-            }
-
-        }
-
-        // Redirect to Google
-        public function redirectToGoogle()
-        {
-            return Socialite::driver('google')->stateless()->redirect();
-        }
-
-       //google callback for firebase auth
-    //    public function handleGoogleCallback(Request $request)
-    //    {
-    //      try {
-    //        // Validate request
-    //        $validator = Validator::make($request->all(), [
-    //            'callback_token' => 'required'
-    //        ]);
-
-    //        if ($validator->fails()) {
-    //            return response()->json([
-    //                "success"=>false,
-    //                "message" => $validator->errors()
-    //            ], 422);
-    //        }
-
-    //         $auth = app('firebase.auth');
-    //         $verifiedIdToken =  $auth->verifyIdToken($request->callback_token);
-    //         $email = $verifiedIdToken->claims()->get('email');
-    //         $name = $verifiedIdToken->claims()->get('name');
-
-
-    //        // Check if a user with the email exists
-    //        $existingUser = User::where('email', $email)->first();
-
-    //            if (!$existingUser) {
-    //                // Register new user
-    //                $data = [
-    //                    'username' => $name,
-    //                    'email' => $email,
-    //                    'password' => Hash::make(Str::random(10)), // Generate a random password
-    //                    'user_type' => 'user',
-    //                    'login_type' => 'google',
-    //                ];
-
-    //                $newUser = User::create($data);
-    //                $newUser->assignRole($data['user_type']); // Optional: assign role if using Spatie
-    //                $newUser->save();
-
-    //                // Generate auth token
-    //                $token = $newUser->createToken('auth_token')->plainTextToken;
-
-    //                return response()->json([
-    //                    'success'=>true,
-    //                    'message' => 'Login successfully.',
-    //                    'token' => $token,
-    //                    'user'=> new ProfileResource($newUser),
-    //                ], 201);
-    //            }
-
-    //            // Prevent login if the user is login with a different method
-    //            if ($existingUser->login_type !== 'google') {
-    //                return response()->json([
-    //                    'success'=>false,
-    //                    'message' => 'This email is already registered. Please use the original login method.',
-    //                ], 403);
-    //            }
-
-    //            // Check device limit if applicable
-    //         //    if ($request->has('device_id')) {
-    //         //        $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
-
-    //         //        if (isset($response['error'])) {
-    //         //            return response()->json(['error' => $response['error']], 500);
-    //         //        }
-    //         //    }
-
-    //            // Generate auth token
-    //            $token = $existingUser->createToken('auth_token')->plainTextToken;
-
-    //            return response()->json([
-    //                'success'=>true,
-    //                'message' => 'Login successfully.',
-    //                'token' => $token,
-    //                'user'=>new ProfileResource($existingUser),
-    //            ], 200);
-    //        } catch (\Exception $e) {
-    //            return response()->json(["error" => $e->getMessage()], 500);
-    //        }
-    //    }
-
-    //google callback for ionic auth
-        public function handleGoogleCallback(Request $request){
-            try {
-                $googleUser = Socialite::driver('google')->stateless()->user();
-
-                $token = $googleUser->token;
-
-                $user = User::where('email', $googleUser->getEmail())->first();
-
-                if (!$user) {
-
-                   $fullName = $googleUser->getName();
-
-                   $nameParts = explode(' ', $fullName);
-
-                   $firstName = isset($nameParts[0]) ? $nameParts[0] : ''; // First part of the name
-                   $lastName = isset($nameParts[1]) ? $nameParts[1] : $firstName;  // Second part as last name
-
-
-                   $data = [
-                       // 'first_name' => $firstName,
-                       // 'last_name' => $lastName,
-                       'username'=>$fullName,
-                       'email' =>  $googleUser->getEmail(),
-                       'password' => Hash::make(Str::random(10)),
-                       'user_type' => 'user',
-                       'login_type' => 'google',
-                       'device_id' => $request->device_id ?? null,
-                       'type' => $request->type ?? null,
-
-                   ];
-
-                   $user = User::create($data);
-
-                   $request->session()->regenerate();
-
-                   $user->createOrUpdateProfileWithAvatar();
-
-                   $user->assignRole($data['user_type']);
-
-                   $user->save();
-                }
-
-                if($user->login_type == 'google'){
-
-                   $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-                   //clode device limit
-                   // $response=$this->CheckDeviceLimit($user, $current_device);
-
-                   if(isset($response['error'])) {
-                      return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
-                   }
-
-                    $this->setDevice($user,$request);
-                    $user = Auth::login($user);
-                }
-                else
-                {
-                   $user=Auth::user();
-                   Auth::logout();
-                   $this->removeDevice($user, $request);
-                   return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user))."&error=Something went wrong! During login");
-
-                }
-
-                return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user)));
-
-            } catch (\Exception $e) {
-                return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
-            }
-        }
-
-       //otp store
-       public function otpLoginStore(Request $request)
-       {
-           try {
-               // Validate the request
-               $validator = Validator::make($request->all(), [
-                   'first_name' => 'required|string|max:255',
-                   'last_name' => 'required|string|max:255',
-                   'email' => 'required|email|max:255',
-                   'mobile' => 'required|numeric|digits:10',
-               ]);
-
-               if ($validator->fails()) {
-                   return response()->json([
-                       'success'=>false,
-                       'message' => $validator->errors()
-                   ], 422);
-               }
-
-               // Check if the user already exists
-               $user = User::where('email', $request->email)->first();
-
-               if (!$user) {
-                   // Create a new user if not found
-                   $data = [
-                       'first_name' => $request->first_name,
-                       'last_name' => $request->last_name,
-                       'email' => $request->email,
-                       'mobile' => $request->mobile,
-                       'password' => Hash::make(Str::random(8)), // Random password for OTP login
-                       'user_type' => 'user',
-                       'login_type' => 'otp',
-                   ];
-
-                   $user = User::create($data);
-
-                   // Optionally create profile and assign a role
-                   $user->createOrUpdateProfileWithAvatar(); // Ensure this function exists
-                   $user->assignRole($data['user_type']); // Ensure this role exists
-               } elseif ($user->login_type !== 'otp') {
-                   // Block login if the user exists but doesn't use OTP for login
-                   return response()->json([
-                       'success'=>false,
-                       'message' => 'This email is already registered with a different login method.',
-                   ], 403);
-               }
-
-               // Log in the user and generate an access token
-               $this->setDevice($user, $request); // Ensure device tracking is implemented
-               $access_token = $user->createToken('auth_token')->plainTextToken;
-
-               return response()->json([
-                   'succcess'=>true,
-                   'message' => 'Login Successfully',
-                   'token' => $access_token,
-               ],200);
-
-           } catch (\Exception $e) {
-               // Catch and return errors
-               return response()->json([
-                   'success'=>false,
-                   'message' => $e->getMessage(),
-               ],500);
-           }
-       }
-
-       // check user exist
-       public function checkUserExists(Request $request)
-       {
-           $data = $request->all();
-
-           $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-
-           $flag = 0;
-           $user = User::where('mobile', $request->mobile)->where('login_type','otp')->with('subscriptionPackage')->first();
-
-           if(!empty($user))
-           {
-
-               if($user->user_type !='user'){
-
-                   return response()->json([
-                       'success'=>false,
-                       'message'=>"Admin doesn't have access to login",
-                      ],403);
-               }
-
-               $response=$this->CheckDeviceLimit($user, $current_device);
-
-               if(isset($response['error'])) {
-
-                   return response()->json([
-                        'success'=>false,
-                        'message'=>$response['error'],
-                     ],403);
-               }
-
-               $this->setDevice($user, $request);
-
-               $token = $user->createToken('auth_token')->plainTextToken;
-               $flag = 1;
-               return response()->json([
-                     'success'=>true,
-                     'message' => 'User logged in successfully.',
-                     'is_user_exists' => $flag,
-                     'token' => $token
-                   ],200);
-           }
-
-            return response()->json([
-                    'success'=>true,
-                    'is_user_exists' => $flag,
-                ]);
-       }
-
-       //profile api
-       public function profile()
-       {
-           $user =auth('sanctum')->user();
-
-           if($user){
-               return response()->json([
-                   'success'=>true,
-                   'message'=>'User profile reterived successfully',
-                   'data'=>new ProfileResource($user),
-               ],200);
-           }
-       }
-
-       //profiel update api
-       public function updateProfile(Request $request)
-       {
-            $user = auth('sanctum')->user();
-
-            $validator = Validator::make($request->all(),[
-                'username' => 'required_without:email|unique:users,username,' . $user->id,
-                'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
-                'image_file'=> 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
-
-            if($validator->fails()){
-                return response()->json([
-                    'success'=>false,
-                    'message'=>$validator->errors()->first(),
-                ],403);
-            };
-
-            $data = $request->all();
-
-            $user->update($data);
-
-            if ($request->hasFile('image_file')) {
-                $file = $request->file('image_file');
-
-                $activeDisk = env('ACTIVE_STORAGE', 'local');
-
-                $filename = $file->getClientOriginalName();
-
-
-               if ($activeDisk == 'local') {
-                    $destinationPath = 'streamit-laravel';
-                    $filePath = $file->storeAs($destinationPath, $filename, 'public');
-                    $image_file = '/storage/' . $filePath;
-
-                } else {
-
-                    $folderPath = 'streamit-laravel/' .  $filename ;
-                    Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
-                    $baseUrl = env('DO_SPACES_URL');
-                    $image_file = $baseUrl . '/' . $folderPath;
-                }
-
-                $data['image_file']=extractFileNameFromUrl($image_file);
-
-            } else {
-                $data['image_file'] = $user->file_url;
-            }
-            $user->update(['file_url' => $data['image_file']]);
-            $user_data = User::find($user->id);
-            $user_data->save();
-
-            //  dd(setBaseUrlWithFileName('sound_wave.png'));
-            return response()->json([
-                'success'=>true,
-                'message'=>'User profile updated successfully',
-                'data'=>new ProfileResource($user),
-            ],200);
-       }
-
-       //logout api
-       public function logout()
-       {
-           $user = auth('sanctum')->user();
-           $user->device_id = null;
-           $user->type = null;
-           $user->save();
-           auth('sanctum')->user()->tokens()->delete();
-           return response()->json([
-               'success'=>true,
-               'message'=>'Logout successfully',
-           ],200);
-       }
-
-       //accoutn delete api
-       public function deleteAccount()
-       {
-            $user = auth('sanctum')->user();
-            Device::where('user_id', $user->id)->forceDelete();
-            UserMultiProfile::where('user_id', $user->id)->forceDelete();
-            Subscription::where('user_id', $user->id)->update(['status' => 'deactivated']);
-            User::where('id', $user->id)->forceDelete();
-            ContinueWatch::where('user_id', $user->id)->delete();
-            Watchlist::where('user_id',$user->id)->delete();
-            EntertainmentDownload::where('user_id',$user->id)->delete();
-            UserReminder::where('user_id', $user->id)->delete();
-
-            $user->forceDelete();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Account deleted successfully',
-            ], 200);
-       }
-
-       //HomeBanner
-       public function HomeBanner()
-       {
-          $bannerList = Banner::where('status',1)->get();
-          $banners = BannerResource::collection($bannerList);
-
+            $user->assignRole('user');
+            $user->createOrUpdateProfileWithAvatar();
+            $token = $user->createToken('authToken')->plainTextToken;
             return response()->json([
                 'success' => true,
-                'message' => "Banner list reterived successfully",
-                'data' => $banners
+                'message' => 'User created successfully.',
+                'token' => $token,
+                'user' => new ProfileResource($user),
             ],200);
-       }
+    }
 
-       //continue watching
-       public function ContinueWatching()
-       {
-            $user = User::where('id',auth('sanctum')->id())->first();
-            if($user){
-                $continueWatchList = ContinueWatch::where('user_id', 3)
-                ->whereNotNull('watched_time')
-                ->whereNotNull('total_watched_time')
-                ->whereHas('entertainment', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->with(['entertainment', 'episode', 'video'])
-                ->orderBy('id', 'desc')
-                ->get();
-                $continueWatch = ContinueWatchingResource::collection($continueWatchList);
+    //test firebase connection
+    public function sendMessage()
+    {
+        $database = app('firebase.database');
+        $database->getReference('users/user2')->push([
+            'name' => 'user2',
+            'email' => 'john.doe@example.com',
+        ]);
+        return response()->json([
+            'success'=>true,
+            'message'=>'Message sent successfully',
+        ],200);
+    }
+
+    //test notification api
+    public function sendNotification(Request $request)
+    {
+        $deviceToken = $request->device_token;
+        $messaging = app('firebase.messaging');
+        $message = CloudMessage::new()
+        ->withNotification(Notification::create('Title', 'Body'))
+        ->withData(['key' => 'value'])
+        ->toToken($deviceToken);
+
+        try{
+            $messaging->send($message);
+        }catch(MessagingException $e){
+
+        }
+
+    }
+
+    // Redirect to Google
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->stateless()->redirect();
+    }
+
+    //not used
+    public function handleGoogleCallbackForfirebaseauth(Request $request)
+    {
+        try {
+        // Validate request
+        $validator = Validator::make($request->all(), [
+            'callback_token' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success"=>false,
+                "message" => $validator->errors()
+            ], 422);
+        }
+
+        $auth = app('firebase.auth');
+        $verifiedIdToken =  $auth->verifyIdToken($request->callback_token);
+        $email = $verifiedIdToken->claims()->get('email');
+        $name = $verifiedIdToken->claims()->get('name');
+
+
+        // Check if a user with the email exists
+        $existingUser = User::where('email', $email)->first();
+
+            if (!$existingUser) {
+                // Register new user
+                $data = [
+                    'username' => $name,
+                    'email' => $email,
+                    'password' => Hash::make(Str::random(10)), // Generate a random password
+                    'user_type' => 'user',
+                    'login_type' => 'google',
+                ];
+
+                $newUser = User::create($data);
+                $newUser->assignRole($data['user_type']); // Optional: assign role if using Spatie
+                $newUser->save();
+
+                // Generate auth token
+                $token = $newUser->createToken('auth_token')->plainTextToken;
 
                 return response()->json([
-                    'success' => true,
-                    'message' => "Continue watching list reterived successfully",
-                    'data' => $continueWatch
-                ],200);
+                    'success'=>true,
+                    'message' => 'Login successfully.',
+                    'token' => $token,
+                    'user'=> new ProfileResource($newUser),
+                ], 201);
             }
+
+            // Prevent login if the user is login with a different method
+            if ($existingUser->login_type !== 'google') {
+                return response()->json([
+                    'success'=>false,
+                    'message' => 'This email is already registered. Please use the original login method.',
+                ], 403);
+            }
+
+            // Check device limit if applicable
+        //    if ($request->has('device_id')) {
+        //        $response = $this->CheckDeviceLimit($existingUser, $request->device_id);
+
+        //        if (isset($response['error'])) {
+        //            return response()->json(['error' => $response['error']], 500);
+        //        }
+        //    }
+
+            // Generate auth token
+            $token = $existingUser->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'success'=>true,
+                'message' => 'Login successfully.',
+                'token' => $token,
+                'user'=>new ProfileResource($existingUser),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e->getMessage()], 500);
+        }
+    }
+
+//google callback for ionic auth
+    public function handleGoogleCallback(Request $request){
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+
+            $token = $googleUser->token;
+
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if (!$user) {
+
+                $fullName = $googleUser->getName();
+
+                $nameParts = explode(' ', $fullName);
+
+                $firstName = isset($nameParts[0]) ? $nameParts[0] : ''; // First part of the name
+                $lastName = isset($nameParts[1]) ? $nameParts[1] : $firstName;  // Second part as last name
+
+
+                $data = [
+                    // 'first_name' => $firstName,
+                    // 'last_name' => $lastName,
+                    'username'=>$fullName,
+                    'email' =>  $googleUser->getEmail(),
+                    'password' => Hash::make(Str::random(10)),
+                    'user_type' => 'user',
+                    'login_type' => 'google',
+                    'device_id' => $request->device_id ?? null,
+                    'type' => $request->type ?? null,
+
+                ];
+
+                $user = User::create($data);
+
+                $request->session()->regenerate();
+
+                $user->createOrUpdateProfileWithAvatar();
+
+                $user->assignRole($data['user_type']);
+
+                $user->save();
+            }
+
+            if($user->login_type == 'google'){
+
+                $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
+                //clode device limit
+                // $response=$this->CheckDeviceLimit($user, $current_device);
+
+                if(isset($response['error'])) {
+                    return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
+                }
+
+                $this->setDevice($user,$request);
+                $user = Auth::login($user);
+            }
+            else
+            {
+                $user=Auth::user();
+                Auth::logout();
+                $this->removeDevice($user, $request);
+                return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user))."&error=Something went wrong! During login");
+
+            }
+
+            return redirect()->away("goldenapp://auth/google/callback?token=" . urlencode($token) . "&user=" . urlencode(json_encode($user)));
+
+        } catch (\Exception $e) {
+            return redirect()->away("goldenapp://auth/google/callback?error=Something went wrong! During login");
+        }
+    }
+
+    //otp store
+    public function otpLoginStore(Request $request)
+    {
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'mobile' => 'required|numeric|digits:10',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success'=>false,
+                    'message' => $validator->errors()
+                ], 422);
+            }
+
+            // Check if the user already exists
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                // Create a new user if not found
+                $data = [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'mobile' => $request->mobile,
+                    'password' => Hash::make(Str::random(8)), // Random password for OTP login
+                    'user_type' => 'user',
+                    'login_type' => 'otp',
+                ];
+
+                $user = User::create($data);
+
+                // Optionally create profile and assign a role
+                $user->createOrUpdateProfileWithAvatar(); // Ensure this function exists
+                $user->assignRole($data['user_type']); // Ensure this role exists
+            } elseif ($user->login_type !== 'otp') {
+                // Block login if the user exists but doesn't use OTP for login
+                return response()->json([
+                    'success'=>false,
+                    'message' => 'This email is already registered with a different login method.',
+                ], 403);
+            }
+
+            // Log in the user and generate an access token
+            $this->setDevice($user, $request); // Ensure device tracking is implemented
+            $access_token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'succcess'=>true,
+                'message' => 'Login Successfully',
+                'token' => $access_token,
+            ],200);
+
+        } catch (\Exception $e) {
+            // Catch and return errors
+            return response()->json([
+                'success'=>false,
+                'message' => $e->getMessage(),
+            ],500);
+        }
+    }
+
+    // check user exist
+    public function checkUserExists(Request $request)
+    {
+        $data = $request->all();
+
+        $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
+
+        $flag = 0;
+        $user = User::where('mobile', $request->mobile)->where('login_type','otp')->with('subscriptionPackage')->first();
+
+        if(!empty($user))
+        {
+
+            if($user->user_type !='user'){
+
+                return response()->json([
+                    'success'=>false,
+                    'message'=>"Admin doesn't have access to login",
+                    ],403);
+            }
+
+            $response=$this->CheckDeviceLimit($user, $current_device);
+
+            if(isset($response['error'])) {
+
+                return response()->json([
+                    'success'=>false,
+                    'message'=>$response['error'],
+                    ],403);
+            }
+
+            $this->setDevice($user, $request);
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $flag = 1;
+            return response()->json([
+                    'success'=>true,
+                    'message' => 'User logged in successfully.',
+                    'is_user_exists' => $flag,
+                    'token' => $token
+                ],200);
+        }
+
+        return response()->json([
+                'success'=>true,
+                'is_user_exists' => $flag,
+            ]);
+    }
+
+    //profile api
+    public function profile()
+    {
+        $user =auth('sanctum')->user();
+
+        if($user){
+            return response()->json([
+                'success'=>true,
+                'message'=>'User profile reterived successfully',
+                'data'=>new ProfileResource($user),
+            ],200);
+        }
+    }
+
+    //profiel update api
+    public function updateProfile(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $validator = Validator::make($request->all(),[
+            'username' => 'required_without:email|unique:users,username,' . $user->id,
+            'email' => 'required_without:username|nullable|email|unique:users,email,' . $user->id,
+            'image_file'=> 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                'message'=>$validator->errors()->first(),
+            ],403);
+        };
+
+        $data = $request->all();
+
+        $user->update($data);
+
+        if ($request->hasFile('image_file')) {
+            $file = $request->file('image_file');
+
+            $activeDisk = env('ACTIVE_STORAGE', 'local');
+
+            $filename = $file->getClientOriginalName();
+
+
+            if ($activeDisk == 'local') {
+                $destinationPath = 'streamit-laravel';
+                $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                $image_file = '/storage/' . $filePath;
+
+            } else {
+
+                $folderPath = 'streamit-laravel/' .  $filename ;
+                Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
+                $baseUrl = env('DO_SPACES_URL');
+                $image_file = $baseUrl . '/' . $folderPath;
+            }
+
+            $data['image_file']=extractFileNameFromUrl($image_file);
+
+        } else {
+            $data['image_file'] = $user->file_url;
+        }
+        $user->update(['file_url' => $data['image_file']]);
+        $user_data = User::find($user->id);
+        $user_data->save();
+
+        //  dd(setBaseUrlWithFileName('sound_wave.png'));
+        return response()->json([
+            'success'=>true,
+            'message'=>'User profile updated successfully',
+            'data'=>new ProfileResource($user),
+        ],200);
+    }
+
+    //logout api
+    public function logout()
+    {
+        $user = auth('sanctum')->user();
+        $user->device_id = null;
+        $user->type = null;
+        $user->save();
+        auth('sanctum')->user()->tokens()->delete();
+        return response()->json([
+            'success'=>true,
+            'message'=>'Logout successfully',
+        ],200);
+    }
+
+    //accoutn delete api
+    public function deleteAccount()
+    {
+        $user = auth('sanctum')->user();
+        Device::where('user_id', $user->id)->forceDelete();
+        UserMultiProfile::where('user_id', $user->id)->forceDelete();
+        Subscription::where('user_id', $user->id)->update(['status' => 'deactivated']);
+        User::where('id', $user->id)->forceDelete();
+        ContinueWatch::where('user_id', $user->id)->delete();
+        Watchlist::where('user_id',$user->id)->delete();
+        EntertainmentDownload::where('user_id',$user->id)->delete();
+        UserReminder::where('user_id', $user->id)->delete();
+
+        $user->forceDelete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Account deleted successfully',
+        ], 200);
+    }
+
+    //HomeBanner
+    public function HomeBanner()
+    {
+        $bannerList = Banner::where('status',1)->get();
+        $banners = BannerResource::collection($bannerList);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Banner list reterived successfully",
+            'data' => $banners
+        ],200);
+    }
+
+    //continue watching
+    public function ContinueWatching()
+    {
+        $user = User::where('id',auth('sanctum')->id())->first();
+        if($user){
+            $continueWatchList = ContinueWatch::where('user_id', 3)
+            ->whereNotNull('watched_time')
+            ->whereNotNull('total_watched_time')
+            ->whereHas('entertainment', function ($query) {
+                $query->where('status', 1);
+            })
+            ->with(['entertainment', 'episode', 'video'])
+            ->orderBy('id', 'desc')
+            ->get();
+            $continueWatch = ContinueWatchingResource::collection($continueWatchList);
 
             return response()->json([
                 'success' => true,
                 'message' => "Continue watching list reterived successfully",
-                'data' => [],
-            ],200);
-
-       }
-
-       //save contiue watch
-       public function saveContinueWatch(Request $request)
-        {
-            $user = auth('sanctum')->user();
-            if(!$user){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No user found',
-                ], 404);
-            }
-            // $user = User::where('id',15)->first();
-            $watch_data = $request->all();
-            $watch_data['total_watched_time'] = isset($watch_data['total_watched_time']) && substr_count($watch_data['total_watched_time'], ':') == 1 ? $watch_data['total_watched_time'] . ':00' : $watch_data['total_watched_time'];
-            $watch_data['user_id'] = $user->id;
-
-            $profile_id=$request->has('profile_id') && $request->profile_id
-            ? $request->profile_id
-            : getCurrentProfile($user->id, $request);
-
-            $watch_data['profile_id'] =  $profile_id;
-
-            $result = ContinueWatch::updateOrCreate(['entertainment_id' => $request->entertainment_id, 'user_id' => $user->id, 'entertainment_type' => $request->entertainment_type,'profile_id'=>$profile_id,'episode_id'=>$request->episode_id], $watch_data);
-
-            return response()->json([
-                'success' => true,
-                'message' => "Continue watching saved successfully",
-                'data' => $result
+                'data' => $continueWatch
             ],200);
         }
 
-        //delete continue wtch
-        public function deleteContinueWatch(Request $request)
-        {
-            $continuewatch = ContinueWatch::where('id', $request->id)->first();
+        return response()->json([
+            'success' => true,
+            'message' => "Continue watching list reterived successfully",
+            'data' => [],
+        ],200);
 
-            if ($continuewatch == null) {
-                return response()->json([
-                    'success'=>false,
-                    'message'=>"Continue watch not found",
-                ],404);
-            }
-            $continuewatch->delete();
+    }
+
+    //save contiue watch
+    public function saveContinueWatch(Request $request)
+    {
+        $user = auth('sanctum')->user();
+        if(!$user){
             return response()->json([
-                'success' => true,
-                'message' => "Continue watch deleted successfully",
-            ],200);
+                'success' => false,
+                'message' => 'No user found',
+            ], 404);
         }
+        // $user = User::where('id',15)->first();
+        $watch_data = $request->all();
+        $watch_data['total_watched_time'] = isset($watch_data['total_watched_time']) && substr_count($watch_data['total_watched_time'], ':') == 1 ? $watch_data['total_watched_time'] . ':00' : $watch_data['total_watched_time'];
+        $watch_data['user_id'] = $user->id;
+
+        $profile_id=$request->has('profile_id') && $request->profile_id
+        ? $request->profile_id
+        : getCurrentProfile($user->id, $request);
+
+        $watch_data['profile_id'] =  $profile_id;
+
+        $result = ContinueWatch::updateOrCreate(['entertainment_id' => $request->entertainment_id, 'user_id' => $user->id, 'entertainment_type' => $request->entertainment_type,'profile_id'=>$profile_id,'episode_id'=>$request->episode_id], $watch_data);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Continue watching saved successfully",
+            'data' => $result
+        ],200);
+    }
+
+    //delete continue wtch
+    public function deleteContinueWatch(Request $request)
+    {
+        $continuewatch = ContinueWatch::where('id', $request->id)->first();
+
+        if ($continuewatch == null) {
+            return response()->json([
+                'success'=>false,
+                'message'=>"Continue watch not found",
+            ],404);
+        }
+        $continuewatch->delete();
+        return response()->json([
+            'success' => true,
+            'message' => "Continue watch deleted successfully",
+        ],200);
+    }
 
     //top rated movies
     public function TopRatedItems($type)
@@ -918,6 +918,7 @@ class ApiController extends Controller
         ],200);
     }
 
+    //not used
     public function Subscription(Request $request)
     {
         $user_id = auth('sanctum')->id();
@@ -952,6 +953,7 @@ class ApiController extends Controller
 
     }
 
+    //not used
     private function handleExistingSubscription($subscription, $plan)
     {
         if ($subscription->end_date > Carbon::now()) {
@@ -979,7 +981,7 @@ class ApiController extends Controller
         ], 200);
     }
 
-
+    //not use
     private function createNewSubscription($userId, $plan)
     {
         Subscription::create([
@@ -993,6 +995,11 @@ class ApiController extends Controller
             'status' => 'active',
         ]);
         auth('sanctum')->user()->update(['is_subscribe' => true]);
+
+            return response()->json([
+            'success' => true,
+            'message' => 'Subscription created successfully.',
+        ], 200);
     }
 
     public function Search(Request $request)
