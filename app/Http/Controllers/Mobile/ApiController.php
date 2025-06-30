@@ -60,28 +60,32 @@ class ApiController extends Controller
                     'message' => $validator->errors()->first(),
                 ], 422);
             }
-        $user = User::where('username', $request->username)->first();
-        if ($user) {
-                if (Hash::check($request->password, $user->password)) {
-                    $token = $user->createToken('authToken')->plainTextToken;
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'User login successfully.',
-                        'token' => $token,
-                        'user' => new ProfileResource($user),
-                    ], 200);
+            $user = User::where('username', $request->username)->first();
+            if ($user) {
+                    if (Hash::check($request->password, $user->password)) {
+                        $user->update([
+                            'device_id' => $request->device_id ?? null,
+                            'type' => $request->type ?? null,
+                        ]);
+                        $token = $user->createToken('authToken')->plainTextToken;
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'User login successfully.',
+                            'token' => $token,
+                            'user' => new ProfileResource($user),
+                        ], 200);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Password mismatch',
+                        ], 422);
+                    }
                 } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Password mismatch',
+                        'message' => 'User does not exist',
                     ], 422);
                 }
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User does not exist',
-                ], 422);
-            }
         }
 
         public function register(Request $request)
@@ -101,7 +105,9 @@ class ApiController extends Controller
                     'username' => $request->username,
                     'password' => Hash::make($request->password),
                     'user_type' => 'user',
-                    'login_type' => 'username'
+                    'login_type' => 'username',
+                    'device_id'=>$request->device_id ?? null,
+                    'type'=>$request->type ?? null,
                 ]);
                 $user->assignRole('user');
                 $user->createOrUpdateProfileWithAvatar();
@@ -259,7 +265,10 @@ class ApiController extends Controller
                        'email' =>  $googleUser->getEmail(),
                        'password' => Hash::make(Str::random(10)),
                        'user_type' => 'user',
-                       'login_type' => 'google'
+                       'login_type' => 'google',
+                       'device_id' => $request->device_id ?? null,
+                       'type' => $request->type ?? null,
+
                    ];
 
                    $user = User::create($data);
@@ -494,6 +503,10 @@ class ApiController extends Controller
        //logout api
        public function logout()
        {
+           $user = auth('sanctum')->user();
+           $user->device_id = null;
+           $user->type = null;
+           $user->save();
            auth('sanctum')->user()->tokens()->delete();
            return response()->json([
                'success'=>true,
@@ -614,111 +627,111 @@ class ApiController extends Controller
             ],200);
         }
 
-        //top rated movies
-       public function TopRatedItems($type)
-       {
+    //top rated movies
+    public function TopRatedItems($type)
+    {
 
-            $topRatedItems = Entertainment::whereBetween('IMDb_rating',[6,10])->where(['status'=>1,'type'=>$type])->orderBy('IMDb_rating','desc')->inRandomOrder()->limit(15)->get();
+        $topRatedItems = Entertainment::whereBetween('IMDb_rating',[6,10])->where(['status'=>1,'type'=>$type])->orderBy('IMDb_rating','desc')->inRandomOrder()->limit(15)->get();
 
-            $top_rated = ItemListResource::collection($topRatedItems);
+        $top_rated = ItemListResource::collection($topRatedItems);
 
-           return response()->json([
-               "success"=>true,
-               "message"=>"Top rated $type reterived successfully",
-               "data"=>$top_rated,
-           ],200);
-       }
+        return response()->json([
+            "success"=>true,
+            "message"=>"Top rated $type reterived successfully",
+            "data"=>$top_rated,
+        ],200);
+    }
 
-       //recently added movies
-       public function RecentlyAdded()
-       {
-            $items = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
+    //recently added movies
+    public function RecentlyAdded()
+    {
+        $items = Entertainment::orderBy('created_at','desc')->where('status', 1)->take(20)->get();
 
-            $recently_add = ItemListResource::collection($items);
+        $recently_add = ItemListResource::collection($items);
 
-           return response()->json([
-               "success"=>true,
-               "message"=>"Recently added items reterived successfully",
-               "data"=>$recently_add,
-           ],200);
-       }
+        return response()->json([
+            "success"=>true,
+            "message"=>"Recently added items reterived successfully",
+            "data"=>$recently_add,
+        ],200);
+    }
 
        //download
-       public function saveDownload(Request $request)
-       {
-        $validator = Validator::make($request->all(),[
-            'entertainment_id' => 'required',
-            'type' => 'required|in:movie,episode',
-           ]);
+    public function saveDownload(Request $request)
+    {
+    $validator = Validator::make($request->all(),[
+        'entertainment_id' => 'required',
+        'type' => 'required|in:movie,episode',
+        ]);
 
-           if($validator->fails()){
-            return response()->json([
-                'success'=>false,
-                'message'=>$validator->errors(),
-            ],422);
-           }
-
-           if($request->type == 'movie'){
-                $movie = Entertainment::where('id', $request->entertainment_id)->where('type', 'movie')->first();
-                if (!$movie) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Movie not found',
-                    ], 404);
-                }
-           }else{
-                $episode = Episode::where('id', $request->entertainment_id)->first();
-                if (!$episode) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Episode not found',
-                    ], 404);
-                }
-           }
-
-           $user_id = auth('sanctum')->id();
-           $download_data = $request->all();
-           $download_data['user_id'] = $user_id;
-
-           $download = EntertainmentDownload::where('entertainment_id', $request->entertainment_id)->where('user_id', $user_id)->where('type', $request->type)->first();
-
-           //save both movie and episode download data in entertainment_download table
-           if (!$download) {
-                EntertainmentDownload::create($download_data);
-               return response()->json(['success' => true, 'message' => "Download added successfully"]);
-           } else {
-               return response()->json(['status' => false, 'message' => "Download already exists"]);
-           }
-       }
-
-       public function DownloadList(){
-        $user_id = auth('sanctum')->id();
-        $downloadList = EntertainmentDownload::where('user_id', $user_id)->get();
-        $data = DownloadListResource::collection($downloadList);
+        if($validator->fails()){
         return response()->json([
-            'success'=>true,
-            'message'=>'Download list reterived successfully',
-            'data'=>$data,
-        ],200);
-       }
-
-        public function DeleteDownload($id)
-        {
-            $user_id = auth('sanctum')->id();
-            $download = EntertainmentDownload::where('id', $id)->where('user_id', $user_id)->first();
-            if ($download) {
-                $download->delete();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Download deleted successfully',
-                ], 200);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'Download not found',
-            ], 404);
+            'success'=>false,
+            'message'=>$validator->errors(),
+        ],422);
         }
 
+        if($request->type == 'movie'){
+            $movie = Entertainment::where('id', $request->entertainment_id)->where('type', 'movie')->first();
+            if (!$movie) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Movie not found',
+                ], 404);
+            }
+        }else{
+            $episode = Episode::where('id', $request->entertainment_id)->first();
+            if (!$episode) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Episode not found',
+                ], 404);
+            }
+        }
+
+        $user_id = auth('sanctum')->id();
+        $download_data = $request->all();
+        $download_data['user_id'] = $user_id;
+
+        $download = EntertainmentDownload::where('entertainment_id', $request->entertainment_id)->where('user_id', $user_id)->where('type', $request->type)->first();
+
+        //save both movie and episode download data in entertainment_download table
+        if (!$download) {
+            EntertainmentDownload::create($download_data);
+            return response()->json(['success' => true, 'message' => "Download added successfully"]);
+        } else {
+            return response()->json(['status' => false, 'message' => "Download already exists"]);
+        }
+    }
+
+    public function DownloadList()
+    {
+    $user_id = auth('sanctum')->id();
+    $downloadList = EntertainmentDownload::where('user_id', $user_id)->get();
+    $data = DownloadListResource::collection($downloadList);
+    return response()->json([
+        'success'=>true,
+        'message'=>'Download list reterived successfully',
+        'data'=>$data,
+    ],200);
+    }
+
+    public function DeleteDownload($id)
+    {
+        $user_id = auth('sanctum')->id();
+        $download = EntertainmentDownload::where('id', $id)->where('user_id', $user_id)->first();
+        if ($download) {
+            $download->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Download deleted successfully',
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Download not found',
+        ], 404);
+    }
 
     public function MovieDetails($id)
     {
@@ -785,9 +798,11 @@ class ApiController extends Controller
         }
 
         $user_id = auth('sanctum')->id();
-        Review::updateOrCreate([
+        Review::updateOrCreate(
+            [
                 'entertainment_id' => $request->entertainment_id,
                 'user_id' => $user_id,
+            ],[
                 'rating' => $request->rating,
                 'review' => $request->review
             ]);
