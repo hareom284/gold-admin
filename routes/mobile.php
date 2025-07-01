@@ -85,6 +85,16 @@ Route::group(['prefix'=>'v1'],function(){
         //details page api
         Route::get('movie-details/{id}',[ApiController::class,'MovieDetails']);
         Route::get('tv-details/{id}',[ApiController::class,'TvShowDetails']);
+
+        //notification api
+        Route::get('notifications', [ApiController::class, 'Notifications']);
+        Route::post('notification/{id}/read', [ApiController::class, 'MarkAsRead']);
+        Route::post('notification/all-read', [ApiController::class, 'MarkAllAsRead']);
+        Route::delete('notification/{id}/delete', [ApiController::class, 'DeleteNotification']);
+        Route::delete('notification/all-delete', [ApiController::class, 'DeleteAllNotifications']);
+
+        //fcm token update
+        Route::post('update-fcm-token', [ApiController::class, 'UpdateFcmToken']);
     });
 
 });

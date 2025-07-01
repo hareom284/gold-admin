@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\UserMultiProfile;
 use Modules\Banner\Models\Banner;
 use Modules\Genres\Models\Genres;
+use Modules\Episode\Models\Episode;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Entertainment\Models\Review;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\GeneralNotification;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Modules\Entertainment\Models\Watchlist;
@@ -39,11 +41,10 @@ use Modules\Entertainment\Models\EntertainmentDownload;
 use Modules\User\Transformers\UserMultiProfileResource;
 use App\Http\Resources\Mobile\Detail\MovieDetailResource;
 use App\Http\Resources\Mobile\Detail\TvShowDetailResource;
-use Modules\Subscriptions\Models\SubscriptionTransactions;
 use App\Http\Resources\Mobile\Genral\DownloadListResource;
+use Modules\Subscriptions\Models\SubscriptionTransactions;
 use App\Http\Resources\Mobile\Home\ContinueWatchingResource;
 use App\Http\Resources\Mobile\Subscription\SubscriptionDetailResource;
-use Modules\Episode\Models\Episode;
 
 class ApiController extends Controller
 {
@@ -64,9 +65,17 @@ class ApiController extends Controller
         if ($user) {
                 if (Hash::check($request->password, $user->password)) {
                     $user->update([
-                        'device_id' => $request->device_id ?? null,
-                        'type' => $request->type ?? null,
+                        'fcm_token' => $request->fcm_token ?? null,
+                        'hardware_id' => $request->hardware_id ?? null,
+                        'platform' => $request->platform ?? null,
                     ]);
+
+                    //send db notification
+                    $user->notify(new GeneralNotification([
+                        'title' => 'Login success.',
+                        'message' => 'You have successfully logged in.',
+                    ]));
+
                     $token = $user->createToken('authToken')->plainTextToken;
                     return response()->json([
                         'success' => true,
@@ -106,8 +115,9 @@ class ApiController extends Controller
                 'password' => Hash::make($request->password),
                 'user_type' => 'user',
                 'login_type' => 'username',
-                'device_id'=>$request->device_id ?? null,
-                'type'=>$request->type ?? null,
+                'fcm_token' => $request->fcm_token ?? null,
+                'hardware_id' => $request->hardware_id ?? null,
+                'platform' => $request->platform ?? null,
             ]);
             $user->assignRole('user');
             $user->createOrUpdateProfileWithAvatar();
@@ -134,7 +144,7 @@ class ApiController extends Controller
         ],200);
     }
 
-    //test notification api
+    //test push notification api
     public function sendNotification(Request $request)
     {
         $deviceToken = $request->device_token;
@@ -152,13 +162,114 @@ class ApiController extends Controller
 
     }
 
+    //update fcm token
+    public function UpdateFcmToken(Request $request)
+    {
+        $user = User::find(auth('sanctum')->id());
+        $user->fcm_token = $request->fcm_token ? $request->fcm_token : $user->fcm_token;
+        $user->hardware_id = $request->hardware_id ? $request->hardware_id : $user->hardware_id;
+        $user->platform = $request->platform ? $request->platform : $user->platform;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'FCM token updated successfully',
+        ], 200);
+    }
+
+    //get db notifications list
+    public function Notifications()
+    {
+        $user = User::find(auth('sanctum')->id());
+
+        // notifications
+        $notifications = $user->notifications->map(function ($notification) {
+            return [
+                'id' => $notification->id,
+                'data' => $notification->data,
+                'read_at' => $notification->read_at,
+                'created_at' => $notification->created_at->diffForHumans(),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notifications retrieved successfully',
+            'data' => $notifications,
+        ], 200);
+    }
+
+    // Mark notification as read
+    public function MarkAsRead($id)
+    {
+        $user = User::find(auth('sanctum')->id());
+        $notification = $user->notifications()->find($id);
+
+        if ($notification) {
+            $notification->markAsRead();
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification marked as read',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Notification not found',
+        ], 404);
+    }
+
+    // Mark all notifications as read
+    public function MarkAllAsRead()
+    {
+        $user = User::find(auth('sanctum')->id());
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All notifications marked as read',
+        ], 200);
+    }
+
+    // Delete all notifications
+    public function DeleteAllNotifications()
+    {
+        $user = User::find(auth('sanctum')->id());
+        $user->notifications()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All notifications deleted successfully',
+        ], 200);
+    }
+
+    // Delete notification
+    public function DeleteNotification($id)
+    {
+        $user = User::find(auth('sanctum')->id());
+        $notification = $user->notifications()->find($id);
+
+        if ($notification) {
+            $notification->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification deleted successfully',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Notification not found',
+        ], 404);
+    }
+
     // Redirect to Google
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->stateless()->redirect();
     }
 
-    //not used
+    //not used with ionic mobile app
     public function handleGoogleCallbackForfirebaseauth(Request $request)
     {
         try {
@@ -266,8 +377,9 @@ class ApiController extends Controller
                     'password' => Hash::make(Str::random(10)),
                     'user_type' => 'user',
                     'login_type' => 'google',
-                    'device_id' => $request->device_id ?? null,
-                    'type' => $request->type ?? null,
+                    'fcm_token' => $request->fcm_token ?? null,
+                    'hardware_id' => $request->hardware_id ?? null,
+                    'platform' => $request->platform ?? null,
 
                 ];
 
@@ -503,11 +615,20 @@ class ApiController extends Controller
     //logout api
     public function logout()
     {
-        $user = auth('sanctum')->user();
-        $user->device_id = null;
-        $user->type = null;
+        $user = User::find(auth('sanctum')->id());
+        $user->fcm_token = null;
+        $user->hardware_id = null;
+        $user->platform = null;
         $user->save();
+
+        //send db notification
+        $user->notify(new GeneralNotification([
+            'title' => 'Logout success.',
+            'message' => 'You have successfully logged out.',
+        ]));
+
         auth('sanctum')->user()->tokens()->delete();
+
         return response()->json([
             'success'=>true,
             'message'=>'Logout successfully',

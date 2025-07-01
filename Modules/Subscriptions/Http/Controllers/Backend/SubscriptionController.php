@@ -12,12 +12,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Events\Payment\PaymentStatus;
 use Modules\Subscriptions\Models\Plan;
+use App\Notifications\GeneralNotification;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Subscriptions\Models\Subscription;
 use Modules\Subscriptions\Models\SubscriptionTransactions;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
 
 
 class SubscriptionController extends Controller
@@ -220,6 +221,7 @@ class SubscriptionController extends Controller
 
             $subscriptionTransaction->user->update(['is_subscribe' => true]);
 
+            //send push notification with firebase
             if($subscriptionTransaction->user->device_token) {
                 $deviceToken = $subscriptionTransaction->user->device_token;
                 $messaging = app('firebase.messaging');
@@ -229,6 +231,12 @@ class SubscriptionController extends Controller
                     ->toToken($deviceToken);
                 $messaging->send($message);
             }
+
+            //send db notification
+            $subscriptionTransaction->user->notify(new GeneralNotification([
+                'title' => "$plan->name successfully subscribed",
+                'message' => 'You have successfully subscribed to the ' . $plan->name . ' plan. Your subscription will be active until ' . formatDate($subscription->end_date) . '.',
+            ]));
             return true;
 }
 

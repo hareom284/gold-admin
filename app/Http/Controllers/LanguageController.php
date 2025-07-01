@@ -20,7 +20,7 @@ class LanguageController extends Controller
         Carbon::setLocale($language);
         session()->put('dir',  $dir);
 
-        flash()->success(__('Language changed to').' '.strtoupper($language))->important();
+        flash()->success(__('Language changed to').' '.strtoupper($language));
 
         return redirect()->back();
     }
