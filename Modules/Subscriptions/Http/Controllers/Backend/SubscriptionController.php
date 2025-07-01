@@ -222,13 +222,13 @@ class SubscriptionController extends Controller
             $subscriptionTransaction->user->update(['is_subscribe' => true]);
 
             //send push notification with firebase
-            if($subscriptionTransaction->user->device_token) {
-                $deviceToken = $subscriptionTransaction->user->device_token;
+            if($subscriptionTransaction->user->fcm_token) {
+                $fcmToken = $subscriptionTransaction->user->fcm_token;
                 $messaging = app('firebase.messaging');
                 $message = CloudMessage::new()
                     ->withNotification(Notification::create('Payment Success', 'Your payment was successful.'))
                     ->withData(['key' => 'value'])
-                    ->toToken($deviceToken);
+                    ->toToken($fcmToken);
                 $messaging->send($message);
             }
 
