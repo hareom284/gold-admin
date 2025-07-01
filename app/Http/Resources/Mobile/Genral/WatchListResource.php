@@ -17,13 +17,13 @@ class WatchListResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'name'=> $this->entertainment->name,
-            'type'=> $this->entertainment->type,
-            'movie_access'=> $this->entertainment->movie_access,
-            'IMDb_rating' => $this->entertainment->IMDb_rating,
-            'realease_year'=>Carbon::parse($this->entertainment->release_date)->year,
-            'poster_image' =>  setBaseUrlWithFileName($this->entertainment->poster_url ?? null ),
-            'thumbnail_image' =>setBaseUrlWithFileName($this->entertainment->thumbnail_url ?? null),
+            'name'=> $this->entertainment?->name ?? '',
+            'type'=> $this->entertainment?->type ?? '',
+            'movie_access'=> $this->entertainment?->movie_access ?? '',
+            'IMDb_rating' => $this->entertainment?->IMDb_rating ?? '',
+            'realease_year'=>Carbon::parse($this->entertainment?->release_date)->year,
+            'poster_image' =>  setBaseUrlWithFileName($this->entertainment?->poster_url ?? null ),
+            'thumbnail_image' =>setBaseUrlWithFileName($this->entertainment?->thumbnail_url ?? null),
         ];
     }
 }
